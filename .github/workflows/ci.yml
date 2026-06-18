@@ -65,5 +65,5 @@ jobs:
       - name: Build web
         run: npx turbo run build --filter=@newmomcircle/web
         env:
-          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
-          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.https://iwzkddfdeguqauvjqarz.supabase.co }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.sb_publishable_CBxmuZv5R1ZkLo_RdUzoSA_FMlQc-WO }}
