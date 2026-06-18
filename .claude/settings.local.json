@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(Get-ChildItem -Path \"C:\\\\Users\\\\sumiy\\\\Documents\\\\sumiya\\\\OneDrive\\\\Desktop\\\\newmomcircle\\\\web\\\\src\" -Recurse | Where-Object { $_.Name -match \"login|auth|signin\" -or $_.FullName -match \"login|auth|signin\" })",
+      "PowerShell(Get-ChildItem -Path \"C:\\\\Users\\\\sumiy\\\\Documents\\\\sumiya\\\\OneDrive\\\\Desktop\\\\newmomcircle\\\\mobile\\\\app\" -Recurse | Where-Object { $_.Name -match \"login|auth|signin\" })",
+      "PowerShell(New-Item *)",
+      "PowerShell(cd \"C:\\\\Users\\\\sumiy\\\\Documents\\\\sumiya\\\\OneDrive\\\\Desktop\\\\newmomcircle\"; npx tsc --project apps/web/tsconfig.json --noEmit 2>&1; Write-Host \"Exit code: $LASTEXITCODE\")",
+      "WebFetch(domain:github.com)",
+      "PowerShell(npm *)",
+      "PowerShell(Start-Sleep -Seconds 3; Invoke-WebRequest -Uri \"http://localhost:3001\" -UseBasicParsing -TimeoutSec 10 | Select-Object -ExpandProperty StatusCode)",
+      "PowerShell(Invoke-WebRequest -Uri \"http://localhost:3001/feed\" -UseBasicParsing -TimeoutSec 10 | Select-Object -ExpandProperty StatusCode)",
+      "PowerShell(Invoke-WebRequest -Uri \"http://localhost:3001/auth/signup\" -UseBasicParsing -TimeoutSec 5 | Select-Object -ExpandProperty StatusCode)",
+      "PowerShell(npx playwright --version 2>&1)",
+      "Read(//c/Users/sumiy/AppData/Local/Temp/claude/C--Users-sumiy-Documents-sumiya-OneDrive-Desktop-newmomcircle/735232b7-6f61-45c1-9fa5-6406850941b8/tasks/**)",
+      "PowerShell(try { $response = Invoke-WebRequest -Uri \"http://localhost:3003\" -TimeoutSec 10 -ErrorAction Stop; Write-Output \"Status: $\\($response.StatusCode\\)\"; Write-Output \"Content length: $\\($response.Content.Length\\)\" } catch { Write-Output \"Error: $_\" })",
+      "PowerShell(Stop-Process *)",
+      "PowerShell(Start-Sleep -Seconds 8; try { $r = Invoke-WebRequest -Uri \"http://localhost:3000\" -TimeoutSec 10 -ErrorAction Stop; Write-Output \"3000: $\\($r.StatusCode\\)\" } catch { Write-Output \"3000: $_\" }; try { $r = Invoke-WebRequest -Uri \"http://localhost:3004\" -TimeoutSec 5 -ErrorAction Stop; Write-Output \"3004: $\\($r.StatusCode\\)\" } catch { Write-Output \"3004: $_\" })",
+      "PowerShell(try { $r = Invoke-WebRequest -Uri \"http://localhost:3003\" -TimeoutSec 10 -ErrorAction Stop; Write-Output \"Status: $\\($r.StatusCode\\)\"; Write-Output \"Length: $\\($r.Content.Length\\)\" } catch { Write-Output \"Error: $_\" })",
+      "PowerShell(Get-NetTCPConnection *)",
+      "PowerShell(try { $r = Invoke-WebRequest -Uri \"http://127.0.0.1:3003\" -TimeoutSec 15 -UseBasicParsing -ErrorAction Stop; Write-Output \"Status: $\\($r.StatusCode\\)\" } catch { Write-Output \"Error: $_\" })"
+    ]
+  }
+}

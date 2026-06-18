@@ -1,0 +1,60 @@
+{
+  "expo": {
+    "name": "NewMomCircle",
+    "slug": "newmomcircle",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "cover",
+      "backgroundColor": "#1A0A05"
+    },
+    "assetBundlePatterns": ["**/*"],
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "com.newmomcircle.app",
+      "infoPlist": {
+        "NSCameraUsageDescription": "NewMomCircle uses the camera for profile photos and post images.",
+        "NSPhotoLibraryUsageDescription": "NewMomCircle accesses your photos to share moments with the community.",
+        "NSMotionUsageDescription": "NewMomCircle uses device motion to detect a shake for the SOS emergency alert."
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#FF9F7C"
+      },
+      "package": "com.newmomcircle.app",
+      "permissions": [
+        "android.permission.INTERNET",
+        "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.WRITE_EXTERNAL_STORAGE",
+        "android.permission.CAMERA",
+        "android.permission.HIGH_SAMPLING_RATE_SENSORS"
+      ]
+    },
+    "web": {
+      "favicon": "./assets/favicon.png",
+      "bundler": "metro"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-font",
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "NewMomCircle would like to access your photos.",
+          "cameraPermission": "NewMomCircle would like to use your camera."
+        }
+      ]
+    ],
+    "scheme": "newmomcircle",
+    "extra": {
+      "eas": {
+        "projectId": "YOUR_EAS_PROJECT_ID"
+      }
+    }
+  }
+}

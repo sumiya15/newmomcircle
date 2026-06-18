@@ -1,0 +1,45 @@
+{
+  "name": "newmomcircle",
+  "version": "0.1.0",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev:web": "turbo run dev --filter=@newmomcircle/web",
+    "dev:mobile": "turbo run start --filter=@newmomcircle/mobile",
+    "build": "turbo run build",
+    "build:web": "turbo run build --filter=@newmomcircle/web",
+    "lint": "turbo run lint",
+    "type-check": "turbo run type-check",
+    "test": "turbo run test",
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json}\" --ignore-path .gitignore",
+    "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,json}\" --ignore-path .gitignore",
+    "db:push": "npx supabase db push --db-url \"$DATABASE_URL\"",
+    "db:push:win": "npx supabase db push --db-url \"%DATABASE_URL%\""
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.30",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.5.2",
+    "playwright": "^1.60.0",
+    "prettier": "^3.5.3",
+    "turbo": "^2.5.4",
+    "typescript": "~6.0.3"
+  },
+  "packageManager": "npm@10.9.3",
+  "engines": {
+    "node": ">=20.0.0",
+    "npm": ">=10.0.0"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,js,jsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,md}": [
+      "prettier --write"
+    ]
+  }
+}

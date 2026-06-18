@@ -284,10 +284,11 @@ export default function FeedScreen() {
   // ── Populated / empty ─────────────────────────────────────────────────────
 
   return (
-    <View style={[styles.root, { paddingTop: insets.top }]}>
+    <View style={[styles.root, { paddingTop: insets.top }]} testID="feed-screen">
       <FeedHeader profile={profile} />
 
       <FlatList
+        testID="feed-list"
         data={posts}
         keyExtractor={keyExtractor}
         renderItem={renderPost}
@@ -323,6 +324,7 @@ export default function FeedScreen() {
           style={[styles.fabWrap, { bottom: insets.bottom + 90 }]}
         >
           <Pressable
+            testID="feed-create-btn"
             style={({ pressed }) => [
               styles.fab,
               pressed && styles.fabPressed,
@@ -382,6 +384,7 @@ function FeedHeader({ profile }: { profile: { displayName: string } | null }) {
         <View style={styles.headerRight}>
         {/* Explore Circles */}
         <Pressable
+          testID="feed-explore-btn"
           style={styles.iconBtn}
           hitSlop={12}
           onPress={() => router.push('/(main)/explore')}
@@ -390,6 +393,7 @@ function FeedHeader({ profile }: { profile: { displayName: string } | null }) {
         </Pressable>
         {/* Direct Messages */}
         <Pressable
+          testID="feed-messages-btn"
           style={styles.iconBtn}
           hitSlop={12}
           onPress={() => router.push('/(main)/messages')}
@@ -400,6 +404,7 @@ function FeedHeader({ profile }: { profile: { displayName: string } | null }) {
         </Pressable>
         {/* Baby Tracker */}
         <Pressable
+          testID="feed-tracker-btn"
           style={styles.iconBtn}
           hitSlop={12}
           onPress={() => router.push('/(main)/tracker')}
@@ -408,6 +413,7 @@ function FeedHeader({ profile }: { profile: { displayName: string } | null }) {
         </Pressable>
         {/* Notification bell */}
         <Pressable
+          testID="feed-notification-btn"
           style={styles.iconBtn}
           hitSlop={12}
           onPress={() => router.push('/(main)/notifications')}
@@ -420,6 +426,7 @@ function FeedHeader({ profile }: { profile: { displayName: string } | null }) {
       </View>
       {/* Search bar row */}
       <Pressable
+        testID="feed-search-btn"
         style={({ pressed }) => [styles.searchBarFake, pressed && { opacity: 0.75 }]}
         onPress={() => router.push('/(main)/search')}
       >
@@ -478,6 +485,7 @@ function CreatePostModal({
             </Pressable>
             <Text style={styles.modalTitle}>New post</Text>
             <Pressable
+              testID="feed-submit-btn"
               style={[styles.postBtn, !canPost && styles.postBtnDisabled]}
               onPress={onSubmit}
               disabled={!canPost || submitting}
@@ -490,6 +498,7 @@ function CreatePostModal({
 
           {/* Text input */}
           <TextInput
+            testID="feed-post-input"
             style={styles.textInput}
             multiline
             value={postText}

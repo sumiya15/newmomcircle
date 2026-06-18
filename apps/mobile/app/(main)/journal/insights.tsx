@@ -48,7 +48,7 @@ export default function InsightsScreen() {
   };
 
   return (
-    <ScrollView style={styles.root} showsVerticalScrollIndicator={false}>
+    <ScrollView style={styles.root} testID="insights-screen" showsVerticalScrollIndicator={false}>
       {/* Header */}
       <LinearGradient colors={[Colors.peach, Colors.peachDark]} style={styles.header}>
         <Text style={styles.headerTitle}>{t("insights_title")}</Text>
@@ -87,7 +87,7 @@ export default function InsightsScreen() {
           {/* Weekly Mood Chart */}
           <View style={styles.card}>
             <Text style={styles.cardTitle}>{t("weekly_mood")}</Text>
-            <View style={styles.chart}>
+            <View testID="insights-bar-chart" style={styles.chart}>
               {entries.length === 0
                 ? <Text style={styles.noData}>{"Write journal entries to see your mood trend 🌱"}</Text>
                 : entries.map((e, i) => {
@@ -135,7 +135,7 @@ export default function InsightsScreen() {
 
           {/* Latest Advice */}
           {latest?.sentimentAdvice && (
-            <View style={[
+            <View testID="insights-advice-card" style={[
               styles.adviceCard,
               { borderLeftColor: latest.sentiment
                   ? sentimentColour(latest.sentiment as SentimentLabel)

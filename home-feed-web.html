@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>NewMomCircle — Community Feed</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          "primary":                    "#94492d",
+          "on-primary":                 "#ffffff",
+          "primary-container":          "#ff9f7c",
+          "on-primary-container":       "#783419",
+          "primary-fixed":              "#ffdbcf",
+          "primary-fixed-dim":          "#ffb59b",
+          "inverse-primary":            "#ffb59b",
+          "secondary":                  "#615e5b",
+          "on-secondary":               "#ffffff",
+          "secondary-container":        "#e8e1de",
+          "on-secondary-container":     "#686461",
+          "tertiary":                   "#006a64",
+          "on-tertiary":                "#ffffff",
+          "tertiary-container":         "#5fc8bf",
+          "on-tertiary-container":      "#00524d",
+          "error":                      "#ba1a1a",
+          "on-error":                   "#ffffff",
+          "error-container":            "#ffdad6",
+          "on-error-container":         "#93000a",
+          "surface":                    "#fbf9f8",
+          "surface-dim":                "#dcd9d9",
+          "surface-bright":             "#fbf9f8",
+          "surface-container-lowest":   "#ffffff",
+          "surface-container-low":      "#f6f3f2",
+          "surface-container":          "#f0eded",
+          "surface-container-high":     "#eae8e7",
+          "surface-container-highest":  "#e4e2e1",
+          "on-surface":                 "#1b1c1c",
+          "on-surface-variant":         "#54433d",
+          "inverse-surface":            "#303030",
+          "outline":                    "#87736c",
+          "outline-variant":            "#dac1b9",
+          "background":                 "#fbf9f8",
+          "on-background":              "#1b1c1c",
+        },
+        borderRadius: {
+          "sm":      "0.25rem",
+          "DEFAULT": "0.5rem",
+          "md":      "0.75rem",
+          "lg":      "1rem",
+          "xl":      "1.5rem",
+          "full":    "9999px",
+        },
+        fontFamily: {
+          sans: ["Plus Jakarta Sans", "sans-serif"],
+        },
+        fontSize: {
+          "display":  ["32px", { lineHeight: "40px",  letterSpacing: "-0.02em", fontWeight: "700" }],
+          "h1":       ["28px", { lineHeight: "36px",  letterSpacing: "-0.02em", fontWeight: "700" }],
+          "h2":       ["22px", { lineHeight: "28px",  letterSpacing: "-0.01em", fontWeight: "600" }],
+          "body-lg":  ["16px", { lineHeight: "24px",  fontWeight: "400" }],
+          "body-md":  ["14px", { lineHeight: "20px",  fontWeight: "400" }],
+          "button":   ["15px", { lineHeight: "20px",  fontWeight: "600" }],
+          "caption":  ["12px", { lineHeight: "16px",  fontWeight: "500" }],
+        },
+        spacing: {
+          "xs":  "4px",
+          "sm":  "8px",
+          "md":  "16px",
+          "lg":  "24px",
+          "xl":  "32px",
+          "2xl": "48px",
+        },
+      }
+    }
+  }
+</script>
+<style>
+  * { font-family: "Plus Jakarta Sans", sans-serif; }
+
+  body { background-color: #FFF8F5; color: #1b1c1c; }
+
+  .tonal-card {
+    background-color: #ffffff;
+    border: 1px solid #F0E0D8;
+    border-radius: 1rem;
+    box-shadow: 0 1px 3px rgba(255,159,124,0.08);
+    transition: box-shadow 0.2s;
+  }
+  .tonal-card:hover { box-shadow: 0 4px 14px rgba(255,159,124,0.18); }
+
+  .nav-item {
+    display: flex; align-items: center; gap: 12px;
+    padding: 10px 16px; border-radius: 9999px;
+    font-weight: 600; font-size: 15px; color: #54433d;
+    transition: background 0.15s, color 0.15s;
+    cursor: pointer; text-decoration: none;
+  }
+  .nav-item:hover { background: #fff1ec; color: #94492d; }
+  .nav-item.active { background: #ffdbcf; color: #783419; }
+  .nav-item.active .material-symbols-outlined {
+    font-variation-settings: 'FILL' 1, 'wght' 500, 'GRAD' 0, 'opsz' 24;
+  }
+
+  .pill-active {
+    background: #ff9f7c; color: #783419;
+    border-radius: 9999px; font-weight: 600; font-size: 13px;
+    padding: 6px 16px; white-space: nowrap; transition: opacity 0.15s;
+  }
+  .pill-inactive {
+    background: #f0eded; color: #54433d;
+    border-radius: 9999px; font-weight: 600; font-size: 13px;
+    padding: 6px 16px; white-space: nowrap; transition: background 0.15s, color 0.15s;
+    cursor: pointer;
+  }
+  .pill-inactive:hover { background: #ffdbcf; color: #783419; }
+
+  .material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    font-size: 22px;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar { display: none; }
+  .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+
+  /* Sticky left sidebar scroll */
+  .sidebar-left { position: sticky; top: 80px; height: fit-content; }
+  .sidebar-right { position: sticky; top: 80px; height: fit-content; }
+</style>
+</head>
+<body class="antialiased">
+
+<!-- ═══════════════════════════════════════════════════════
+     TOP HEADER
+═══════════════════════════════════════════════════════ -->
+<header class="fixed top-0 left-0 right-0 z-50 bg-[#FFF8F5] border-b border-[#F0E0D8]">
+  <div class="max-w-[1280px] mx-auto px-8 h-16 flex items-center justify-between">
+
+    <!-- Brand -->
+    <div class="flex items-center gap-3">
+      <div class="w-9 h-9 rounded-full overflow-hidden border-2 border-[#ff9f7c]">
+        <img alt="Logo" class="w-full h-full object-cover"
+          src="https://lh3.googleusercontent.com/aida-public/AB6AXuBB3Jr7RNaJSLconsBvfvmI1jV1QGcRjAJHOKVHXf83Kc2jlzLpjIAe1SUEW66-4JCKtOw9s9nkM5A3kO4trPoJqDppyaOJNFi8nR83ExDEyGd2fgNI7cjgykgQwT_0ghD4VzVo1tYpTjvITvFZd-eL1Ovx3BvFyQaFogV2f1UxORKGeMqvsrbINwFn2UTzaEJ_RUr_2X9Cx2lP1MuQaw2FjzmjLeYLI2eQVSkACp9892ex4jCbCa1HAwV7fbHPJ-nh_eLB26mxet55"/>
+      </div>
+      <span class="text-xl font-extrabold tracking-tight text-[#FF9F7C]">NewMomCircle</span>
+    </div>
+
+    <!-- Center search -->
+    <div class="flex-1 max-w-sm mx-8">
+      <div class="flex items-center gap-2 bg-[#f0eded] rounded-full px-4 py-2">
+        <span class="material-symbols-outlined text-[#87736c]" style="font-size:18px">search</span>
+        <input type="text" placeholder="Search posts, groups, resources…"
+          class="bg-transparent text-sm text-[#1b1c1c] placeholder-[#87736c] outline-none w-full"/>
+      </div>
+    </div>
+
+    <!-- Right actions -->
+    <div class="flex items-center gap-2">
+      <!-- SOS -->
+      <button class="flex items-center gap-2 bg-[#ff9f7c] hover:bg-[#f08060] text-white text-sm font-semibold rounded-full px-4 py-2 transition-colors active:scale-95">
+        <span class="material-symbols-outlined" style="font-size:18px">emergency_home</span>
+        SOS
+      </button>
+      <!-- Notifications -->
+      <button class="w-10 h-10 flex items-center justify-center rounded-full text-[#54433d] hover:bg-[#fff1ec] transition-colors relative">
+        <span class="material-symbols-outlined">notifications</span>
+        <span class="absolute top-2 right-2 w-2 h-2 bg-[#ff9f7c] rounded-full"></span>
+      </button>
+      <!-- Avatar -->
+      <div class="w-9 h-9 rounded-full overflow-hidden border-2 border-[#ff9f7c] cursor-pointer">
+        <img alt="Your profile"
+          src="https://lh3.googleusercontent.com/aida-public/AB6AXuBB3Jr7RNaJSLconsBvfvmI1jV1QGcRjAJHOKVHXf83Kc2jlzLpjIAe1SUEW66-4JCKtOw9s9nkM5A3kO4trPoJqDppyaOJNFi8nR83ExDEyGd2fgNI7cjgykgQwT_0ghD4VzVo1tYpTjvITvFZd-eL1Ovx3BvFyQaFogV2f1UxORKGeMqvsrbINwFn2UTzaEJ_RUr_2X9Cx2lP1MuQaw2FjzmjLeYLI2eQVSkACp9892ex4jCbCa1HAwV7fbHPJ-nh_eLB26mxet55"
+          class="w-full h-full object-cover"/>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ═══════════════════════════════════════════════════════
+     3-COLUMN LAYOUT
+═══════════════════════════════════════════════════════ -->
+<div class="max-w-[1280px] mx-auto px-8 pt-24 pb-12 flex gap-8">
+
+  <!-- ── LEFT SIDEBAR ── -->
+  <aside class="sidebar-left w-60 shrink-0 flex flex-col gap-2">
+    <a href="#" class="nav-item active">
+      <span class="material-symbols-outlined">home</span>
+      Feed
+    </a>
+    <a href="#" class="nav-item">
+      <span class="material-symbols-outlined">edit_note</span>
+      Journal
+    </a>
+    <a href="#" class="nav-item">
+      <span class="material-symbols-outlined">analytics</span>
+      Insights
+    </a>
+    <a href="#" class="nav-item">
+      <span class="material-symbols-outlined">auto_stories</span>
+      Library
+    </a>
+    <a href="#" class="nav-item">
+      <span class="material-symbols-outlined">group</span>
+      Groups
+    </a>
+    <a href="#" class="nav-item">
+      <span class="material-symbols-outlined">chat_bubble</span>
+      Messages
+    </a>
+    <a href="#" class="nav-item">
+      <span class="material-symbols-outlined">person</span>
+      Profile
+    </a>
+
+    <div class="mt-4 pt-4 border-t border-[#F0E0D8]">
+      <a href="#" class="nav-item">
+        <span class="material-symbols-outlined">settings</span>
+        Settings
+      </a>
+    </div>
+
+    <!-- Create Post button -->
+    <button class="mt-4 w-full bg-[#ff9f7c] hover:bg-[#f08060] text-white font-semibold text-sm rounded-full py-3 transition-colors active:scale-95 flex items-center justify-center gap-2">
+      <span class="material-symbols-outlined" style="font-size:18px">add</span>
+      Create Post
+    </button>
+  </aside>
+
+  <!-- ── MAIN FEED ── -->
+  <main class="flex-1 min-w-0 flex flex-col gap-5">
+
+    <!-- Welcome -->
+    <div class="mb-1">
+      <h1 class="text-2xl font-bold text-[#783419] tracking-tight">Good morning, Priya</h1>
+      <p class="text-sm text-[#54433d] mt-0.5">Your community is here for you today.</p>
+    </div>
+
+    <!-- Category pills -->
+    <div class="flex gap-2 overflow-x-auto scrollbar-hide pb-1">
+      <button class="pill-active">All Posts</button>
+      <button class="pill-inactive">Sleep Tips</button>
+      <button class="pill-inactive">Nutrition</button>
+      <button class="pill-inactive">Mental Health</button>
+      <button class="pill-inactive">Newborn Care</button>
+      <button class="pill-inactive">Milestones</button>
+      <button class="pill-inactive">Postpartum</button>
+    </div>
+
+    <!-- Compose box -->
+    <div class="tonal-card p-4 flex items-center gap-4">
+      <div class="w-10 h-10 rounded-full overflow-hidden border-2 border-[#ff9f7c] shrink-0">
+        <img alt="Your avatar"
+          src="https://lh3.googleusercontent.com/aida-public/AB6AXuBB3Jr7RNaJSLconsBvfvmI1jV1QGcRjAJHOKVHXf83Kc2jlzLpjIAe1SUEW66-4JCKtOw9s9nkM5A3kO4trPoJqDppyaOJNFi8nR83ExDEyGd2fgNI7cjgykgQwT_0ghD4VzVo1tYpTjvITvFZd-eL1Ovx3BvFyQaFogV2f1UxORKGeMqvsrbINwFn2UTzaEJ_RUr_2X9Cx2lP1MuQaw2FjzmjLeYLI2eQVSkACp9892ex4jCbCa1HAwV7fbHPJ-nh_eLB26mxet55"
+          class="w-full h-full object-cover"/>
+      </div>
+      <button class="flex-1 text-left bg-[#f6f3f2] hover:bg-[#f0eded] text-[#87736c] text-sm rounded-full px-5 py-3 transition-colors">
+        Share something with the circle, Priya…
+      </button>
+      <div class="flex gap-1">
+        <button class="w-9 h-9 flex items-center justify-center rounded-full hover:bg-[#fff1ec] text-[#ff9f7c] transition-colors">
+          <span class="material-symbols-outlined" style="font-size:20px">image</span>
+        </button>
+        <button class="w-9 h-9 flex items-center justify-center rounded-full hover:bg-[#fff1ec] text-[#ff9f7c] transition-colors">
+          <span class="material-symbols-outlined" style="font-size:20px">emoji_emotions</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- ── POST CARD 1 ── -->
+    <article class="tonal-card p-5">
+      <div class="flex items-center justify-between mb-4">
+        <div class="flex items-center gap-3">
+          <img alt="Ananya Sharma avatar" class="w-11 h-11 rounded-full object-cover border border-[#F0E0D8]"
+            src="https://lh3.googleusercontent.com/aida-public/AB6AXuDV6DYlfytUYLQ0BSMeV2evUEomh-4mnVlkfbDV79MEDlaEkkDFkkFc2uDHYeFkWty-h7MHsnEGQy5qQj5QGY_fviTB-f1RCzn6xvEpYlU1WcJVOhgJHauIMWcOy18g4Jex5e5iDN84pfNmd9_JHCDW7PWCZLGfrH4OA0jgFlBTEboXvbRDdFHHkhhy2fTwfWdXsTIBKDD4JekLkalNJK4NBLO_bPpKAZjaasnwPWblrSSfJQJqq1JA-exwBAxlanevhKC33UDNe1Wa"/>
+          <div>
+            <p class="font-semibold text-sm text-[#1b1c1c]">Ananya Sharma</p>
+            <p class="text-xs text-[#87736c]">2 hours ago · Sleep Tips</p>
+          </div>
+        </div>
+        <button class="text-[#87736c] hover:text-[#54433d] w-8 h-8 flex items-center justify-center rounded-full hover:bg-[#f0eded] transition-colors">
+          <span class="material-symbols-outlined">more_horiz</span>
+        </button>
+      </div>
+
+      <p class="text-sm text-[#54433d] leading-relaxed mb-4">
+        Finally managed to get a 4-hour stretch of sleep last night! It feels like a small victory, but I'm celebrating anyway. To all the tired moms out there: you're doing amazing. 🌸
+      </p>
+
+      <div class="flex items-center justify-between pt-4 border-t border-[#F0E0D8]">
+        <div class="flex gap-6">
+          <button class="flex items-center gap-1.5 text-[#FF9F7C] hover:opacity-80 transition-opacity active:scale-90">
+            <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1;font-size:20px">favorite</span>
+            <span class="text-xs font-semibold">24</span>
+          </button>
+          <button class="flex items-center gap-1.5 text-[#87736c] hover:text-[#54433d] transition-colors active:scale-90">
+            <span class="material-symbols-outlined" style="font-size:20px">chat_bubble</span>
+            <span class="text-xs font-semibold">8 Comments</span>
+          </button>
+        </div>
+        <div class="flex gap-2">
+          <button class="flex items-center gap-1.5 text-[#87736c] hover:text-[#54433d] text-xs font-semibold transition-colors">
+            <span class="material-symbols-outlined" style="font-size:18px">share</span>
+            Share
+          </button>
+          <button class="flex items-center gap-1.5 text-[#87736c] hover:text-[#54433d] text-xs font-semibold transition-colors">
+            <span class="material-symbols-outlined" style="font-size:18px">bookmark</span>
+            Save
+          </button>
+        </div>
+      </div>
+    </article>
+
+    <!-- ── POST CARD 2 (with image) ── -->
+    <article class="tonal-card p-5">
+      <div class="flex items-center gap-3 mb-4">
+        <img alt="Meera Reddy avatar" class="w-11 h-11 rounded-full object-cover border border-[#F0E0D8]"
+          src="https://lh3.googleusercontent.com/aida-public/AB6AXuB3sE4mGSYIYSHJoMDu3GbfAkU_2ofOVJEyV7ABvv3DkHBl3n72UyBwqe8yGaSWZm5orbY8MAFR8KXRo8aXv1Nm9X9CEXz9eQUGgRL-CrSmwG-Fc2FnHpSEKnD_RLDpMiTKT4aFSTaMzgejQ4W13_qg1SGcPAY440aPW-SNTLrfaOGKikX4z5cNLiSgQMKElc5htIqzNY29R36YEKa5gyF5bGmvqbzLas-IW_iW3yNhB2qvyrYZSgt2kY2Mpf9_wx0V-UhvXlgHjxBi"/>
+        <div>
+          <p class="font-semibold text-sm text-[#1b1c1c]">Meera Reddy</p>
+          <p class="text-xs text-[#87736c]">5 hours ago · Mental Health</p>
+        </div>
+      </div>
+
+      <p class="text-sm text-[#54433d] leading-relaxed mb-4">
+        First walk in the park today with the stroller. The fresh air did wonders for both of us! Highly recommend a 15-minute change of scenery if you're feeling overwhelmed today.
+      </p>
+
+      <!-- Image — wider on desktop -->
+      <div class="mb-4 rounded-lg overflow-hidden border border-[#F0E0D8]">
+        <img alt="Park scenery" class="w-full h-64 object-cover"
+          src="https://lh3.googleusercontent.com/aida-public/AB6AXuBCfoR6J9oUBl6UiQ_VzJxfew8thESPC8f6hRUUj9QPc2N8_p9oYu4e2ppLMYXeAwja12s6hLJUaf_nW-ZXYuzhtr8c1nO_uupax_YmEfKUypJfaR4djnZL3FBID4-sd-zibBm6WJBS0qZPs4cjPk6r6ASrRcccKiUcLC-TZ5wA7u5LWqJj9bHUok6b8GAttBkiStv4gSvoiK8cgIK4VdBjaE4WJXi6AvZ5JFcHQ8dWHmGIAPKF0_HEEnqWGdOZKarl1z_s-oMNliPZ"/>
+      </div>
+
+      <div class="flex items-center justify-between pt-4 border-t border-[#F0E0D8]">
+        <div class="flex gap-6">
+          <button class="flex items-center gap-1.5 text-[#87736c] hover:text-[#FF9F7C] transition-colors active:scale-90">
+            <span class="material-symbols-outlined" style="font-size:20px">favorite</span>
+            <span class="text-xs font-semibold">156</span>
+          </button>
+          <button class="flex items-center gap-1.5 text-[#87736c] hover:text-[#54433d] transition-colors active:scale-90">
+            <span class="material-symbols-outlined" style="font-size:20px">chat_bubble</span>
+            <span class="text-xs font-semibold">12 Comments</span>
+          </button>
+        </div>
+        <div class="flex gap-2">
+          <button class="flex items-center gap-1.5 text-[#87736c] hover:text-[#54433d] text-xs font-semibold transition-colors">
+            <span class="material-symbols-outlined" style="font-size:18px">share</span>
+            Share
+          </button>
+          <button class="flex items-center gap-1.5 text-[#87736c] hover:text-[#54433d] text-xs font-semibold transition-colors">
+            <span class="material-symbols-outlined" style="font-size:18px">bookmark</span>
+            Save
+          </button>
+        </div>
+      </div>
+    </article>
+
+    <!-- ── POST CARD 3 (question style) ── -->
+    <article class="tonal-card p-5 border-l-4 border-l-[#FF9F7C]">
+      <div class="flex items-center gap-3 mb-4">
+        <div class="w-11 h-11 rounded-full bg-[#ffdbcf] flex items-center justify-center text-[#94492d] shrink-0">
+          <span class="material-symbols-outlined">person</span>
+        </div>
+        <div>
+          <p class="font-semibold text-sm text-[#1b1c1c]">Kavita B.</p>
+          <p class="text-xs text-[#87736c]">Yesterday · Newborn Care</p>
+        </div>
+      </div>
+
+      <h3 class="font-bold text-base text-[#94492d] mb-2">Any advice for teething?</h3>
+      <p class="text-sm text-[#54433d] leading-relaxed mb-4">
+        Little Aarav is 6 months old and starting to get his first teeth. He's so fussy and won't take his usual pacifier. What worked for your little ones?
+      </p>
+
+      <div class="flex items-center justify-between pt-4 border-t border-[#F0E0D8]">
+        <div class="flex gap-6">
+          <button class="flex items-center gap-1.5 text-[#87736c] hover:text-[#FF9F7C] transition-colors active:scale-90">
+            <span class="material-symbols-outlined" style="font-size:20px">favorite</span>
+            <span class="text-xs font-semibold">42</span>
+          </button>
+          <button class="flex items-center gap-1.5 text-[#94492d] font-bold active:scale-90">
+            <span class="material-symbols-outlined" style="font-size:20px">chat_bubble</span>
+            <span class="text-xs font-bold">31 Answers</span>
+          </button>
+        </div>
+        <div class="flex gap-2">
+          <button class="flex items-center gap-1.5 text-[#87736c] hover:text-[#54433d] text-xs font-semibold transition-colors">
+            <span class="material-symbols-outlined" style="font-size:18px">share</span>
+            Share
+          </button>
+          <button class="flex items-center gap-1.5 text-[#87736c] hover:text-[#54433d] text-xs font-semibold transition-colors">
+            <span class="material-symbols-outlined" style="font-size:18px">bookmark</span>
+            Save
+          </button>
+        </div>
+      </div>
+    </article>
+
+  </main>
+
+  <!-- ── RIGHT SIDEBAR ── -->
+  <aside class="sidebar-right w-72 shrink-0 flex flex-col gap-5">
+
+    <!-- Your Wellness -->
+    <div class="tonal-card p-5">
+      <h2 class="font-bold text-sm text-[#1b1c1c] mb-3">Your Wellness Today</h2>
+      <div class="flex flex-col gap-3">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2 text-[#54433d] text-sm">
+            <span class="material-symbols-outlined text-[#ff9f7c]" style="font-size:18px">bedtime</span>
+            Sleep
+          </div>
+          <div class="flex-1 mx-3 h-1.5 bg-[#f0eded] rounded-full overflow-hidden">
+            <div class="h-full bg-[#ff9f7c] rounded-full" style="width:55%"></div>
+          </div>
+          <span class="text-xs text-[#87736c] font-semibold">4 hrs</span>
+        </div>
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2 text-[#54433d] text-sm">
+            <span class="material-symbols-outlined text-[#006a64]" style="font-size:18px">water_drop</span>
+            Hydration
+          </div>
+          <div class="flex-1 mx-3 h-1.5 bg-[#f0eded] rounded-full overflow-hidden">
+            <div class="h-full bg-[#5fc8bf] rounded-full" style="width:70%"></div>
+          </div>
+          <span class="text-xs text-[#87736c] font-semibold">7 cups</span>
+        </div>
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2 text-[#54433d] text-sm">
+            <span class="material-symbols-outlined text-[#ff9f7c]" style="font-size:18px">mood</span>
+            Mood
+          </div>
+          <div class="flex-1 mx-3 h-1.5 bg-[#f0eded] rounded-full overflow-hidden">
+            <div class="h-full bg-[#ff9f7c] rounded-full" style="width:80%"></div>
+          </div>
+          <span class="text-xs text-[#87736c] font-semibold">Good</span>
+        </div>
+      </div>
+      <button class="mt-4 w-full text-xs font-semibold text-[#94492d] hover:underline text-center">
+        View Full Insights →
+      </button>
+    </div>
+
+    <!-- Suggested Groups -->
+    <div class="tonal-card p-5">
+      <h2 class="font-bold text-sm text-[#1b1c1c] mb-3">Suggested Groups</h2>
+      <div class="flex flex-col gap-3">
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-lg bg-[#ffdbcf] flex items-center justify-center text-[#94492d] shrink-0">
+            <span class="material-symbols-outlined" style="font-size:18px">bedtime</span>
+          </div>
+          <div class="flex-1 min-w-0">
+            <p class="text-sm font-semibold text-[#1b1c1c] truncate">Sleep Training Support</p>
+            <p class="text-xs text-[#87736c]">2.4k members</p>
+          </div>
+          <button class="shrink-0 text-xs font-semibold text-[#94492d] border border-[#ff9f7c] rounded-full px-3 py-1 hover:bg-[#fff1ec] transition-colors">Join</button>
+        </div>
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-lg bg-[#e8f8f7] flex items-center justify-center text-[#006a64] shrink-0">
+            <span class="material-symbols-outlined" style="font-size:18px">local_dining</span>
+          </div>
+          <div class="flex-1 min-w-0">
+            <p class="text-sm font-semibold text-[#1b1c1c] truncate">Breastfeeding Mamas</p>
+            <p class="text-xs text-[#87736c]">5.1k members</p>
+          </div>
+          <button class="shrink-0 text-xs font-semibold text-[#94492d] border border-[#ff9f7c] rounded-full px-3 py-1 hover:bg-[#fff1ec] transition-colors">Join</button>
+        </div>
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-lg bg-[#ffdbcf] flex items-center justify-center text-[#94492d] shrink-0">
+            <span class="material-symbols-outlined" style="font-size:18px">psychology</span>
+          </div>
+          <div class="flex-1 min-w-0">
+            <p class="text-sm font-semibold text-[#1b1c1c] truncate">Postpartum Mental Health</p>
+            <p class="text-xs text-[#87736c]">3.8k members</p>
+          </div>
+          <button class="shrink-0 text-xs font-semibold text-[#94492d] border border-[#ff9f7c] rounded-full px-3 py-1 hover:bg-[#fff1ec] transition-colors">Join</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Trending Topics -->
+    <div class="tonal-card p-5">
+      <h2 class="font-bold text-sm text-[#1b1c1c] mb-3">Trending This Week</h2>
+      <div class="flex flex-col gap-2">
+        <a href="#" class="flex items-center justify-between hover:bg-[#fff1ec] -mx-2 px-2 py-1.5 rounded-lg transition-colors">
+          <span class="text-sm text-[#94492d] font-semibold">#SleepDeprivation</span>
+          <span class="text-xs text-[#87736c]">842 posts</span>
+        </a>
+        <a href="#" class="flex items-center justify-between hover:bg-[#fff1ec] -mx-2 px-2 py-1.5 rounded-lg transition-colors">
+          <span class="text-sm text-[#94492d] font-semibold">#FirstSmile</span>
+          <span class="text-xs text-[#87736c]">631 posts</span>
+        </a>
+        <a href="#" class="flex items-center justify-between hover:bg-[#fff1ec] -mx-2 px-2 py-1.5 rounded-lg transition-colors">
+          <span class="text-sm text-[#94492d] font-semibold">#MomGuilt</span>
+          <span class="text-xs text-[#87736c]">519 posts</span>
+        </a>
+        <a href="#" class="flex items-center justify-between hover:bg-[#fff1ec] -mx-2 px-2 py-1.5 rounded-lg transition-colors">
+          <span class="text-sm text-[#94492d] font-semibold">#TeethingTips</span>
+          <span class="text-xs text-[#87736c]">388 posts</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Footer links -->
+    <p class="text-xs text-[#87736c] leading-relaxed px-1">
+      Privacy · Terms · Help · About NewMomCircle<br/>
+      © 2026 NewMomCircle
+    </p>
+
+  </aside>
+</div>
+
+</body>
+</html>

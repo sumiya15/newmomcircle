@@ -92,10 +92,10 @@ export default function JournalScreen() {
   };
 
   return (
-    <View style={styles.root}>
+    <View style={styles.root} testID="journal-screen">
       <LinearGradient colors={[Colors.peach, Colors.peachDark]} style={styles.header}>
         <Text style={styles.headerTitle}>{t("journal_title")}</Text>
-        <TouchableOpacity style={styles.newBtn} onPress={() => setShowNew(true)}>
+        <TouchableOpacity testID="journal-new-btn" style={styles.newBtn} onPress={() => setShowNew(true)}>
           <Text style={styles.newBtnText}>+ {t("new_entry")}</Text>
         </TouchableOpacity>
       </LinearGradient>
@@ -131,6 +131,7 @@ export default function JournalScreen() {
         </View>
       ) : (
         <FlatList
+          testID="journal-entries-list"
           data={entries}
           keyExtractor={(e) => e.id}
           contentContainerStyle={styles.list}
@@ -164,6 +165,7 @@ export default function JournalScreen() {
             </View>
 
             <TextInput
+              testID="journal-content-input"
               style={styles.textArea}
               multiline
               value={entryText}
@@ -188,6 +190,7 @@ export default function JournalScreen() {
             )}
 
             <TouchableOpacity
+              testID="journal-submit-btn"
               style={[styles.saveBtn, (saving || !entryText.trim()) && { opacity: 0.5 }]}
               onPress={handleSave}
               disabled={saving || !entryText.trim()}

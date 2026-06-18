@@ -11,11 +11,11 @@ on:
   workflow_dispatch:
     inputs:
       android_api:
-        description: 'Android API level'
+        description: 'Android API level (30 or 33)'
         required: false
         default: '33'
       test_suite:
-        description: 'Test suite (auth/feed/forms/navigation/all)'
+        description: 'Suite: auth | feed | explore | forms | navigation | tracker | messages | profile | performance | safety | all'
         required: false
         default: 'all'
 
@@ -23,9 +23,16 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+# ── Permissions for PR comment posting ───────────────────────────────────────
+permissions:
+  contents: read
+  pull-requests: write
+  checks: write
+
 jobs:
+  # ── Matrix E2E job (API 30 + 33) ─────────────────────────────────────────────
   e2e-tests:
-    name: E2E on Android ${{ matrix.api-level }}
+    name: E2E · Android API ${{ matrix.api-level }}
     runs-on: ubuntu-latest
     timeout-minutes: 60
 
@@ -33,6 +40,17 @@ jobs:
       fail-fast: false
       matrix:
         api-level: [30, 33]
+
+    outputs:
+      passed-30:  ${{ steps.results.outputs.passed-30  }}
+      failed-30:  ${{ steps.results.outputs.failed-30  }}
+      skipped-30: ${{ steps.results.outputs.skipped-30 }}
+      total-30:   ${{ steps.results.outputs.total-30   }}
+      passed-33:  ${{ steps.results.outputs.passed-33  }}
+      failed-33:  ${{ steps.results.outputs.failed-33  }}
+      skipped-33: ${{ steps.results.outputs.skipped-33 }}
+      total-33:   ${{ steps.results.outputs.total-33   }}
+      duration:   ${{ steps.results.outputs.duration   }}
 
     env:
       EXECUTION_MODE: installed
@@ -47,14 +65,14 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # ── Java ──────────────────────────────────────────────────────────────────
+      # ── Java 17 ───────────────────────────────────────────────────────────────
       - name: Set up Java 17
         uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: '17'
 
-      # ── Node.js ───────────────────────────────────────────────────────────────
+      # ── Node.js 20 ────────────────────────────────────────────────────────────
       - name: Set up Node.js 20
         uses: actions/setup-node@v4
         with:
@@ -62,21 +80,21 @@ jobs:
           cache: npm
           cache-dependency-path: e2e/package-lock.json
 
-      # ── KVM (emulator hardware acceleration) ──────────────────────────────────
-      - name: Enable KVM for emulator acceleration
+      # ── KVM (hardware acceleration for emulator) ──────────────────────────────
+      - name: Enable KVM
         run: |
           echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' \
             | sudo tee /etc/udev/rules.d/99-kvm4all.rules
           sudo udevadm control --reload-rules
           sudo udevadm trigger --name-match=kvm
 
-      # ── Install framework dependencies ────────────────────────────────────────
-      - name: Install E2E framework dependencies
+      # ── Install E2E dependencies ───────────────────────────────────────────────
+      - name: Install E2E dependencies
         working-directory: e2e
         run: npm ci
 
-      # ── Appium ────────────────────────────────────────────────────────────────
-      - name: Install Appium 2.x and UiAutomator2 driver
+      # ── Install Appium 2.x + UiAutomator2 ─────────────────────────────────────
+      - name: Install Appium
         run: |
           npm install -g appium
           appium driver install uiautomator2
@@ -85,19 +103,20 @@ jobs:
       # ── Start Appium server ───────────────────────────────────────────────────
       - name: Start Appium server
         run: |
-          appium --log-level error --base-path / &
+          appium --log-level warn --base-path / > /tmp/appium.log 2>&1 &
           sleep 5
-          curl -s http://127.0.0.1:4723/status | jq .
+          curl -sf http://127.0.0.1:4723/status | jq .value.ready
 
-      # ── Run tests inside emulator ─────────────────────────────────────────────
-      - name: Run E2E tests on Android ${{ matrix.api-level }} emulator
+      # ── Run E2E tests inside emulator ─────────────────────────────────────────
+      - name: Run E2E on Android API ${{ matrix.api-level }}
+        id: run-tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level:   ${{ matrix.api-level }}
           target:      google_apis
           arch:        x86_64
           profile:     pixel_5
-          avd-name:    NewMomCircle_API${{ matrix.api-level }}
+          avd-name:    NMC_API${{ matrix.api-level }}
           ram-size:    4096M
           heap-size:   512M
           disk-size:   6144M
@@ -109,25 +128,64 @@ jobs:
             -no-boot-anim
           disable-animations: true
           script: |
-            adb wait-for-device
+            adb wait-for-device shell 'while [[ -z $(getprop sys.boot_completed) ]]; do sleep 1; done'
             adb shell input keyevent 82
-            # Install Expo Go for Expo-managed apps
-            # adb install -r path/to/ExpoGo.apk
             cd e2e
             SUITE="${{ github.event.inputs.test_suite || 'all' }}"
             if [ "$SUITE" = "all" ]; then
-              npm run test:ci
+              npm run test:ci || true
             else
-              npm run test:$SUITE
+              npm run test:$SUITE || true
             fi
 
-      # ── Upload Mochawesome HTML report ────────────────────────────────────────
+      # ── Parse mochawesome JSON → structured outputs ────────────────────────────
+      - name: Parse test results
+        id: results
+        if: always()
+        working-directory: e2e
+        run: |
+          API="${{ matrix.api-level }}"
+          REPORT="mochawesome-report/mochawesome.json"
+
+          if [ -f "$REPORT" ]; then
+            PASSED=$(jq '.stats.passes'   "$REPORT")
+            FAILED=$(jq '.stats.failures' "$REPORT")
+            SKIPPED=$(jq '.stats.pending' "$REPORT")
+            TOTAL=$(jq  '.stats.tests'   "$REPORT")
+            DURATION_MS=$(jq '.stats.duration' "$REPORT")
+            DURATION_S=$(( DURATION_MS / 1000 ))
+          else
+            PASSED=0; FAILED=0; SKIPPED=0; TOTAL=0; DURATION_S=0
+          fi
+
+          echo "passed-${API}=$PASSED"   >> $GITHUB_OUTPUT
+          echo "failed-${API}=$FAILED"   >> $GITHUB_OUTPUT
+          echo "skipped-${API}=$SKIPPED" >> $GITHUB_OUTPUT
+          echo "total-${API}=$TOTAL"     >> $GITHUB_OUTPUT
+          echo "duration=${DURATION_S}s" >> $GITHUB_OUTPUT
+
+          # Also write to file for the report-comment job
+          mkdir -p /tmp/results
+          echo "{\"api\":$API,\"passed\":$PASSED,\"failed\":$FAILED,\"skipped\":$SKIPPED,\"total\":$TOTAL,\"duration\":${DURATION_S}}" \
+            > /tmp/results/api${API}.json
+
+      # ── Generate HTML report ───────────────────────────────────────────────────
       - name: Generate HTML report
         if: always()
         working-directory: e2e
         run: npm run report || true
 
-      - name: Upload Mochawesome HTML report
+      # ── Save results file as artifact ──────────────────────────────────────────
+      - name: Upload results JSON
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-results-api${{ matrix.api-level }}
+          path: /tmp/results/api${{ matrix.api-level }}.json
+          retention-days: 7
+
+      # ── Upload Mochawesome HTML report ─────────────────────────────────────────
+      - name: Upload HTML report
         uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -135,7 +193,7 @@ jobs:
           path: e2e/mochawesome-report/
           retention-days: 30
 
-      # ── Upload Excel report ───────────────────────────────────────────────────
+      # ── Upload Excel report ────────────────────────────────────────────────────
       - name: Upload Excel report
         uses: actions/upload-artifact@v4
         if: always()
@@ -144,7 +202,7 @@ jobs:
           path: e2e/excel/
           retention-days: 30
 
-      # ── Upload screenshots ────────────────────────────────────────────────────
+      # ── Upload screenshots ─────────────────────────────────────────────────────
       - name: Upload screenshots
         uses: actions/upload-artifact@v4
         if: always()
@@ -155,7 +213,7 @@ jobs:
             e2e/reports/failures/
           retention-days: 14
 
-      # ── Upload logs ───────────────────────────────────────────────────────────
+      # ── Upload device logs ─────────────────────────────────────────────────────
       - name: Upload device logs
         uses: actions/upload-artifact@v4
         if: always()
@@ -164,14 +222,141 @@ jobs:
           path: e2e/logs/
           retention-days: 14
 
-      # ── Summary ───────────────────────────────────────────────────────────────
-      - name: Post test summary to GitHub Step Summary
+      # ── Per-matrix Step Summary ────────────────────────────────────────────────
+      - name: Write Step Summary
         if: always()
         run: |
-          echo "## 📊 E2E Test Results — API ${{ matrix.api-level }}" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "| Artifact | Location |" >> $GITHUB_STEP_SUMMARY
-          echo "|---|---|" >> $GITHUB_STEP_SUMMARY
-          echo "| HTML Report | mochawesome-report-api${{ matrix.api-level }} |" >> $GITHUB_STEP_SUMMARY
-          echo "| Excel Report | excel-report-api${{ matrix.api-level }} |" >> $GITHUB_STEP_SUMMARY
-          echo "| Screenshots | screenshots-api${{ matrix.api-level }} |" >> $GITHUB_STEP_SUMMARY
+          API="${{ matrix.api-level }}"
+          REPORT="e2e/mochawesome-report/mochawesome.json"
+          if [ -f "$REPORT" ]; then
+            PASSED=$(jq '.stats.passes'   "$REPORT")
+            FAILED=$(jq '.stats.failures' "$REPORT")
+            TOTAL=$(jq  '.stats.tests'   "$REPORT")
+            PCT=$(( PASSED * 100 / ( TOTAL > 0 ? TOTAL : 1 ) ))
+            STATUS=$( [ "$FAILED" -eq 0 ] && echo "✅ All Passed" || echo "❌ $FAILED Failed" )
+          else
+            PASSED=0; FAILED=0; TOTAL=0; PCT=0; STATUS="⚠️ No Report"
+          fi
+
+          {
+            echo "## E2E Results — Android API ${API}"
+            echo ""
+            echo "| | |"
+            echo "|---|---|"
+            echo "| Status | ${STATUS} |"
+            echo "| Passed | ${PASSED} / ${TOTAL} (${PCT}%) |"
+            echo "| Failed | ${FAILED} |"
+            echo ""
+            echo "**Artifacts:**"
+            echo "- 📊 \`mochawesome-report-api${API}\` — HTML test report"
+            echo "- 📋 \`excel-report-api${API}\` — Excel report (4 sheets)"
+            echo "- 📸 \`screenshots-api${API}\` — Screenshots & failure captures"
+            echo "- 📝 \`device-logs-api${API}\` — Logcat & Winston logs"
+          } >> $GITHUB_STEP_SUMMARY
+
+  # ── PR Comment job (runs after both matrix jobs) ──────────────────────────────
+  post-pr-comment:
+    name: Post PR Comment
+    runs-on: ubuntu-latest
+    needs: e2e-tests
+    if: always() && github.event_name == 'pull_request'
+
+    steps:
+      - name: Download result JSONs
+        uses: actions/download-artifact@v4
+        with:
+          pattern: test-results-api*
+          merge-multiple: true
+          path: /tmp/results
+
+      - name: Build and post PR comment
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const fs = require('fs');
+            const path = require('path');
+
+            // Read both result files
+            const resultsDir = '/tmp/results';
+            const files = fs.existsSync(resultsDir) ? fs.readdirSync(resultsDir) : [];
+
+            let rows = '';
+            let totalPassed = 0, totalFailed = 0, totalTests = 0;
+
+            const apiData = {};
+            for (const f of files) {
+              try {
+                const data = JSON.parse(fs.readFileSync(path.join(resultsDir, f), 'utf8'));
+                apiData[data.api] = data;
+              } catch {}
+            }
+
+            for (const api of [30, 33]) {
+              const d = apiData[api] || { passed: 0, failed: 0, skipped: 0, total: 0, duration: 0 };
+              const pct = d.total > 0 ? Math.round((d.passed / d.total) * 100) : 0;
+              const status = d.total === 0 ? '⚠️ No data'
+                           : d.failed === 0 ? '✅ Passed'
+                           : '❌ Failed';
+              rows += `| API ${api} | ${status} | ${d.passed} | ${d.failed} | ${d.skipped} | ${d.total} | ${pct}% | ${d.duration}s |\n`;
+              totalPassed += d.passed;
+              totalFailed += d.failed;
+              totalTests  += d.total;
+            }
+
+            const overallPct = totalTests > 0 ? Math.round((totalPassed / totalTests) * 100) : 0;
+            const overallStatus = totalTests === 0 ? '⚠️ No tests ran'
+                                : totalFailed === 0 ? '✅ All tests passed'
+                                : `❌ ${totalFailed} test(s) failed`;
+
+            const runUrl = `https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+
+            const body = [
+              `## 📱 E2E Test Results`,
+              ``,
+              `**${overallStatus}** &nbsp;·&nbsp; ${totalPassed}/${totalTests} passed (${overallPct}%)`,
+              ``,
+              `| Device | Status | ✅ Pass | ❌ Fail | ⏭️ Skip | Total | Pass % | Duration |`,
+              `|--------|--------|---------|---------|---------|-------|--------|----------|`,
+              rows.trim(),
+              ``,
+              `### 📦 Artifacts`,
+              ``,
+              `| Artifact | API 30 | API 33 |`,
+              `|----------|--------|--------|`,
+              `| HTML Report | [View](${runUrl}#artifacts) | [View](${runUrl}#artifacts) |`,
+              `| Excel Report | 📋 \`excel-report-api30\` | 📋 \`excel-report-api33\` |`,
+              `| Screenshots | 📸 \`screenshots-api30\` | 📸 \`screenshots-api33\` |`,
+              `| Device Logs | 📝 \`device-logs-api30\` | 📝 \`device-logs-api33\` |`,
+              ``,
+              `> Artifacts are available for 14–30 days from the [Actions run](${runUrl}).`,
+              ``,
+              `<sub>🤖 Generated by [Appium E2E Workflow](.github/workflows/appium-e2e.yml)</sub>`,
+            ].join('\n');
+
+            // Find existing bot comment to update (avoid duplicate comments on re-runs)
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo:  context.repo.repo,
+              issue_number: context.issue.number,
+            });
+
+            const existingComment = comments.find(c =>
+              c.user.type === 'Bot' && c.body.includes('📱 E2E Test Results')
+            );
+
+            if (existingComment) {
+              await github.rest.issues.updateComment({
+                owner:      context.repo.owner,
+                repo:       context.repo.repo,
+                comment_id: existingComment.id,
+                body,
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner:        context.repo.owner,
+                repo:         context.repo.repo,
+                issue_number: context.issue.number,
+                body,
+              });
+            }

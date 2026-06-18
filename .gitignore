@@ -1,0 +1,63 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Build outputs
+.next/
+dist/
+build/
+out/
+*.tsbuildinfo
+
+# Expo / React Native
+.expo/
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+*.orig.*
+web-build/
+android/
+ios/
+
+# Environment files — NEVER commit these
+.env
+.env.local
+.env.*.local
+.env.production
+.env.development.local
+.env.test.local
+
+# Supabase
+.supabase/
+
+# Firebase (legacy — being removed)
+.firebase/
+firebase-debug.log
+firestore-debug.log
+
+# OS
+.DS_Store
+Thumbs.db
+*.swp
+
+# Editors
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+.idea/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Turbo cache
+.turbo/
+
+# Testing
+coverage/
