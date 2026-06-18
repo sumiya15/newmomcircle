@@ -249,17 +249,18 @@ export default function EventsScreen() {
   };
 
   return (
-    <View style={[styles.root, { paddingTop: insets.top }]}>
+    <View style={[styles.root, { paddingTop: insets.top }]} testID="events-screen">
       <StatusBar barStyle="dark-content" />
 
       {/* ── Header ── */}
       <View style={styles.header}>
-        <Pressable style={styles.backBtn} onPress={() => router.back()} hitSlop={12}>
+        <Pressable testID="events-back-btn" style={styles.backBtn} onPress={() => router.back()} hitSlop={12}>
           <Ionicons name="chevron-back" size={22} color={Colors.textPrimary} />
         </Pressable>
         <View style={styles.headerCenter}>
           <Text style={styles.headerTitle}>Events Near You</Text>
           <Pressable
+            testID="events-city-picker"
             style={styles.cityPill}
             onPress={() => setShowCities((s) => !s)}
           >
@@ -288,6 +289,7 @@ export default function EventsScreen() {
             {CITIES.map((city) => (
               <Pressable
                 key={city}
+                testID={`events-city-${city.toLowerCase().replace(/ /g, '-')}-btn`}
                 style={[
                   styles.cityOption,
                   city === activeCity && styles.cityOptionActive,
@@ -325,6 +327,7 @@ export default function EventsScreen() {
             return (
               <Pressable
                 key={f}
+                testID={`events-filter-${f.toLowerCase().replace(/ /g, '-')}-btn`}
                 style={({ pressed }) => [
                   styles.filterChip,
                   active && styles.filterChipActive,
@@ -352,6 +355,7 @@ export default function EventsScreen() {
         />
       ) : (
         <FlatList
+          testID="events-list"
           data={rest}
           keyExtractor={(e) => e.id}
           contentContainerStyle={[
@@ -547,6 +551,7 @@ function EventCardFooter({
           </Text>
         </View>
         <Pressable
+          testID={`events-rsvp-${event.id}-btn`}
           style={({ pressed }) => [
             styles.rsvpBtn,
             going && styles.rsvpBtnGoing,

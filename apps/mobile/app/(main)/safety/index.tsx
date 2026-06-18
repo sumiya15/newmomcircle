@@ -116,7 +116,7 @@ export default function SafetyScreen() {
   };
 
   return (
-    <View style={styles.root}>
+    <View style={styles.root} testID="safety-screen">
       <LinearGradient colors={["#D94F4F", "#B03030"]} style={styles.header}>
         <Text style={styles.headerTitle}>{t("safety_title")}</Text>
         <Text style={styles.headerEmoji}>🛡️</Text>
@@ -129,6 +129,7 @@ export default function SafetyScreen() {
             transition={{ type: 'timing', duration: 500, loop: sosActive, repeatReverse: sosActive }}
           >
             <TouchableOpacity
+              testID="safety-sos-btn"
               style={styles.sosBtn}
               onPress={triggerSOS}
               activeOpacity={0.82}
@@ -149,7 +150,7 @@ export default function SafetyScreen() {
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
             <Text style={styles.sectionTitle}>{t("guardians")}</Text>
-            <TouchableOpacity style={styles.addBtn} onPress={() => { setShowAddGuardian(true); setModalError(""); }}>
+            <TouchableOpacity testID="safety-add-guardian-btn" style={styles.addBtn} onPress={() => { setShowAddGuardian(true); setModalError(""); }}>
               <Text style={styles.addBtnText}>+ {t("add_guardian")}</Text>
             </TouchableOpacity>
           </View>
@@ -168,16 +169,16 @@ export default function SafetyScreen() {
                   {pendingDeleteId === g.id && (
                     <View style={styles.deleteConfirmRow}>
                       <Text style={styles.deleteConfirmLabel}>Remove?</Text>
-                      <TouchableOpacity onPress={confirmDeleteGuardian} style={styles.deleteYesBtn}>
+                      <TouchableOpacity testID="safety-confirm-delete-btn" onPress={confirmDeleteGuardian} style={styles.deleteYesBtn}>
                         <Text style={styles.deleteYesText}>{t("delete_confirm_yes")}</Text>
                       </TouchableOpacity>
-                      <TouchableOpacity onPress={() => setPendingDeleteId(null)}>
+                      <TouchableOpacity testID="safety-cancel-delete-btn" onPress={() => setPendingDeleteId(null)}>
                         <Text style={styles.deleteNoText}>{t("delete_confirm_no")}</Text>
                       </TouchableOpacity>
                     </View>
                   )}
                 </View>
-                <TouchableOpacity onPress={() => handleDeleteGuardian(g.id)}>
+                <TouchableOpacity testID={`safety-delete-guardian-${g.id}-btn`} onPress={() => handleDeleteGuardian(g.id)}>
                   <Text style={styles.deleteIcon}>🗑️</Text>
                 </TouchableOpacity>
               </View>
@@ -192,7 +193,7 @@ export default function SafetyScreen() {
           <View style={styles.sosCountdownCard}>
             <Text style={styles.sosCountdownTitle}>{t("sos_confirm_title")}</Text>
             <Text style={styles.sosCountdownNum}>{countdown}</Text>
-            <TouchableOpacity style={styles.cancelBtn} onPress={cancelSOS}>
+            <TouchableOpacity testID="safety-sos-cancel-btn" style={styles.cancelBtn} onPress={cancelSOS}>
               <Text style={styles.cancelBtnText}>{t("sos_cancel")}</Text>
             </TouchableOpacity>
           </View>
@@ -219,12 +220,13 @@ export default function SafetyScreen() {
           <View style={styles.modalCard}>
             <Text style={styles.modalTitle}>{t("add_guardian")}</Text>
             {[
-              { label: t("guardian_name"),        value: gName,         setter: setGName,         keyboard: undefined },
-              { label: t("guardian_phone"),        value: gPhone,        setter: setGPhone,        keyboard: "phone-pad" as const },
-              { label: t("guardian_relationship"), value: gRelationship, setter: setGRelationship, keyboard: undefined },
+              { label: t("guardian_name"),        value: gName,         setter: setGName,         keyboard: undefined,          testID: "safety-guardian-name-input" },
+              { label: t("guardian_phone"),        value: gPhone,        setter: setGPhone,        keyboard: "phone-pad" as const, testID: "safety-guardian-phone-input" },
+              { label: t("guardian_relationship"), value: gRelationship, setter: setGRelationship, keyboard: undefined,          testID: "safety-guardian-relationship-input" },
             ].map((f, i) => (
               <TextInput
                 key={i}
+                testID={f.testID}
                 style={styles.input}
                 value={f.value}
                 onChangeText={f.setter}
@@ -235,6 +237,7 @@ export default function SafetyScreen() {
             ))}
             {modalError ? <Text style={styles.modalErrorText}>{modalError}</Text> : null}
             <TouchableOpacity
+              testID="safety-save-guardian-btn"
               style={[styles.saveGuardianBtn, savingGuardian && { opacity: 0.5 }]}
               onPress={handleAddGuardian}
               disabled={savingGuardian}
@@ -245,7 +248,7 @@ export default function SafetyScreen() {
                 <Text style={styles.saveGuardianBtnText}>{t("save_guardian")}</Text>
               )}
             </TouchableOpacity>
-            <TouchableOpacity style={styles.cancelModalBtn} onPress={() => { setShowAddGuardian(false); setModalError(""); }}>
+            <TouchableOpacity testID="safety-cancel-guardian-btn" style={styles.cancelModalBtn} onPress={() => { setShowAddGuardian(false); setModalError(""); }}>
               <Text style={styles.cancelModalText}>{t("delete_confirm_no")}</Text>
             </TouchableOpacity>
           </View>

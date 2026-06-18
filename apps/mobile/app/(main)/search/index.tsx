@@ -166,17 +166,18 @@ export default function SearchScreen() {
   const showEmpty = !!debouncedQuery && !loading && !hasResults;
 
   return (
-    <View style={[styles.root, { paddingTop: insets.top }]}>
+    <View style={[styles.root, { paddingTop: insets.top }]} testID="search-screen">
       <StatusBar barStyle="dark-content" />
 
       {/* ── Search bar ── */}
       <View style={styles.searchRow}>
-        <Pressable style={styles.backBtn} onPress={() => router.back()} hitSlop={12}>
+        <Pressable testID="search-back-btn" style={styles.backBtn} onPress={() => router.back()} hitSlop={12}>
           <Ionicons name="chevron-back" size={22} color={Colors.textPrimary} />
         </Pressable>
         <View style={styles.searchBar}>
           <Ionicons name="search-outline" size={17} color={Colors.textMuted} />
           <TextInput
+            testID="search-input"
             ref={inputRef}
             style={styles.searchInput}
             value={query}
@@ -195,7 +196,7 @@ export default function SearchScreen() {
                 exit={{ opacity: 0, scale: 0.6 }}
                 transition={{ type: 'spring', ...Motion.spring.snappy }}
               >
-                <Pressable onPress={clearQuery} hitSlop={8}>
+                <Pressable testID="search-clear-btn" onPress={clearQuery} hitSlop={8}>
                   <Ionicons name="close-circle" size={17} color={Colors.textMuted} />
                 </Pressable>
               </MotiView>
@@ -207,6 +208,7 @@ export default function SearchScreen() {
       {/* ── Empty state (no query) ── */}
       {!query ? (
         <ScrollView
+          testID="search-browse-scroll"
           showsVerticalScrollIndicator={false}
           keyboardDismissMode="on-drag"
           keyboardShouldPersistTaps="handled"
@@ -224,6 +226,7 @@ export default function SearchScreen() {
                   transition={{ type: 'spring', ...Motion.spring.snappy, delay: i * 30 }}
                 >
                   <Pressable
+                    testID={`search-trending-${t.replace(/ /g, '-')}-btn`}
                     style={({ pressed }) => [
                       styles.trendingChip,
                       pressed && { opacity: 0.8 },
@@ -243,7 +246,7 @@ export default function SearchScreen() {
             <View style={styles.discoverSection}>
               <View style={styles.discoverTitleRow}>
                 <Text style={styles.discoverTitle}>Recent Searches</Text>
-                <Pressable onPress={() => setRecent([])} hitSlop={8}>
+                <Pressable testID="search-clear-recent-btn" onPress={() => setRecent([])} hitSlop={8}>
                   <Text style={styles.clearText}>Clear</Text>
                 </Pressable>
               </View>
@@ -251,6 +254,7 @@ export default function SearchScreen() {
                 {recent.map((r) => (
                   <Pressable
                     key={r}
+                    testID={`search-recent-${r.replace(/ /g, '-')}-btn`}
                     style={({ pressed }) => [styles.recentRow, pressed && { opacity: 0.8 }]}
                     onPress={() => { setQuery(r); handleSearch(r); }}
                   >
@@ -288,6 +292,7 @@ export default function SearchScreen() {
               return (
                 <Pressable
                   key={t}
+                  testID={`search-tab-${t.toLowerCase()}`}
                   style={[styles.tab, active && styles.tabActive]}
                   onPress={() => setActiveTab(t)}
                 >
@@ -449,7 +454,7 @@ function PersonResultRow({ person, index }: { person: SearchPerson; index: numbe
             )}
           </View>
         </View>
-        <Pressable style={styles.followBtn}>
+        <Pressable testID={`search-follow-${person.id}-btn`} style={styles.followBtn}>
           <Text style={styles.followBtnText}>Follow</Text>
         </Pressable>
       </Pressable>
@@ -487,6 +492,7 @@ function CircleResultRow({
           </View>
         </View>
         <Pressable
+          testID={`search-join-${circle.id}-btn`}
           style={({ pressed }) => [
             styles.joinBtn,
             joined && styles.joinBtnJoined,

@@ -70,12 +70,12 @@ export default function SettingsScreen() {
   };
 
   return (
-    <View style={[styles.root, { paddingTop: insets.top }]}>
+    <View style={[styles.root, { paddingTop: insets.top }]} testID="settings-screen">
       <StatusBar barStyle="dark-content" />
 
       {/* ── Header ── */}
       <View style={styles.header}>
-        <Pressable style={styles.backBtn} onPress={() => router.back()} hitSlop={12}>
+        <Pressable testID="settings-back-btn" style={styles.backBtn} onPress={() => router.back()} hitSlop={12}>
           <Ionicons name="chevron-back" size={22} color={Colors.textPrimary} />
         </Pressable>
         <Text style={styles.headerTitle}>Settings</Text>
@@ -83,6 +83,7 @@ export default function SettingsScreen() {
       </View>
 
       <ScrollView
+        testID="settings-scroll"
         showsVerticalScrollIndicator={false}
         contentContainerStyle={[
           styles.scroll,
@@ -101,6 +102,7 @@ export default function SettingsScreen() {
             sub="Alerts on this device"
             value={pushEnabled}
             onChange={setPushEnabled}
+            testID="settings-push-notifications-toggle"
           />
           <RowSep />
           <ToggleRow
@@ -109,6 +111,7 @@ export default function SettingsScreen() {
             value={emailDigest}
             onChange={setEmailDigest}
             disabled={!pushEnabled}
+            testID="settings-email-digest-toggle"
           />
           <RowSep />
           <ToggleRow
@@ -116,6 +119,7 @@ export default function SettingsScreen() {
             sub="Likes, comments & replies"
             value={activityAlerts}
             onChange={setActivityAlerts}
+            testID="settings-activity-alerts-toggle"
           />
           <RowSep />
           <ToggleRow
@@ -123,6 +127,7 @@ export default function SettingsScreen() {
             sub="New posts in circles you've joined"
             value={circleUpdates}
             onChange={setCircleUpdates}
+            testID="settings-circle-updates-toggle"
           />
         </SettingsSection>
 
@@ -146,6 +151,7 @@ export default function SettingsScreen() {
             sub="Display weeks/months on your profile"
             value={showBabyAge}
             onChange={setShowBabyAge}
+            testID="settings-show-baby-age-toggle"
           />
           <RowSep />
           <ToggleRow
@@ -153,6 +159,7 @@ export default function SettingsScreen() {
             sub="Other members can message you"
             value={allowDMs}
             onChange={setAllowDMs}
+            testID="settings-allow-dms-toggle"
           />
           <RowSep />
           <ToggleRow
@@ -161,6 +168,7 @@ export default function SettingsScreen() {
             value={readReceipts}
             onChange={setReadReceipts}
             disabled={!allowDMs}
+            testID="settings-read-receipts-toggle"
           />
         </SettingsSection>
 
@@ -175,6 +183,7 @@ export default function SettingsScreen() {
             sub="Allow anonymised data to improve recommendations"
             value={allowRetraining}
             onChange={handleRetraining}
+            testID="settings-ai-personalisation-toggle"
           />
           <RowSep />
           <TapRow
@@ -182,12 +191,14 @@ export default function SettingsScreen() {
             sub="Get a copy of everything you've shared"
             icon="download-outline"
             onPress={() => showToast('Data export coming soon — we\'ll email when ready.')}
+            testID="settings-download-data-btn"
           />
           <RowSep />
           <TapRow
             label="Privacy Policy"
             icon="document-text-outline"
             onPress={() => showToast('Opening privacy policy…')}
+            testID="settings-privacy-policy-btn"
           />
         </SettingsSection>
 
@@ -210,18 +221,21 @@ export default function SettingsScreen() {
             label="Terms of Service"
             icon="reader-outline"
             onPress={() => showToast('Opening terms…')}
+            testID="settings-terms-btn"
           />
           <RowSep />
           <TapRow
             label="Open Source Licenses"
             icon="code-slash-outline"
             onPress={() => showToast('Opening licenses…')}
+            testID="settings-licenses-btn"
           />
           <RowSep />
           <TapRow
             label="Send Feedback"
             icon="chatbubble-ellipses-outline"
             onPress={() => showToast('Thank you! Feedback form coming soon.')}
+            testID="settings-feedback-btn"
           />
         </SettingsSection>
 
@@ -288,11 +302,12 @@ function SettingsSection({
 // ─── Toggle row ───────────────────────────────────────────────────────────────
 
 function ToggleRow({
-  label, sub, value, onChange, disabled = false,
+  label, sub, value, onChange, disabled = false, testID,
 }: {
   label: string; sub?: string;
   value: boolean; onChange: (v: boolean) => void;
   disabled?: boolean;
+  testID?: string;
 }) {
   return (
     <View style={[styles.row, disabled && styles.rowDisabled]}>
@@ -301,6 +316,7 @@ function ToggleRow({
         {sub && <Text style={styles.rowSub}>{sub}</Text>}
       </View>
       <Switch
+        testID={testID}
         value={value}
         onValueChange={disabled ? undefined : onChange}
         disabled={disabled}
@@ -314,15 +330,17 @@ function ToggleRow({
 // ─── Tap row ──────────────────────────────────────────────────────────────────
 
 function TapRow({
-  label, sub, value, icon, showChevron = true, onPress,
+  label, sub, value, icon, showChevron = true, onPress, testID,
 }: {
   label: string; sub?: string; value?: string;
   icon?: React.ComponentProps<typeof Ionicons>['name'];
   showChevron?: boolean;
   onPress: () => void;
+  testID?: string;
 }) {
   return (
     <Pressable
+      testID={testID}
       style={({ pressed }) => [styles.row, pressed && styles.rowPressed]}
       onPress={onPress}
     >
@@ -365,6 +383,7 @@ function VisibilityControl({
         return (
           <Pressable
             key={id}
+            testID={`settings-visibility-${id.toLowerCase()}-btn`}
             style={({ pressed }) => [
               styles.visOption,
               active && styles.visOptionActive,

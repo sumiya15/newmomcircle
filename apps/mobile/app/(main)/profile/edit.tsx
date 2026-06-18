@@ -201,6 +201,7 @@ export default function EditProfileScreen() {
         </View>
 
         <ScrollView
+          testID="edit-profile-scroll"
           showsVerticalScrollIndicator={false}
           contentContainerStyle={[
             styles.scroll,
@@ -220,7 +221,7 @@ export default function EditProfileScreen() {
               >
                 <Ionicons name="alert-circle-outline" size={16} color={Colors.danger} />
                 <Text style={styles.errorText}>{errorMsg}</Text>
-                <Pressable onPress={() => setErrorMsg('')} hitSlop={8}>
+                <Pressable testID="edit-profile-error-dismiss" onPress={() => setErrorMsg('')} hitSlop={8}>
                   <Ionicons name="close" size={16} color={Colors.danger} />
                 </Pressable>
               </MotiView>
@@ -235,6 +236,7 @@ export default function EditProfileScreen() {
             style={styles.photoSection}
           >
             <Pressable
+              testID="edit-profile-avatar-btn"
               style={({ pressed }) => [styles.avatarWrap, pressed && { opacity: 0.85 }]}
               onPress={handlePickPhoto}
             >
@@ -255,6 +257,7 @@ export default function EditProfileScreen() {
             <FormField label="Display Name *">
               <Animated.View style={animStyle}>
                 <TextInput
+                  testID="edit-profile-name-input"
                   ref={nameRef}
                   style={[
                     styles.input,
@@ -272,6 +275,7 @@ export default function EditProfileScreen() {
 
             <FormField label="Bio" hint={`${bio.length}/${BIO_MAX}`}>
               <TextInput
+                testID="edit-profile-bio-input"
                 style={[styles.input, styles.multiline]}
                 value={bio}
                 onChangeText={(t) => setBio(t.slice(0, BIO_MAX))}
@@ -285,6 +289,7 @@ export default function EditProfileScreen() {
 
             <FormField label="City">
               <TextInput
+                testID="edit-profile-city-input"
                 style={styles.input}
                 value={city}
                 onChangeText={setCity}
@@ -299,6 +304,7 @@ export default function EditProfileScreen() {
           <FormSection title="Your Baby" icon="nutrition-outline">
             <FormField label="Baby's Name">
               <TextInput
+                testID="edit-profile-baby-name-input"
                 style={styles.input}
                 value={babyName}
                 onChangeText={setBabyName}
@@ -310,6 +316,7 @@ export default function EditProfileScreen() {
 
             <FormField label="Baby's Date of Birth" hint="DD/MM/YYYY">
               <TextInput
+                testID="edit-profile-baby-dob-input"
                 style={styles.input}
                 value={babyDob}
                 onChangeText={setBabyDob}
@@ -328,6 +335,7 @@ export default function EditProfileScreen() {
                   return (
                     <Pressable
                       key={s.id}
+                      testID={`edit-profile-stage-${s.id}-btn`}
                       style={({ pressed }) => [
                         styles.chip,
                         active && styles.chipActive,
@@ -360,6 +368,7 @@ export default function EditProfileScreen() {
                     transition={{ type: 'spring', ...Motion.spring.snappy }}
                   >
                     <Pressable
+                      testID={`edit-profile-topic-${t.toLowerCase().replace(/ /g, '-')}-btn`}
                       style={({ pressed }) => [
                         styles.topicChip,
                         active && styles.topicChipActive,
@@ -384,6 +393,7 @@ export default function EditProfileScreen() {
         {/* ── Sticky Save bar ── */}
         <View style={[styles.saveBar, { paddingBottom: Math.max(insets.bottom, Spacing.md) }]}>
           <Pressable
+            testID="edit-profile-save-btn"
             style={({ pressed }) => [
               styles.saveBtn,
               (saving || success) && { opacity: 0.7 },

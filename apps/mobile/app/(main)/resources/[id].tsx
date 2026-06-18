@@ -73,7 +73,7 @@ export default function ArticleDetailScreen() {
   };
 
   return (
-    <View style={[styles.root, { paddingBottom: insets.bottom }]}>
+    <View style={[styles.root, { paddingBottom: insets.bottom }]} testID="article-detail-screen">
       <StatusBar barStyle="light-content" />
 
       {/* ── Sticky animated header ── */}
@@ -90,6 +90,7 @@ export default function ArticleDetailScreen() {
       {/* ── Floating controls (always visible) ── */}
       <View style={[styles.floatingControls, { top: insets.top + 8 }]}>
         <Pressable
+          testID="article-detail-back-btn"
           style={({ pressed }) => [styles.floatBtn, pressed && { opacity: 0.8 }]}
           onPress={() => router.back()}
           hitSlop={12}
@@ -97,6 +98,7 @@ export default function ArticleDetailScreen() {
           <Ionicons name="chevron-back" size={20} color={Colors.white} />
         </Pressable>
         <Pressable
+          testID="article-detail-bookmark-btn"
           style={({ pressed }) => [
             styles.floatBtn,
             pressed && { opacity: 0.8 },
@@ -115,6 +117,7 @@ export default function ArticleDetailScreen() {
 
       {/* ── Main scroll ── */}
       <RNAnimated.ScrollView
+        testID="article-detail-scroll"
         showsVerticalScrollIndicator={false}
         onScroll={RNAnimated.event(
           [{ nativeEvent: { contentOffset: { y: scrollY } } }],
@@ -193,6 +196,7 @@ export default function ArticleDetailScreen() {
           {/* ── Engagement row ── */}
           <View style={styles.engagementRow}>
             <Pressable
+              testID="article-detail-like-btn"
               style={({ pressed }) => [
                 styles.engageBtn,
                 pressed && { transform: [{ scale: 0.92 }] },
@@ -214,7 +218,7 @@ export default function ArticleDetailScreen() {
               </Text>
             </Pressable>
 
-            <Pressable style={styles.engageBtn} onPress={handleShare}>
+            <Pressable testID="article-detail-share-btn" style={styles.engageBtn} onPress={handleShare}>
               <Ionicons name="share-social-outline" size={20} color={Colors.textSecondary} />
               <Text style={styles.engageBtnText}>Share</Text>
             </Pressable>
@@ -260,6 +264,7 @@ export default function ArticleDetailScreen() {
       {/* ── Bottom share bar ── */}
       <View style={[styles.shareBar, { paddingBottom: Math.max(insets.bottom, Spacing.md) }]}>
         <Pressable
+          testID="article-detail-share-bar-btn"
           style={({ pressed }) => [styles.shareBtn, pressed && { opacity: 0.88 }]}
           onPress={handleShare}
         >
@@ -321,6 +326,7 @@ function RelatedCard({
       transition={{ type: 'timing', duration: Motion.duration.base, delay: index * 80 }}
     >
       <Pressable
+        testID={`article-related-${article.id}-btn`}
         style={({ pressed }) => [styles.relatedCard, pressed && { opacity: 0.9 }]}
         onPress={onPress}
       >

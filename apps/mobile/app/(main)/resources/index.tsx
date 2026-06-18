@@ -310,7 +310,7 @@ export default function ResourcesScreen() {
   };
 
   return (
-    <View style={[styles.root, { paddingTop: insets.top }]}>
+    <View style={[styles.root, { paddingTop: insets.top }]} testID="resources-screen">
       <StatusBar barStyle="dark-content" />
 
       {/* ── Header ── */}
@@ -319,7 +319,7 @@ export default function ResourcesScreen() {
           <Text style={styles.headerTitle}>Learn & Grow</Text>
           <Text style={styles.headerSub}>Evidence-based guides for new mothers</Text>
         </View>
-        <Pressable style={styles.searchToggle} hitSlop={12} onPress={toggleSearch}>
+        <Pressable testID="resources-search-toggle" style={styles.searchToggle} hitSlop={12} onPress={toggleSearch}>
           <Ionicons
             name={searchOpen ? 'close-outline' : 'search-outline'}
             size={22}
@@ -341,6 +341,7 @@ export default function ResourcesScreen() {
             <View style={styles.searchBar}>
               <Ionicons name="search-outline" size={16} color={Colors.textMuted} />
               <TextInput
+                testID="resources-search-input"
                 ref={searchRef}
                 style={styles.searchInput}
                 value={searchQuery}
@@ -350,7 +351,7 @@ export default function ResourcesScreen() {
                 returnKeyType="search"
               />
               {searchQuery.length > 0 && (
-                <Pressable onPress={() => setSearchQuery('')} hitSlop={8}>
+                <Pressable testID="resources-search-clear-btn" onPress={() => setSearchQuery('')} hitSlop={8}>
                   <Ionicons name="close-circle" size={16} color={Colors.textMuted} />
                 </Pressable>
               )}
@@ -375,6 +376,7 @@ export default function ResourcesScreen() {
             return (
               <Pressable
                 key={cat}
+                testID={`resources-cat-${cat.toLowerCase().replace(/ /g, '-')}-btn`}
                 style={({ pressed }) => [
                   styles.categoryChip,
                   active && styles.categoryChipActive,
@@ -407,6 +409,7 @@ export default function ResourcesScreen() {
         />
       ) : (
         <FlatList
+          testID="resources-list"
           data={rest}
           keyExtractor={(a) => a.id}
           contentContainerStyle={[
@@ -459,6 +462,7 @@ function EventsBanner({ onPress }: { onPress: () => void }) {
       transition={{ type: 'timing', duration: Motion.duration.base }}
     >
       <Pressable
+        testID="resources-events-banner-btn"
         style={({ pressed }) => [styles.eventsBanner, pressed && { opacity: 0.9 }]}
         onPress={onPress}
       >
@@ -506,6 +510,7 @@ function FeaturedCard({
       transition={{ type: 'timing', duration: Motion.duration.base }}
     >
       <Pressable
+        testID="resources-featured-article-btn"
         style={({ pressed }) => [styles.featured, pressed && { opacity: 0.94 }]}
         onPress={onPress}
       >
@@ -522,6 +527,7 @@ function FeaturedCard({
         />
         {/* Bookmark */}
         <Pressable
+          testID="resources-featured-bookmark-btn"
           style={styles.featuredBookmark}
           onPress={onBookmark}
           hitSlop={10}
@@ -565,6 +571,7 @@ function ArticleCard({
 }) {
   return (
     <Pressable
+      testID={`resources-article-${article.id}-btn`}
       style={({ pressed }) => [styles.card, pressed && { opacity: 0.93 }]}
       onPress={onPress}
     >
@@ -591,7 +598,7 @@ function ArticleCard({
         </View>
       </View>
       {/* Bookmark */}
-      <Pressable onPress={onBookmark} hitSlop={12} style={styles.cardBookmark}>
+      <Pressable testID={`resources-bookmark-${article.id}-btn`} onPress={onBookmark} hitSlop={12} style={styles.cardBookmark}>
         <Ionicons
           name={bookmarked ? 'bookmark' : 'bookmark-outline'}
           size={18}

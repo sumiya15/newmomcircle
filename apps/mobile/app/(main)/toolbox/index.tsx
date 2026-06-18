@@ -96,7 +96,7 @@ export default function ToolboxScreen() {
   const currentStep = BREATHING_STEPS[breathStep];
 
   return (
-    <View style={styles.root}>
+    <View style={styles.root} testID="toolbox-screen">
       {/* Header */}
       <LinearGradient
         colors={["rgba(20,8,4,0.95)", "rgba(20,8,4,0.80)"]}
@@ -116,6 +116,7 @@ export default function ToolboxScreen() {
         ].map((tab) => (
           <TouchableOpacity
             key={tab.key}
+            testID={`toolbox-tab-${tab.key}-btn`}
             onPress={() => setActiveTab(tab.key as typeof activeTab)}
             style={[styles.tabPill, activeTab === tab.key && styles.tabPillActive]}
           >
@@ -128,6 +129,7 @@ export default function ToolboxScreen() {
       </View>
 
       <ScrollView
+        testID="toolbox-scroll"
         contentContainerStyle={styles.content}
         showsVerticalScrollIndicator={false}
       >
@@ -161,6 +163,7 @@ export default function ToolboxScreen() {
             </View>
 
             <TouchableOpacity
+              testID="toolbox-breath-btn"
               style={[styles.breathBtn, isBreathing && styles.breathBtnStop]}
               onPress={isBreathing ? stopBreathing : startBreathing}
             >
@@ -188,6 +191,7 @@ export default function ToolboxScreen() {
             <Text style={styles.affirmEmoji}>{AFFIRMATIONS[affirmIdx].emoji}</Text>
             <Text style={styles.affirmText}>"{AFFIRMATIONS[affirmIdx].text}"</Text>
             <TouchableOpacity
+              testID="toolbox-next-affirmation-btn"
               onPress={() => setAffirmIdx((i) => (i + 1) % AFFIRMATIONS.length)}
               style={styles.nextBtn}
             >
@@ -249,6 +253,7 @@ export default function ToolboxScreen() {
             <Text style={styles.jokeTitle}>A Little Smile Goes a Long Way</Text>
             <Text style={styles.jokeText}>{JOKES[jokeIdx]}</Text>
             <TouchableOpacity
+              testID="toolbox-next-joke-btn"
               onPress={() => setJokeIdx((i) => (i + 1) % JOKES.length)}
               style={styles.nextBtn}
             >
