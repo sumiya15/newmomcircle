@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import {
-  View, Text, FlatList, StyleSheet, TouchableOpacity,
+  View, Text, FlatList, StyleSheet, Pressable,
   Modal, TextInput, ActivityIndicator,
   KeyboardAvoidingView, Platform,
 } from "react-native";
+import { MotiView } from "moti";
+import { Skeleton } from "moti/skeleton";
 import { LinearGradient } from "expo-linear-gradient";
 import { useTranslation } from "react-i18next";
 import { useAuthStore } from "../../../store/authStore";
@@ -106,7 +108,27 @@ export default function JournalScreen() {
       )}
 
       {loading ? (
-        <ActivityIndicator color={Colors.peach} style={{ marginTop: 80 }} size="large" />
+        <View style={styles.list}>
+          {[0, 1, 2].map((i) => (
+            <MotiView
+              key={i}
+              from={{ opacity: 0, translateY: 8 }}
+              animate={{ opacity: 1, translateY: 0 }}
+              transition={{ delay: i * 80, type: "timing", duration: 350 }}
+              style={styles.skeletonCard}
+            >
+              <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: Spacing.sm }}>
+                <Skeleton colorMode="light" height={12} width={80} radius={6} />
+                <Skeleton colorMode="light" height={22} width={90} radius={Radius.full} />
+              </View>
+              <Skeleton colorMode="light" height={13} width="100%" radius={6} />
+              <View style={{ height: 6 }} />
+              <Skeleton colorMode="light" height={13} width="80%" radius={6} />
+              <View style={{ height: 6 }} />
+              <Skeleton colorMode="light" height={13} width="60%" radius={6} />
+            </MotiView>
+          ))}
+        </View>
       ) : (
         <FlatList
           data={entries}
@@ -124,7 +146,7 @@ export default function JournalScreen() {
               </TouchableOpacity>
             </View>
           }
-          renderItem={({ item }) => <EntryCard entry={item} />}
+          renderItem={({ item, index }) => <EntryCard entry={item} index={index} />}
         />
       )}
 
@@ -186,26 +208,38 @@ export default function JournalScreen() {
   );
 }
 
-function EntryCard({ entry }: { entry: JournalEntry }) {
+function EntryCard({ entry, index }: { entry: JournalEntry; index: number }) {
   const date = entry.createdAt ? format(new Date(entry.createdAt), "dd MMM yyyy") : "";
+  const [pressed, setPressed] = useState(false);
 
   return (
-    <View style={styles.card}>
-      <View style={styles.cardTop}>
-        <Text style={styles.cardDate}>{date}</Text>
-        {entry.sentiment && (
-          <View style={[styles.sentimentBadge, { backgroundColor: sentimentColour(entry.sentiment) + "22" }]}>
-            <Text style={styles.sentimentBadgeText}>
-              {sentimentEmoji(entry.sentiment)} {entry.sentiment}
-            </Text>
+    <MotiView
+      from={{ opacity: 0, translateY: 10 }}
+      animate={{ opacity: 1, translateY: 0, scale: pressed ? 0.97 : 1 }}
+      transition={{ type: "timing", duration: 300, delay: index * 60 }}
+    >
+      <Pressable
+        onPressIn={() => setPressed(true)}
+        onPressOut={() => setPressed(false)}
+      >
+        <View style={styles.card}>
+          <View style={styles.cardTop}>
+            <Text style={styles.cardDate}>{date}</Text>
+            {entry.sentiment && (
+              <View style={[styles.sentimentBadge, { backgroundColor: sentimentColour(entry.sentiment) + "22" }]}>
+                <Text style={styles.sentimentBadgeText}>
+                  {sentimentEmoji(entry.sentiment)} {entry.sentiment}
+                </Text>
+              </View>
+            )}
           </View>
-        )}
-      </View>
-      <Text style={styles.cardContent} numberOfLines={3}>{entry.content}</Text>
-      {entry.sentimentAdvice && (
-        <Text style={styles.cardAdvice} numberOfLines={2}>{entry.sentimentAdvice}</Text>
-      )}
-    </View>
+          <Text style={styles.cardContent} numberOfLines={3}>{entry.content}</Text>
+          {entry.sentimentAdvice && (
+            <Text style={styles.cardAdvice} numberOfLines={2}>{entry.sentimentAdvice}</Text>
+          )}
+        </View>
+      </Pressable>
+    </MotiView>
   );
 }
 
@@ -236,6 +270,7 @@ const styles = StyleSheet.create({
   emptyBtn: { borderRadius: Radius.full, overflow: "hidden", ...Shadow.button },
   emptyBtnGrad: { paddingVertical: 14, paddingHorizontal: Spacing.xl, borderRadius: Radius.full, alignItems: "center" },
   emptyBtnText: { fontFamily: Typography.fontFamilySemiBold, fontSize: Typography.base, color: Colors.white },
+  skeletonCard: { backgroundColor: Colors.white, borderRadius: Radius.lg, padding: Spacing.md, ...Shadow.card },
   card: { backgroundColor: Colors.white, borderRadius: Radius.lg, padding: Spacing.md, ...Shadow.card },
   cardTop: { flexDirection: "row", alignItems: "center", justifyContent: "space-between", marginBottom: Spacing.xs },
   cardDate: { fontFamily: Typography.fontFamilyMedium, fontSize: Typography.xs, color: Colors.textMuted },

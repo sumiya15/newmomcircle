@@ -1,0 +1,22 @@
+[
+  {
+    "id": "j001",
+    "content": "Today was a good day. Baby smiled for the first time and it melted my heart completely.",
+    "expectedSentiment": "positive"
+  },
+  {
+    "id": "j002",
+    "content": "I am exhausted but pushing through. Sleep deprivation is no joke. Taking it one hour at a time.",
+    "expectedSentiment": "neutral"
+  },
+  {
+    "id": "j003",
+    "content": "Feeling very overwhelmed today. Cannot stop crying. Everything feels too hard right now.",
+    "expectedSentiment": "negative"
+  },
+  {
+    "id": "j004",
+    "content": "Automated test entry for E2E validation. Timestamp will be appended.",
+    "expectedSentiment": "neutral"
+  }
+]

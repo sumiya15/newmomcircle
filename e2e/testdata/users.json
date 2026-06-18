@@ -1,0 +1,29 @@
+[
+  {
+    "type": "valid",
+    "name": "Test User",
+    "email": "test@newmomcircle.com",
+    "password": "Test1234!",
+    "displayName": "Test Mom",
+    "babyName": "Baby Test",
+    "babyStage": "newborn"
+  },
+  {
+    "type": "invalid",
+    "name": "Wrong User",
+    "email": "wrong@example.com",
+    "password": "WrongPassword999!",
+    "displayName": "",
+    "babyName": "",
+    "babyStage": ""
+  },
+  {
+    "type": "newUser",
+    "name": "New Automation User",
+    "email": "newuser_TIMESTAMP@test.com",
+    "password": "NewUser@2025!",
+    "displayName": "New Mom",
+    "babyName": "Baby Automation",
+    "babyStage": "newborn"
+  }
+]

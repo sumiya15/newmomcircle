@@ -15,7 +15,7 @@ import {
   Easing,
   Platform,
 } from "react-native";
-import { MotiView } from "moti";
+import { MotiView, AnimatePresence } from "moti";
 import { LinearGradient } from "expo-linear-gradient";
 import { useTranslation } from "react-i18next";
 import { Colors, Typography, Spacing, Radius, Shadow } from "../../../utils/theme";
@@ -131,8 +131,16 @@ export default function ToolboxScreen() {
         contentContainerStyle={styles.content}
         showsVerticalScrollIndicator={false}
       >
+        <AnimatePresence exitBeforeEnter>
         {/* ── BREATHING ── */}
         {activeTab === "breath" && (
+          <MotiView
+            key="breath"
+            from={{ opacity: 0, translateY: 14 }}
+            animate={{ opacity: 1, translateY: 0 }}
+            exit={{ opacity: 0, translateY: -8 }}
+            transition={{ type: "timing", duration: 240 }}
+          >
           <View style={styles.breathSection}>
             <Text style={styles.sectionTitle}>Box Breathing</Text>
             <Text style={styles.sectionSub}>4 counts each phase · Inhale → Hold → Exhale → Hold</Text>
@@ -164,10 +172,18 @@ export default function ToolboxScreen() {
               </LinearGradient>
             </TouchableOpacity>
           </View>
+          </MotiView>
         )}
 
         {/* ── AFFIRMATIONS ── */}
         {activeTab === "affirm" && (
+          <MotiView
+            key="affirm"
+            from={{ opacity: 0, translateY: 14 }}
+            animate={{ opacity: 1, translateY: 0 }}
+            exit={{ opacity: 0, translateY: -8 }}
+            transition={{ type: "timing", duration: 240 }}
+          >
           <View style={styles.card}>
             <Text style={styles.affirmEmoji}>{AFFIRMATIONS[affirmIdx].emoji}</Text>
             <Text style={styles.affirmText}>"{AFFIRMATIONS[affirmIdx].text}"</Text>
@@ -183,10 +199,18 @@ export default function ToolboxScreen() {
               </LinearGradient>
             </TouchableOpacity>
           </View>
+          </MotiView>
         )}
 
         {/* ── 5-4-3-2-1 GROUNDING ── */}
         {activeTab === "ground" && (
+          <MotiView
+            key="ground"
+            from={{ opacity: 0, translateY: 14 }}
+            animate={{ opacity: 1, translateY: 0 }}
+            exit={{ opacity: 0, translateY: -8 }}
+            transition={{ type: "timing", duration: 240 }}
+          >
           <View style={styles.card}>
             <Text style={styles.sectionTitle}>5-4-3-2-1 Grounding</Text>
             <Text style={styles.sectionSub}>Bring yourself back to the present moment</Text>
@@ -208,10 +232,18 @@ export default function ToolboxScreen() {
               </View>
             ))}
           </View>
+          </MotiView>
         )}
 
         {/* ── MOM JOKES ── */}
         {activeTab === "joke" && (
+          <MotiView
+            key="joke"
+            from={{ opacity: 0, translateY: 14 }}
+            animate={{ opacity: 1, translateY: 0 }}
+            exit={{ opacity: 0, translateY: -8 }}
+            transition={{ type: "timing", duration: 240 }}
+          >
           <View style={styles.card}>
             <Text style={styles.jokeEmoji}>😄</Text>
             <Text style={styles.jokeTitle}>A Little Smile Goes a Long Way</Text>
@@ -228,7 +260,9 @@ export default function ToolboxScreen() {
               </LinearGradient>
             </TouchableOpacity>
           </View>
+          </MotiView>
         )}
+        </AnimatePresence>
       </ScrollView>
     </View>
   );

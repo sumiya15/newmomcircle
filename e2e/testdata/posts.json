@@ -1,0 +1,23 @@
+[
+  {
+    "id": "p001",
+    "category": "sleep",
+    "content": "My baby finally slept 5 hours straight! Sharing what worked for us.",
+    "anonymous": false,
+    "tags": ["sleep", "newborn", "milestone"]
+  },
+  {
+    "id": "p002",
+    "category": "nutrition",
+    "content": "Looking for advice on introducing solids at 6 months. Any tips?",
+    "anonymous": true,
+    "tags": ["nutrition", "solids", "6months"]
+  },
+  {
+    "id": "p003",
+    "category": "mental-health",
+    "content": "Postpartum anxiety is real. You are not alone. Sending love to all mamas.",
+    "anonymous": false,
+    "tags": ["mentalhealth", "ppd", "support"]
+  }
+]
