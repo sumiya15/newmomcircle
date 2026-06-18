@@ -43,6 +43,7 @@ import PostCard from '../../../components/feed/PostCard';
 import PostSkeleton from '../../../components/feed/PostSkeleton';
 import CategoryPills, { FeedCategory } from '../../../components/feed/CategoryPills';
 import EmptyState from '../../../components/common/EmptyState';
+import WebWrapper from '../../../components/common/WebWrapper';
 import {
   outdoorWalks,
   nursingMoments,
@@ -266,84 +267,82 @@ export default function FeedScreen() {
 
   const keyExtractor = useCallback((item: Post) => item.id, []);
 
-  // ── Loading state ─────────────────────────────────────────────────────────
-
-  if (loading) {
-    return (
-      <View style={[styles.root, { paddingTop: insets.top }]}>
-        <FeedHeader profile={profile} />
-        <View style={styles.skeletonList}>
-          {[0, 1, 2, 3].map((i) => (
-            <PostSkeleton key={i} index={i} showImage={i === 1} />
-          ))}
-        </View>
-      </View>
-    );
-  }
-
-  // ── Populated / empty ─────────────────────────────────────────────────────
+  // ── Loading + populated states both share the same root ────────────────────
 
   return (
     <View style={[styles.root, { paddingTop: insets.top }]} testID="feed-screen">
-      <FeedHeader profile={profile} />
+      {/* WebWrapper: centres content in 480px on wide web; passthrough on native */}
+      <WebWrapper>
+        <FeedHeader profile={profile} />
 
-      <FlatList
-        testID="feed-list"
-        data={posts}
-        keyExtractor={keyExtractor}
-        renderItem={renderPost}
-        contentContainerStyle={[
-          styles.listContent,
-          posts.length === 0 && styles.listContentEmpty,
-        ]}
-        // Category pills scroll with the list so they don't eat screen space
-        ListHeaderComponent={
-          <CategoryPills active={activeCategory} onChange={setActiveCategory} />
-        }
-        ListHeaderComponentStyle={styles.pillsHeader}
-        ListEmptyComponent={
-          <EmptyState
-            emoji="🌸"
-            title="Be the first to share"
-            subtitle="Your circle is waiting. Share a moment, ask a question, or just say hi."
-            actionLabel="Write a post"
-            onAction={() => router.push('/(main)/feed/create')}
-          />
-        }
-        showsVerticalScrollIndicator={false}
-        ItemSeparatorComponent={() => <View style={{ height: Spacing.md }} />}
-      />
-
-      {/* ── FAB ── */}
-      <AnimatePresence>
-        <MotiView
-          from={{ scale: 0, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          exit={{ scale: 0, opacity: 0 }}
-          transition={{ type: 'spring', damping: 14, stiffness: 260, delay: 400 }}
-          style={[styles.fabWrap, { bottom: insets.bottom + 90 }]}
-        >
-          <Pressable
-            testID="feed-create-btn"
-            style={({ pressed }) => [
-              styles.fab,
-              pressed && styles.fabPressed,
+        {loading ? (
+          <View style={styles.skeletonList}>
+            {[0, 1, 2, 3].map((i) => (
+              <PostSkeleton key={i} index={i} showImage={i === 1} />
+            ))}
+          </View>
+        ) : (
+          <FlatList
+            testID="feed-list"
+            data={posts}
+            keyExtractor={keyExtractor}
+            renderItem={renderPost}
+            contentContainerStyle={[
+              styles.listContent,
+              posts.length === 0 && styles.listContentEmpty,
             ]}
-            onPress={() => router.push('/(main)/feed/create')}
-          >
-            <LinearGradient
-              colors={[Colors.peach, Colors.peachDark]}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 1 }}
-              style={styles.fabGrad}
-            >
-              <Ionicons name="add" size={28} color={Colors.white} />
-            </LinearGradient>
-          </Pressable>
-        </MotiView>
-      </AnimatePresence>
+            // Category pills scroll with the list so they don't eat screen space
+            ListHeaderComponent={
+              <CategoryPills active={activeCategory} onChange={setActiveCategory} />
+            }
+            ListHeaderComponentStyle={styles.pillsHeader}
+            ListEmptyComponent={
+              <EmptyState
+                emoji="🌸"
+                title="Be the first to share"
+                subtitle="Your circle is waiting. Share a moment, ask a question, or just say hi."
+                actionLabel="Write a post"
+                onAction={() => router.push('/(main)/feed/create')}
+              />
+            }
+            showsVerticalScrollIndicator={false}
+            ItemSeparatorComponent={() => <View style={{ height: Spacing.md }} />}
+          />
+        )}
 
-      {/* ── Create Post Modal ── */}
+        {/* ── FAB ── */}
+        {!loading && (
+          <AnimatePresence>
+            <MotiView
+              from={{ scale: 0, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0, opacity: 0 }}
+              transition={{ type: 'spring', damping: 14, stiffness: 260, delay: 400 }}
+              style={[styles.fabWrap, { bottom: insets.bottom + 90 }]}
+            >
+              <Pressable
+                testID="feed-create-btn"
+                style={({ pressed }) => [
+                  styles.fab,
+                  pressed && styles.fabPressed,
+                ]}
+                onPress={() => router.push('/(main)/feed/create')}
+              >
+                <LinearGradient
+                  colors={[Colors.peach, Colors.peachDark]}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 1, y: 1 }}
+                  style={styles.fabGrad}
+                >
+                  <Ionicons name="add" size={28} color={Colors.white} />
+                </LinearGradient>
+              </Pressable>
+            </MotiView>
+          </AnimatePresence>
+        )}
+      </WebWrapper>
+
+      {/* ── Create Post Modal ── (Modal renders at system level; outside WebWrapper) */}
       <CreatePostModal
         visible={showCreate}
         postText={postText}

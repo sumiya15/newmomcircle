@@ -30,6 +30,7 @@ import { format } from 'date-fns';
 import { Colors, Typography, Spacing, Radius, Shadow, Motion } from '../../../utils/theme';
 import SkeletonBlock from '../../../components/primitives/SkeletonBlock';
 import EmptyState from '../../../components/common/EmptyState';
+import WebWrapper from '../../../components/common/WebWrapper';
 import {
   postpartumWellness, nursingMoments, babySleeping,
   outdoorWalks, groupOfMoms, nurseryInteriors,
@@ -312,6 +313,8 @@ export default function ResourcesScreen() {
   return (
     <View style={[styles.root, { paddingTop: insets.top }]} testID="resources-screen">
       <StatusBar barStyle="dark-content" />
+      {/* WebWrapper: centres content in 480px on wide web; passthrough on native */}
+      <WebWrapper>
 
       {/* ── Header ── */}
       <View style={styles.header}>
@@ -448,6 +451,7 @@ export default function ResourcesScreen() {
           )}
         />
       )}
+      </WebWrapper>
     </View>
   );
 }

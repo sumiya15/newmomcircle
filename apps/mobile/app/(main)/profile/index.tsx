@@ -34,6 +34,7 @@ import { useAuthStore } from '../../../store/authStore';
 import { useAppStore, SupportedLocale } from '../../../store/appStore';
 import { Colors, Typography, Spacing, Radius, Shadow, Motion } from '../../../utils/theme';
 import { deterministicAvatar } from '../../../lib/unsplashImages';
+import WebWrapper from '../../../components/common/WebWrapper';
 
 const { height: SCREEN_H } = Dimensions.get('window');
 const SHEET_H = SCREEN_H * 0.56;
@@ -167,10 +168,13 @@ export default function ProfileScreen() {
     <View style={[styles.root, { paddingTop: insets.top }]} testID="profile-screen">
       <StatusBar barStyle="dark-content" />
 
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ paddingBottom: insets.bottom + 40 }}
-      >
+      {/* WebWrapper: centres content in 480px on wide web.
+          The delete sheet / scrim are kept outside so they cover the full screen. */}
+      <WebWrapper>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{ paddingBottom: insets.bottom + 40 }}
+        >
         {/* ── Hero ── */}
         <LinearGradient
           colors={[Colors.peachLight, Colors.offWhite]}
@@ -421,9 +425,10 @@ export default function ProfileScreen() {
             </MotiView>
           ) : null}
         </AnimatePresence>
-      </ScrollView>
+        </ScrollView>
+      </WebWrapper>
 
-      {/* ── Delete confirmation sheet ── */}
+      {/* ── Delete confirmation sheet (absolute, outside WebWrapper so scrim covers full screen) ── */}
       {deleteOpen && (
         <>
           <Pressable style={styles.scrim} onPress={closeDelete} />

@@ -14,6 +14,7 @@ import {
 import { useShakeDetection } from "../../../hooks/useShakeDetection";
 import { Colors, Typography, Spacing, Radius, Shadow } from "../../../utils/theme";
 import type { Guardian } from "@newmomcircle/types";
+import WebWrapper from "../../../components/common/WebWrapper";
 
 const SOS_COUNTDOWN = 10;
 
@@ -117,12 +118,14 @@ export default function SafetyScreen() {
 
   return (
     <View style={styles.root} testID="safety-screen">
-      <LinearGradient colors={["#D94F4F", "#B03030"]} style={styles.header}>
-        <Text style={styles.headerTitle}>{t("safety_title")}</Text>
-        <Text style={styles.headerEmoji}>🛡️</Text>
-      </LinearGradient>
+      {/* WebWrapper: centres content in 480px on wide web; passthrough on native */}
+      <WebWrapper>
+        <LinearGradient colors={["#D94F4F", "#B03030"]} style={styles.header}>
+          <Text style={styles.headerTitle}>{t("safety_title")}</Text>
+          <Text style={styles.headerEmoji}>🛡️</Text>
+        </LinearGradient>
 
-      <View style={styles.body}>
+        <View style={styles.body}>
         <View style={styles.sosSection}>
           <MotiView
             animate={{ scale: sosActive ? 1.12 : 1 }}
@@ -187,19 +190,6 @@ export default function SafetyScreen() {
         </View>
       </View>
 
-      {/* SOS Countdown Overlay */}
-      <Modal visible={sosActive} transparent animationType="fade">
-        <View style={styles.sosOverlay}>
-          <View style={styles.sosCountdownCard}>
-            <Text style={styles.sosCountdownTitle}>{t("sos_confirm_title")}</Text>
-            <Text style={styles.sosCountdownNum}>{countdown}</Text>
-            <TouchableOpacity testID="safety-sos-cancel-btn" style={styles.cancelBtn} onPress={cancelSOS}>
-              <Text style={styles.cancelBtnText}>{t("sos_cancel")}</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </Modal>
-
       {/* Toast */}
       <AnimatePresence>
         {toast ? (
@@ -213,6 +203,20 @@ export default function SafetyScreen() {
           </MotiView>
         ) : null}
       </AnimatePresence>
+      </WebWrapper>
+
+      {/* SOS Countdown Overlay (Modal — outside WebWrapper) */}
+      <Modal visible={sosActive} transparent animationType="fade">
+        <View style={styles.sosOverlay}>
+          <View style={styles.sosCountdownCard}>
+            <Text style={styles.sosCountdownTitle}>{t("sos_confirm_title")}</Text>
+            <Text style={styles.sosCountdownNum}>{countdown}</Text>
+            <TouchableOpacity testID="safety-sos-cancel-btn" style={styles.cancelBtn} onPress={cancelSOS}>
+              <Text style={styles.cancelBtnText}>{t("sos_cancel")}</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
 
       {/* Add Guardian Modal */}
       <Modal visible={showAddGuardian} transparent animationType="slide">

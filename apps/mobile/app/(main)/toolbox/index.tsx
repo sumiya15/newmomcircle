@@ -19,6 +19,7 @@ import { MotiView, AnimatePresence } from "moti";
 import { LinearGradient } from "expo-linear-gradient";
 import { useTranslation } from "react-i18next";
 import { Colors, Typography, Spacing, Radius, Shadow } from "../../../utils/theme";
+import WebWrapper from "../../../components/common/WebWrapper";
 
 // ── Seed data ────────────────────────────────────────────────────────────────
 
@@ -97,6 +98,8 @@ export default function ToolboxScreen() {
 
   return (
     <View style={styles.root} testID="toolbox-screen">
+      {/* WebWrapper: centres content in 480px on wide web; passthrough on native */}
+      <WebWrapper>
       {/* Header */}
       <LinearGradient
         colors={["rgba(20,8,4,0.95)", "rgba(20,8,4,0.80)"]}
@@ -269,6 +272,7 @@ export default function ToolboxScreen() {
         )}
         </AnimatePresence>
       </ScrollView>
+      </WebWrapper>
     </View>
   );
 }

@@ -1,4 +1,4 @@
-﻿/**
+/**
  * app/(auth)/signup.tsx — Screen 2: Sign Up
  *
  * Stitch ref "Sign Up" (c1c38aad):
@@ -34,6 +34,8 @@ import { signUp } from '../../supabase/auth';
 import { Colors, Typography, Spacing, Radius, Shadow, Motion } from '../../utils/theme';
 import { nurseryInteriors } from '../../lib/unsplashImages';
 import Input from '../../components/primitives/Input';
+import WebWrapper from '../../components/common/WebWrapper';
+import { useWebLayout } from '../../hooks/useWebLayout';
 
 // ─── Password strength ────────────────────────────────────────────────────────
 
@@ -85,6 +87,9 @@ type SubmitState = 'idle' | 'loading' | 'success' | 'error';
 export default function SignupScreen() {
   const router = useRouter();
   const { t } = useTranslation();
+  const { isWideWeb, contentWidth } = useWebLayout();
+  // On wide web, scale the hero banner by aspect ratio rather than fixed px
+  const bannerH = isWideWeb ? Math.round(contentWidth * 0.46) : BANNER_H;
 
   const [name,     setName]     = useState('');
   const [email,    setEmail]    = useState('');
@@ -143,32 +148,34 @@ export default function SignupScreen() {
 
   return (
     <View style={styles.root} testID="signup-screen">
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        style={{ flex: 1 }}
-      >
-        <ScrollView
-          testID="signup-scroll"
-          contentContainerStyle={styles.scroll}
-          keyboardShouldPersistTaps="handled"
-          showsVerticalScrollIndicator={false}
+      {/* WebWrapper: on wide browser viewports, centres content in a 480px column */}
+      <WebWrapper style={{ flex: 1 }}>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          style={{ flex: 1 }}
         >
-          {/* ── Photo banner ── */}
-          <View style={styles.banner}>
-            <Image
-              source={{ uri: nurseryInteriors[0]!.url }}
-              style={StyleSheet.absoluteFill}
-              contentFit="cover"
-              placeholder={Colors.warmGrey}
-              transition={350}
-            />
-            {/* Gradient fades photo into the off-white background below */}
-            <LinearGradient
-              colors={['rgba(253,248,245,0)', Colors.offWhite]}
-              locations={[0.55, 1]}
-              style={StyleSheet.absoluteFill}
-            />
-          </View>
+          <ScrollView
+            testID="signup-scroll"
+            contentContainerStyle={styles.scroll}
+            keyboardShouldPersistTaps="handled"
+            showsVerticalScrollIndicator={false}
+          >
+            {/* ── Photo banner — height scales with content width on web ── */}
+            <View style={[styles.banner, { height: bannerH }]}>
+              <Image
+                source={{ uri: nurseryInteriors[0]!.url }}
+                style={StyleSheet.absoluteFill}
+                contentFit="cover"
+                placeholder={Colors.warmGrey}
+                transition={350}
+              />
+              {/* Gradient fades photo into the off-white background below */}
+              <LinearGradient
+                colors={['rgba(253,248,245,0)', Colors.offWhite]}
+                locations={[0.55, 1]}
+                style={StyleSheet.absoluteFill}
+              />
+            </View>
 
           {/* ── Headline ── */}
           <MotiView
@@ -352,8 +359,9 @@ export default function SignupScreen() {
               <Text style={styles.langText}>Change Language</Text>
             </Pressable>
           </Link>
-        </ScrollView>
-      </KeyboardAvoidingView>
+          </ScrollView>
+        </KeyboardAvoidingView>
+      </WebWrapper>
     </View>
   );
 }
@@ -386,9 +394,9 @@ const styles = StyleSheet.create({
     paddingBottom: Spacing['2xl'],
   },
 
-  // Photo banner — top portion, fades into page bg
+  // Photo banner — height is overridden inline via bannerH for responsive web
   banner: {
-    height: BANNER_H,
+    height: BANNER_H, // default; overridden inline on wide web
     width: '100%',
     overflow: 'hidden',
   },

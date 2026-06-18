@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import {
-  View, Text, FlatList, StyleSheet, Pressable,
+  View, Text, FlatList, StyleSheet, Pressable, TouchableOpacity,
   Modal, TextInput, ActivityIndicator,
   KeyboardAvoidingView, Platform,
 } from "react-native";
@@ -20,6 +20,7 @@ import { Colors, Typography, Spacing, Radius, Shadow } from "../../../utils/them
 import { useAppStore } from "../../../store/appStore";
 import { format } from "date-fns";
 import type { JournalEntry } from "@newmomcircle/types";
+import WebWrapper from "../../../components/common/WebWrapper";
 
 export default function JournalScreen() {
   const { t } = useTranslation();
@@ -93,64 +94,68 @@ export default function JournalScreen() {
 
   return (
     <View style={styles.root} testID="journal-screen">
-      <LinearGradient colors={[Colors.peach, Colors.peachDark]} style={styles.header}>
-        <Text style={styles.headerTitle}>{t("journal_title")}</Text>
-        <TouchableOpacity testID="journal-new-btn" style={styles.newBtn} onPress={() => setShowNew(true)}>
-          <Text style={styles.newBtnText}>+ {t("new_entry")}</Text>
-        </TouchableOpacity>
-      </LinearGradient>
+      {/* WebWrapper: centres content in 480px column on wide web viewports */}
+      <WebWrapper>
+        <LinearGradient colors={[Colors.peach, Colors.peachDark]} style={styles.header}>
+          <Text style={styles.headerTitle}>{t("journal_title")}</Text>
+          <TouchableOpacity testID="journal-new-btn" style={styles.newBtn} onPress={() => setShowNew(true)}>
+            <Text style={styles.newBtnText}>+ {t("new_entry")}</Text>
+          </TouchableOpacity>
+        </LinearGradient>
 
-      {latestResult?.sentiment && (
-        <View style={[styles.resultBanner, { borderLeftColor: sentimentColour(latestResult.sentiment) }]}>
-          <Text style={styles.resultEmoji}>{sentimentEmoji(latestResult.sentiment)}</Text>
-          <Text style={styles.resultAdvice}>{latestResult.sentimentAdvice}</Text>
-        </View>
-      )}
+        {latestResult?.sentiment && (
+          <View style={[styles.resultBanner, { borderLeftColor: sentimentColour(latestResult.sentiment) }]}>
+            <Text style={styles.resultEmoji}>{sentimentEmoji(latestResult.sentiment)}</Text>
+            <Text style={styles.resultAdvice}>{latestResult.sentimentAdvice}</Text>
+          </View>
+        )}
 
-      {loading ? (
-        <View style={styles.list}>
-          {[0, 1, 2].map((i) => (
-            <MotiView
-              key={i}
-              from={{ opacity: 0, translateY: 8 }}
-              animate={{ opacity: 1, translateY: 0 }}
-              transition={{ delay: i * 80, type: "timing", duration: 350 }}
-              style={styles.skeletonCard}
-            >
-              <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: Spacing.sm }}>
-                <Skeleton colorMode="light" height={12} width={80} radius={6} />
-                <Skeleton colorMode="light" height={22} width={90} radius={Radius.full} />
+        {loading ? (
+          <View style={styles.list}>
+            {[0, 1, 2].map((i) => (
+              <MotiView
+                key={i}
+                from={{ opacity: 0, translateY: 8 }}
+                animate={{ opacity: 1, translateY: 0 }}
+                transition={{ delay: i * 80, type: "timing", duration: 350 }}
+                style={styles.skeletonCard}
+              >
+                <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: Spacing.sm }}>
+                  <Skeleton colorMode="light" height={12} width={80} radius={6} />
+                  <Skeleton colorMode="light" height={22} width={90} radius={Radius.full} />
+                </View>
+                <Skeleton colorMode="light" height={13} width="100%" radius={6} />
+                <View style={{ height: 6 }} />
+                <Skeleton colorMode="light" height={13} width="80%" radius={6} />
+                <View style={{ height: 6 }} />
+                <Skeleton colorMode="light" height={13} width="60%" radius={6} />
+              </MotiView>
+            ))}
+          </View>
+        ) : (
+          <FlatList
+            testID="journal-entries-list"
+            data={entries}
+            keyExtractor={(e) => e.id}
+            contentContainerStyle={styles.list}
+            ListEmptyComponent={
+              <View style={styles.empty}>
+                <Text style={{ fontSize: 48, marginBottom: Spacing.md }}>🌱</Text>
+                <Text style={styles.emptyTitle}>{t("no_entries")}</Text>
+                <Text style={styles.emptySubtitle}>Start writing to track your mood journey</Text>
+                <TouchableOpacity style={styles.emptyBtn} onPress={() => setShowNew(true)} activeOpacity={0.85}>
+                  <LinearGradient colors={[Colors.peach, Colors.peachDark]} style={styles.emptyBtnGrad}>
+                    <Text style={styles.emptyBtnText}>+ {t("new_entry")}</Text>
+                  </LinearGradient>
+                </TouchableOpacity>
               </View>
-              <Skeleton colorMode="light" height={13} width="100%" radius={6} />
-              <View style={{ height: 6 }} />
-              <Skeleton colorMode="light" height={13} width="80%" radius={6} />
-              <View style={{ height: 6 }} />
-              <Skeleton colorMode="light" height={13} width="60%" radius={6} />
-            </MotiView>
-          ))}
-        </View>
-      ) : (
-        <FlatList
-          testID="journal-entries-list"
-          data={entries}
-          keyExtractor={(e) => e.id}
-          contentContainerStyle={styles.list}
-          ListEmptyComponent={
-            <View style={styles.empty}>
-              <Text style={{ fontSize: 48, marginBottom: Spacing.md }}>🌱</Text>
-              <Text style={styles.emptyTitle}>{t("no_entries")}</Text>
-              <Text style={styles.emptySubtitle}>Start writing to track your mood journey</Text>
-              <TouchableOpacity style={styles.emptyBtn} onPress={() => setShowNew(true)} activeOpacity={0.85}>
-                <LinearGradient colors={[Colors.peach, Colors.peachDark]} style={styles.emptyBtnGrad}>
-                  <Text style={styles.emptyBtnText}>+ {t("new_entry")}</Text>
-                </LinearGradient>
-              </TouchableOpacity>
-            </View>
-          }
-          renderItem={({ item, index }) => <EntryCard entry={item} index={index} />}
-        />
-      )}
+            }
+            renderItem={({ item, index }) => <EntryCard entry={item} index={index} />}
+          />
+        )}
+      </WebWrapper>
 
+      {/* Modal renders at system level — outside WebWrapper */}
       <Modal visible={showNew} animationType="slide" transparent onRequestClose={() => { setShowNew(false); setSaveError(""); }}>
         <KeyboardAvoidingView
           behavior={Platform.OS === "ios" ? "padding" : "height"}
