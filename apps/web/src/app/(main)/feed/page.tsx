@@ -221,7 +221,7 @@ export default function FeedPage() {
   const hasMore = visibleCount < posts.length;
 
   return (
-    <div className="max-w-3xl mx-auto space-y-5 w-full pb-10">
+    <div className="max-w-3xl mx-auto space-y-5 w-full pb-10" data-testid="feed-screen">
         {/* Page header */}
         <div className="flex items-center justify-between mb-1">
           <div>
@@ -231,6 +231,7 @@ export default function FeedPage() {
           <button
             onClick={() => setNotificationsCount(0)}
             className="relative p-2 rounded-xl bg-white/[0.05] hover:bg-white/[0.09] border border-white/8 text-white/60 hover:text-white transition-all"
+            data-testid="feed-notification-btn"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
               <path strokeLinecap="round" strokeLinejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
@@ -268,7 +269,7 @@ export default function FeedPage() {
         {/* Create Post Card */}
         {userProfile && (
           <GlassCard className="p-6 space-y-4">
-            <form onSubmit={handleCreatePost} className="space-y-4">
+            <form onSubmit={handleCreatePost} className="space-y-4" data-testid="feed-create-form">
               <div className="flex gap-4">
                 <div className="w-10 h-10 rounded-full bg-[#FF9F7C] text-[#2D1B13] font-bold flex items-center justify-center text-sm font-poppins flex-shrink-0">
                   {isAnonymous ? 'AM' : userProfile.displayName.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2)}
@@ -280,6 +281,7 @@ export default function FeedPage() {
                     placeholder={`What's on your mind, ${isAnonymous ? 'Anonymous Mom' : userProfile.displayName.split(' ')[0]}?`}
                     className="w-full bg-white/[0.04] border border-white/10 rounded-xl p-3 text-white placeholder-white/30 focus:outline-none focus:border-[#FF9F7C]/60 focus:bg-white/[0.06] transition-all resize-none text-[13.5px] font-inter h-[88px] leading-relaxed"
                     required
+                    data-testid="feed-post-input"
                   />
                 </div>
               </div>
@@ -322,7 +324,7 @@ export default function FeedPage() {
                   </label>
                 </div>
 
-                <PeachButton type="submit" loading={isSubmitting} className="!px-6 !py-2 text-sm !font-semibold">
+                <PeachButton type="submit" loading={isSubmitting} className="!px-6 !py-2 text-sm !font-semibold" data-testid="feed-submit-btn">
                   Post
                 </PeachButton>
               </div>
@@ -331,7 +333,7 @@ export default function FeedPage() {
         )}
 
         {/* Feed List */}
-        <div className="space-y-6">
+        <div className="space-y-6" data-testid="feed-list">
           {visiblePosts.length === 0 ? (
             <GlassCard className="p-12 text-center flex flex-col items-center justify-center space-y-4">
               <div className="w-12 h-12 rounded-full bg-[#FF9F7C]/10 flex items-center justify-center">
@@ -410,6 +412,7 @@ export default function FeedPage() {
                         className={`flex items-center gap-1.5 transition-colors ${
                           hasLiked ? 'text-[#FF9F7C] font-bold' : 'text-white/60 hover:text-[#FF9F7C]'
                         }`}
+                        data-testid={`feed-like-${post.id}-btn`}
                       >
                         <span>{hasLiked ? '❤️' : '♡'}</span>
                         <span>{post.likeCount}</span>
@@ -418,6 +421,7 @@ export default function FeedPage() {
                       <button
                         onClick={() => toggleComments(post.id)}
                         className="flex items-center gap-1.5 text-white/60 hover:text-[#FF9F7C] transition-colors"
+                        data-testid={`feed-comments-${post.id}-btn`}
                       >
                         <span>💬</span>
                         <span>{post.commentCount} Comments</span>
@@ -458,10 +462,12 @@ export default function FeedPage() {
                             onChange={(e) => setNewComments(prev => ({ ...prev, [post.id]: e.target.value }))}
                             onKeyDown={(e) => { if (e.key === 'Enter') void handleAddComment(post.id); }}
                             className="glass-input !py-2.5 !text-xs"
+                            data-testid={`feed-comment-input-${post.id}`}
                           />
                           <PeachButton
                             onClick={() => void handleAddComment(post.id)}
                             className="!px-4 !py-2.5 !rounded-xl !h-[38px] flex-shrink-0"
+                            data-testid={`feed-comment-submit-${post.id}-btn`}
                           >
                             <svg className="w-4 h-4 text-white fill-current rotate-90" viewBox="0 0 24 24">
                               <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />

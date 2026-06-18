@@ -197,14 +197,14 @@ export default function JournalPage() {
   const getMoodEmoji = (moodVal: string) => MOODS.find(m => m.value === moodVal)?.emoji || '😐';
 
   return (
-    <div className="max-w-3xl mx-auto space-y-6 w-full pb-10">
+    <div className="max-w-3xl mx-auto space-y-6 w-full pb-10" data-testid="journal-screen">
       {/* Page Header */}
       <div className="flex items-center justify-between mb-1">
         <div>
           <h1 className="text-[22px] font-bold text-white font-poppins tracking-tight">My Journal</h1>
           <p className="text-[13px] text-white/40 mt-0.5">{new Date().toLocaleDateString(undefined, { weekday: 'long', month: 'long', day: 'numeric' })}</p>
         </div>
-        <Link href="/journal/insights" className="text-[12.5px] font-semibold text-[#FF9F7C] hover:text-[#FFCFBB] flex items-center gap-1.5 transition-colors">
+        <Link href="/journal/insights" className="text-[12.5px] font-semibold text-[#FF9F7C] hover:text-[#FFCFBB] flex items-center gap-1.5 transition-colors" data-testid="journal-insights-link">
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
           Insights
         </Link>
@@ -212,7 +212,7 @@ export default function JournalPage() {
 
       {/* Main entry card */}
       <GlassCard className="p-8 space-y-6">
-        <form onSubmit={handleAnalyze} className="space-y-6">
+        <form onSubmit={handleAnalyze} className="space-y-6" data-testid="journal-form">
 
           {/* Mood Picker */}
           <div className="space-y-3">
@@ -225,6 +225,7 @@ export default function JournalPage() {
                     key={mood.value}
                     type="button"
                     onClick={() => setSelectedMood(mood.value)}
+                    data-testid={`journal-mood-${mood.value}-btn`}
                     className={`flex flex-col items-center justify-center p-3 rounded-2xl border transition-all duration-150 cursor-pointer ${
                       isActive
                         ? 'bg-gradient-to-br from-[#FF9F7C] to-[#E8734A] border-none text-white shadow-lg scale-105'
@@ -247,6 +248,7 @@ export default function JournalPage() {
               placeholder="Write freely about how your body is healing, your sleep quality, baby feeding patterns, or whatever is on your mind. Everything you write stays strictly private."
               className="w-full bg-white/5 border border-white/20 rounded-2xl p-4 text-white placeholder-white/40 focus:outline-none focus:border-[#FF9F7C] transition-colors resize-none text-base font-poppins h-56"
               required
+              data-testid="journal-content-input"
             />
           </div>
 
@@ -274,6 +276,7 @@ export default function JournalPage() {
             disabled={!selectedMood || !entryContent.trim()}
             loading={isLoading}
             className="w-full !h-14 font-semibold text-base"
+            data-testid="journal-submit-btn"
           >
             {!isLoading && "Analyze & Save"}
           </PeachButton>
@@ -348,7 +351,7 @@ export default function JournalPage() {
       )}
 
       {/* Past Entries */}
-      <div className="space-y-4">
+      <div className="space-y-4" data-testid="journal-entries-list">
         <h3 className="text-lg font-bold text-[#FFCFBB] pl-1 font-poppins">Past Entries</h3>
         {pastEntries.length === 0 ? (
           <p className="text-xs text-white/40 italic pl-1">Your past logs will appear here once saved.</p>

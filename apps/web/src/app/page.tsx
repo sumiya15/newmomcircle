@@ -77,13 +77,14 @@ export default function LandingPage() {
 
           {/* Desktop Auth CTA */}
           <div className="hidden md:flex items-center space-x-4">
-            <Link 
-              href="/auth/login" 
+            <Link
+              href="/auth/login"
               className="px-6 py-2.5 rounded-full border border-white/30 text-white text-sm font-semibold backdrop-blur-sm hover:bg-white/10 transition-colors"
+              data-testid="landing-signin-btn"
             >
               Sign In
             </Link>
-            <Link href="/auth/signup">
+            <Link href="/auth/signup" data-testid="landing-signup-btn">
               <PeachButton className="!px-6 !py-2.5 text-sm !font-semibold">
                 Get Started Free →
               </PeachButton>
@@ -91,10 +92,11 @@ export default function LandingPage() {
           </div>
 
           {/* Mobile Hamburger Button */}
-          <button 
+          <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             className="md:hidden text-white hover:text-[#FF9F7C] transition-colors focus:outline-none"
             aria-label="Toggle menu"
+            data-testid="landing-mobile-menu-btn"
           >
             {isMobileMenuOpen ? (
               <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -166,7 +168,7 @@ export default function LandingPage() {
 
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row items-center gap-4 mb-16">
-            <Link href="/auth/signup">
+            <Link href="/auth/signup" data-testid="landing-hero-cta-btn">
               <PeachButton className="!px-10 !py-4.5 text-lg !font-semibold shadow-[0_8px_32px_rgba(232,115,74,0.45)] hover:scale-[1.02] transition-transform">
                 Begin Your Journey →
               </PeachButton>

@@ -116,7 +116,7 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="relative min-h-screen bg-[#0E0705] flex items-center justify-center px-4 py-10 overflow-hidden">
+    <div className="relative min-h-screen bg-[#0E0705] flex items-center justify-center px-4 py-10 overflow-hidden" data-testid="signup-screen">
       {/* Ambient glow */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         <div className="absolute top-[-5%] right-[25%] w-[500px] h-[500px] rounded-full bg-[#E8734A]/8 blur-[130px]" />
@@ -144,7 +144,7 @@ export default function SignupPage() {
             </p>
           </div>
 
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4" data-testid="signup-form">
 
             {/* Full Name */}
             <div className="space-y-1.5">
@@ -154,6 +154,7 @@ export default function SignupPage() {
                 type="text"
                 error={!!errors.fullName}
                 autoComplete="name"
+                data-testid="signup-name-input"
                 {...register('fullName')}
                 leftIcon={
                   <svg className="w-[17px] h-[17px]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
@@ -172,6 +173,7 @@ export default function SignupPage() {
                 type="email"
                 error={!!errors.email}
                 autoComplete="email"
+                data-testid="signup-email-input"
                 {...register('email')}
                 leftIcon={
                   <svg className="w-[17px] h-[17px]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
@@ -191,6 +193,7 @@ export default function SignupPage() {
                   type={showPassword ? 'text' : 'password'}
                   error={!!errors.password}
                   autoComplete="new-password"
+                  data-testid="signup-password-input"
                   {...register('password')}
                   rightIcon={
                     <button type="button" onClick={() => setShowPassword(!showPassword)} className="text-white/35 hover:text-white/70 transition-colors" tabIndex={-1}>
@@ -207,6 +210,7 @@ export default function SignupPage() {
                   type={showConfirmPassword ? 'text' : 'password'}
                   error={!!errors.confirmPassword}
                   autoComplete="new-password"
+                  data-testid="signup-confirm-input"
                   {...register('confirmPassword')}
                   rightIcon={
                     <button type="button" onClick={() => setShowConfirmPassword(!showConfirmPassword)} className="text-white/35 hover:text-white/70 transition-colors" tabIndex={-1}>
@@ -273,6 +277,7 @@ export default function SignupPage() {
               type="submit"
               loading={isLoading}
               className="w-full !h-[46px] !text-[14px] !font-semibold mt-1"
+              data-testid="signup-submit-btn"
             >
               {!isLoading && 'Create Account'}
             </PeachButton>
@@ -291,6 +296,7 @@ export default function SignupPage() {
             onClick={handleGoogleSignIn}
             disabled={isLoading}
             className="w-full h-[44px] bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 hover:border-white/18 rounded-xl text-white flex items-center justify-center gap-2.5 transition-all duration-150 text-[13.5px] font-medium font-poppins disabled:opacity-40 disabled:cursor-not-allowed"
+            data-testid="signup-google-btn"
           >
             <svg className="w-4 h-4 flex-shrink-0" viewBox="0 0 24 24">
               <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
@@ -303,7 +309,7 @@ export default function SignupPage() {
 
           <p className="text-center text-[12.5px] text-white/40 mt-6">
             Already a member?{' '}
-            <Link href="/auth/login" className="text-[#FF9F7C] hover:text-[#FFCFBB] font-semibold transition-colors">
+            <Link href="/auth/login" className="text-[#FF9F7C] hover:text-[#FFCFBB] font-semibold transition-colors" data-testid="signup-login-link">
               Sign In
             </Link>
           </p>

@@ -208,7 +208,7 @@ export default function SafetyPage() {
   };
 
   return (
-    <div className="max-w-5xl mx-auto space-y-8 w-full pb-10">
+    <div className="max-w-5xl mx-auto space-y-8 w-full pb-10" data-testid="safety-screen">
 
       {/* Page Header */}
       <div className="flex items-start justify-between mb-1">
@@ -242,6 +242,7 @@ export default function SafetyPage() {
                 <button
                   onClick={startCountdown}
                   className="w-48 h-48 rounded-full bg-gradient-to-br from-[#D94F4F] to-[#E8734A] border-8 border-white/10 flex flex-col justify-center items-center shadow-[0_0_50px_rgba(217,79,79,0.4)] hover:shadow-[0_0_70px_rgba(217,79,79,0.7)] active:scale-95 transition-all duration-300 relative group cursor-pointer"
+                  data-testid="safety-sos-btn"
                 >
                   {/* Pulsing Ripple Effect */}
                   <span className="absolute inset-0 rounded-full bg-[#D94F4F]/30 animate-ping opacity-75 group-hover:duration-75" />
@@ -329,6 +330,7 @@ export default function SafetyPage() {
                       onClick={() => void handleDeleteGuardian(g.id)}
                       className="p-2 rounded-xl bg-white/5 hover:bg-[#D94F4F]/20 text-white/55 hover:text-[#FF6666] transition-colors"
                       title="Remove Guardian"
+                      data-testid={`safety-delete-guardian-${g.id}-btn`}
                     >
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
@@ -340,7 +342,7 @@ export default function SafetyPage() {
             </div>
 
             {/* Add Guardian Form */}
-            <form onSubmit={handleAddGuardian} className="space-y-4 pt-4 border-t border-white/10">
+            <form onSubmit={handleAddGuardian} className="space-y-4 pt-4 border-t border-white/10" data-testid="safety-add-guardian-form">
               <h4 className="text-xs uppercase font-bold tracking-widest text-[#FFCFBB] font-poppins">Add New Contact</h4>
 
               <div className="space-y-3">
@@ -350,6 +352,7 @@ export default function SafetyPage() {
                   value={gName}
                   onChange={(e) => setGName(e.target.value)}
                   required
+                  data-testid="safety-guardian-name-input"
                 />
 
                 <GlassInput
@@ -358,6 +361,7 @@ export default function SafetyPage() {
                   value={gPhone}
                   onChange={(e) => setGPhone(e.target.value)}
                   required
+                  data-testid="safety-guardian-phone-input"
                 />
 
                 <select
@@ -365,6 +369,7 @@ export default function SafetyPage() {
                   onChange={(e) => setGRelationship(e.target.value)}
                   className="glass-input cursor-pointer"
                   required
+                  data-testid="safety-guardian-relationship-select"
                 >
                   <option value="" className="bg-[#140804] text-white/50">Select Relationship</option>
                   <option value="Spouse" className="bg-[#140804] text-white">Spouse / Partner</option>
@@ -378,7 +383,7 @@ export default function SafetyPage() {
                 </select>
               </div>
 
-              <PeachButton type="submit" loading={isSubmitting} className="w-full">
+              <PeachButton type="submit" loading={isSubmitting} className="w-full" data-testid="safety-save-guardian-btn">
                 Add Guardian
               </PeachButton>
             </form>
@@ -409,6 +414,7 @@ export default function SafetyPage() {
           <button
             onClick={cancelCountdown}
             className="px-8 py-3.5 bg-white/10 hover:bg-white/20 border border-white/20 hover:border-[#D94F4F]/50 text-white font-bold rounded-2xl text-sm transition-all hover:scale-105 shadow-xl cursor-pointer"
+            data-testid="safety-sos-cancel-btn"
           >
             Cancel Alert (False Alarm)
           </button>

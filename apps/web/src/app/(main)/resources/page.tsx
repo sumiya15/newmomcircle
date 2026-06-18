@@ -162,7 +162,7 @@ export default function ResourcesPage() {
   });
 
   return (
-    <div className="max-w-7xl mx-auto space-y-8 w-full pb-10">
+    <div className="max-w-7xl mx-auto space-y-8 w-full pb-10" data-testid="resources-screen">
 
       {/* Page Header */}
       <div className="flex items-start justify-between mb-1">
@@ -184,6 +184,7 @@ export default function ResourcesPage() {
               placeholder="Search articles, topics, or authors..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
+              data-testid="resources-search-input"
               leftIcon={
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -197,6 +198,7 @@ export default function ResourcesPage() {
                 <button
                   key={category}
                   onClick={() => setSelectedCategory(category)}
+                  data-testid={`resources-cat-${category.toLowerCase().replace(/ /g, '-')}-btn`}
                   className={`text-xs font-semibold px-4 py-2 rounded-xl transition-all border cursor-pointer ${
                     selectedCategory === category
                       ? 'bg-gradient-to-r from-[#FF9F7C] to-[#E8734A] border-transparent text-[#2D1B13]'
@@ -255,6 +257,7 @@ export default function ResourcesPage() {
                       <button
                         onClick={() => setActiveArticle(res)}
                         className="flex-shrink-0 text-xs font-bold text-[#FF9F7C] hover:text-[#E8734A] transition-colors flex items-center gap-1 cursor-pointer"
+                        data-testid={`resources-article-${res.id}-btn`}
                       >
                         Read Now →
                       </button>
@@ -288,7 +291,7 @@ export default function ResourcesPage() {
                 </p>
               </div>
             ) : (
-              <form onSubmit={handleMentorRequest} className="space-y-4 pt-2">
+              <form onSubmit={handleMentorRequest} className="space-y-4 pt-2" data-testid="resources-mentor-form">
                 <div className="space-y-3">
                   <GlassInput
                     type="text"
@@ -296,6 +299,7 @@ export default function ResourcesPage() {
                     value={mentorName}
                     onChange={(e) => setMentorName(e.target.value)}
                     required
+                    data-testid="resources-mentor-name-input"
                   />
 
                   <GlassInput
@@ -304,6 +308,7 @@ export default function ResourcesPage() {
                     value={mentorPhone}
                     onChange={(e) => setMentorPhone(e.target.value)}
                     required
+                    data-testid="resources-mentor-phone-input"
                   />
 
                   <textarea
@@ -311,10 +316,11 @@ export default function ResourcesPage() {
                     value={mentorMessage}
                     onChange={(e) => setMentorMessage(e.target.value)}
                     className="w-full bg-white/5 border border-white/20 rounded-xl p-3 text-xs text-white placeholder-white/40 focus:outline-none focus:border-[#FF9F7C] transition-colors resize-none h-24 font-poppins"
+                    data-testid="resources-mentor-message-input"
                   />
                 </div>
 
-                <PeachButton type="submit" loading={isSubmittingMentor} className="w-full text-xs !font-bold">
+                <PeachButton type="submit" loading={isSubmittingMentor} className="w-full text-xs !font-bold" data-testid="resources-mentor-submit-btn">
                   Submit Mentor Connection Request
                 </PeachButton>
               </form>
@@ -346,6 +352,7 @@ export default function ResourcesPage() {
               <button
                 onClick={() => setActiveArticle(null)}
                 className="absolute top-4 right-4 bg-[#140804]/70 hover:bg-[#140804] text-white font-bold p-2 rounded-xl transition-colors text-xs border border-white/10 cursor-pointer"
+                data-testid="resources-article-close-btn"
               >
                 Close ✕
               </button>

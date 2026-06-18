@@ -172,7 +172,7 @@ export default function ToolboxPage() {
   const currentDayData = EXERCISE_PROGRAM.find(d => d.day === activeDay)!;
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6 w-full pb-10">
+    <div className="max-w-4xl mx-auto space-y-6 w-full pb-10" data-testid="toolbox-screen">
       
       {/* Page Header */}
       <div className="mb-1">
@@ -184,7 +184,7 @@ export default function ToolboxPage() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         
         {/* Tool 1: Affirmations */}
-        <GlassCard onClick={() => setActiveTool('affirmations')} hoverEffect={true} className="p-6 cursor-pointer flex flex-col space-y-3 items-start text-left">
+        <GlassCard onClick={() => setActiveTool('affirmations')} hoverEffect={true} className="p-6 cursor-pointer flex flex-col space-y-3 items-start text-left" data-testid="toolbox-affirmations-btn">
           <div className="w-10 h-10 rounded-xl bg-[#FF9F7C]/15 flex items-center justify-center">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FF9F7C" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
           </div>
@@ -193,7 +193,7 @@ export default function ToolboxPage() {
         </GlassCard>
 
         {/* Tool 2: Breathing */}
-        <GlassCard onClick={() => setActiveTool('breathing')} hoverEffect={true} className="p-6 cursor-pointer flex flex-col space-y-3 items-start text-left">
+        <GlassCard onClick={() => setActiveTool('breathing')} hoverEffect={true} className="p-6 cursor-pointer flex flex-col space-y-3 items-start text-left" data-testid="toolbox-breathing-btn">
           <div className="w-10 h-10 rounded-xl bg-[#A8C5A0]/15 flex items-center justify-center">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#A8C5A0" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
           </div>
@@ -202,7 +202,7 @@ export default function ToolboxPage() {
         </GlassCard>
 
         {/* Tool 3: Grounding */}
-        <GlassCard onClick={() => { setActiveTool('grounding'); setGroundingStep(0); setGroundingInputs(['', '', '', '', '']); }} hoverEffect={true} className="p-6 cursor-pointer flex flex-col space-y-3 items-start text-left">
+        <GlassCard onClick={() => { setActiveTool('grounding'); setGroundingStep(0); setGroundingInputs(['', '', '', '', '']); }} hoverEffect={true} className="p-6 cursor-pointer flex flex-col space-y-3 items-start text-left" data-testid="toolbox-grounding-btn">
           <div className="w-10 h-10 rounded-xl bg-[#FFCFBB]/10 flex items-center justify-center">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFCFBB" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 8h1a4 4 0 010 8h-1"/><path d="M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
           </div>
@@ -211,7 +211,7 @@ export default function ToolboxPage() {
         </GlassCard>
 
         {/* Tool 4: Laughter */}
-        <GlassCard onClick={() => setActiveTool('laughter')} hoverEffect={true} className="p-6 cursor-pointer flex flex-col space-y-3 items-start text-left">
+        <GlassCard onClick={() => setActiveTool('laughter')} hoverEffect={true} className="p-6 cursor-pointer flex flex-col space-y-3 items-start text-left" data-testid="toolbox-laughter-btn">
           <div className="w-10 h-10 rounded-xl bg-[#F4A1A1]/15 flex items-center justify-center">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F4A1A1" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 13s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
           </div>
@@ -220,7 +220,7 @@ export default function ToolboxPage() {
         </GlassCard>
 
         {/* Tool 5: Visualization */}
-        <GlassCard onClick={() => setActiveTool('visualization')} hoverEffect={true} className="p-6 cursor-pointer flex flex-col space-y-3 items-start text-left">
+        <GlassCard onClick={() => setActiveTool('visualization')} hoverEffect={true} className="p-6 cursor-pointer flex flex-col space-y-3 items-start text-left" data-testid="toolbox-visualization-btn">
           <div className="w-10 h-10 rounded-xl bg-[#A8C5A0]/15 flex items-center justify-center">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#A8C5A0" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M1 6s1-1 4-1 5 2 8 2 4-1 4-1V22s-1 1-4 1-5-2-8-2-4 1-4 1V6z"/><line x1="1" y1="2" x2="1" y2="6"/></svg>
           </div>
@@ -229,7 +229,7 @@ export default function ToolboxPage() {
         </GlassCard>
 
         {/* Tool 6: Gentle Movement */}
-        <GlassCard onClick={() => setActiveTool('movement')} hoverEffect={true} className="p-6 cursor-pointer flex flex-col space-y-3 items-start text-left">
+        <GlassCard onClick={() => setActiveTool('movement')} hoverEffect={true} className="p-6 cursor-pointer flex flex-col space-y-3 items-start text-left" data-testid="toolbox-movement-btn">
           <div className="w-10 h-10 rounded-xl bg-[#FF9F7C]/10 flex items-center justify-center">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FF9F7C" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M13 2a2 2 0 100 4 2 2 0 000-4z"/><path d="M5 7l2 7h2l2-5 2 5h2l2-7"/><path d="M5 19l2-4h6l2 4"/></svg>
           </div>
@@ -290,8 +290,8 @@ export default function ToolboxPage() {
                 <span>Bookmark</span>
               </button>
               <div className="flex items-center gap-2">
-                <button onClick={() => { setIsFlipped(false); setAffIndex((idx) => (idx > 0 ? idx - 1 : AFFIRMATIONS.length - 1)); }} className="w-9 h-9 rounded-full bg-white/5 hover:bg-white/10 text-white flex items-center justify-center">←</button>
-                <button onClick={() => { setIsFlipped(false); setAffIndex((idx) => (idx < AFFIRMATIONS.length - 1 ? idx + 1 : 0)); }} className="w-9 h-9 rounded-full bg-white/5 hover:bg-white/10 text-white flex items-center justify-center">→</button>
+                <button onClick={() => { setIsFlipped(false); setAffIndex((idx) => (idx > 0 ? idx - 1 : AFFIRMATIONS.length - 1)); }} className="w-9 h-9 rounded-full bg-white/5 hover:bg-white/10 text-white flex items-center justify-center" data-testid="toolbox-prev-affirmation-btn">←</button>
+                <button onClick={() => { setIsFlipped(false); setAffIndex((idx) => (idx < AFFIRMATIONS.length - 1 ? idx + 1 : 0)); }} className="w-9 h-9 rounded-full bg-white/5 hover:bg-white/10 text-white flex items-center justify-center" data-testid="toolbox-next-affirmation-btn">→</button>
               </div>
               <PeachButton onClick={() => { setIsFlipped(false); setAffIndex(Math.floor(Math.random() * AFFIRMATIONS.length)); }} className="!px-4 !py-2 !text-xs">Shuffle</PeachButton>
             </div>
@@ -319,7 +319,7 @@ export default function ToolboxPage() {
               <p className="text-xs text-white/50 font-medium">Session {breathingSession} of 5</p>
               <p className="text-xs text-white/80 font-poppins leading-relaxed max-w-xs mx-auto">&ldquo;Exhale longer than you inhale to activate your parasympathetic nervous system.&rdquo;</p>
             </div>
-            <PeachButton onClick={() => setIsBreathingRunning(!isBreathingRunning)} className="w-full !h-12 text-sm font-semibold">
+            <PeachButton onClick={() => setIsBreathingRunning(!isBreathingRunning)} className="w-full !h-12 text-sm font-semibold" data-testid="toolbox-breath-btn">
               {isBreathingRunning ? 'Pause Session' : 'Start Breathing'}
             </PeachButton>
           </GlassCard>
@@ -382,8 +382,8 @@ export default function ToolboxPage() {
                 <span>{jokeLikes[jokeIndex] || 0} Likes</span>
               </button>
               <div className="flex items-center gap-2">
-                <button onClick={() => setJokeIndex((idx) => (idx > 0 ? idx - 1 : JOKES.length - 1))} className="w-9 h-9 rounded-full bg-white/5 hover:bg-white/10 text-white flex items-center justify-center">←</button>
-                <button onClick={() => setJokeIndex((idx) => (idx < JOKES.length - 1 ? idx + 1 : 0))} className="w-9 h-9 rounded-full bg-white/5 hover:bg-white/10 text-white flex items-center justify-center">→</button>
+                <button onClick={() => setJokeIndex((idx) => (idx > 0 ? idx - 1 : JOKES.length - 1))} className="w-9 h-9 rounded-full bg-white/5 hover:bg-white/10 text-white flex items-center justify-center" data-testid="toolbox-prev-joke-btn">←</button>
+                <button onClick={() => setJokeIndex((idx) => (idx < JOKES.length - 1 ? idx + 1 : 0))} className="w-9 h-9 rounded-full bg-white/5 hover:bg-white/10 text-white flex items-center justify-center" data-testid="toolbox-next-joke-btn">→</button>
               </div>
               <button onClick={() => alert("Copied link to clipboard!")} className="btn-secondary !px-4 !py-2 !text-xs">Share</button>
             </div>

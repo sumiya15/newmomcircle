@@ -77,7 +77,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="relative min-h-screen bg-[#0E0705] flex items-center justify-center px-4 py-10 overflow-hidden">
+    <div className="relative min-h-screen bg-[#0E0705] flex items-center justify-center px-4 py-10 overflow-hidden" data-testid="login-screen">
       {/* Ambient glow */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         <div className="absolute top-[-10%] left-[30%] w-[500px] h-[500px] rounded-full bg-[#E8734A]/8 blur-[120px]" />
@@ -107,7 +107,7 @@ export default function LoginPage() {
           </div>
 
           {/* Form */}
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4" data-testid="login-form">
             {/* Email */}
             <div className="space-y-1.5">
               <label className="text-[11.5px] font-semibold text-white/50 uppercase tracking-wide font-poppins">
@@ -118,6 +118,7 @@ export default function LoginPage() {
                 type="email"
                 error={!!errors.email}
                 autoComplete="email"
+                data-testid="login-email-input"
                 {...register('email')}
                 leftIcon={
                   <svg className="w-[17px] h-[17px]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
@@ -136,7 +137,7 @@ export default function LoginPage() {
                 <label className="text-[11.5px] font-semibold text-white/50 uppercase tracking-wide font-poppins">
                   Password
                 </label>
-                <Link href="/auth/forgot-password" className="text-[11.5px] text-[#FF9F7C] hover:text-[#FFCFBB] transition-colors font-medium">
+                <Link href="/auth/forgot-password" className="text-[11.5px] text-[#FF9F7C] hover:text-[#FFCFBB] transition-colors font-medium" data-testid="login-forgot-link">
                   Forgot password?
                 </Link>
               </div>
@@ -145,6 +146,7 @@ export default function LoginPage() {
                 type={showPassword ? 'text' : 'password'}
                 error={!!errors.password}
                 autoComplete="current-password"
+                data-testid="login-password-input"
                 {...register('password')}
                 leftIcon={
                   <svg className="w-[17px] h-[17px]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
@@ -171,6 +173,7 @@ export default function LoginPage() {
               type="submit"
               loading={isLoading}
               className="w-full !h-[46px] !text-[14px] !font-semibold mt-1"
+              data-testid="login-submit-btn"
             >
               {!isLoading && 'Sign In'}
             </PeachButton>
@@ -189,6 +192,7 @@ export default function LoginPage() {
             onClick={handleGoogleSignIn}
             disabled={isLoading}
             className="w-full h-[44px] bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 hover:border-white/18 rounded-xl text-white flex items-center justify-center gap-2.5 transition-all duration-150 text-[13.5px] font-medium font-poppins disabled:opacity-40 disabled:cursor-not-allowed"
+            data-testid="login-google-btn"
           >
             <svg className="w-4 h-4 flex-shrink-0" viewBox="0 0 24 24">
               <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
@@ -202,7 +206,7 @@ export default function LoginPage() {
           {/* Footer link */}
           <p className="text-center text-[12.5px] text-white/40 mt-6">
             New to NewMomCircle?{' '}
-            <Link href="/auth/signup" className="text-[#FF9F7C] hover:text-[#FFCFBB] font-semibold transition-colors">
+            <Link href="/auth/signup" className="text-[#FF9F7C] hover:text-[#FFCFBB] font-semibold transition-colors" data-testid="login-signup-link">
               Create an account
             </Link>
           </p>

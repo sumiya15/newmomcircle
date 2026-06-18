@@ -190,7 +190,7 @@ export default function ProfilePage() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto space-y-8 w-full pb-10">
+    <div className="max-w-4xl mx-auto space-y-8 w-full pb-10" data-testid="profile-screen">
 
       {/* Page Header */}
       <div className="flex items-start justify-between mb-1">
@@ -261,7 +261,7 @@ export default function ProfilePage() {
               Personal Information
             </h3>
 
-            <form onSubmit={handleSaveProfile} className="space-y-4">
+            <form onSubmit={handleSaveProfile} className="space-y-4" data-testid="profile-edit-form">
               <div className="space-y-1">
                 <label className="text-xs font-semibold text-white/70 pl-1">Full Name / Public Display Name</label>
                 <GlassInput
@@ -270,6 +270,7 @@ export default function ProfilePage() {
                   value={displayName}
                   onChange={(e) => setDisplayName(e.target.value)}
                   required
+                  data-testid="profile-name-input"
                 />
               </div>
 
@@ -304,7 +305,7 @@ export default function ProfilePage() {
 
               <div className="flex items-center justify-between gap-4 pt-4 border-t border-white/5">
                 <p className="text-xs text-white/50">Changes apply across feed and reports instantly.</p>
-                <PeachButton type="submit" loading={isSaving} className="!px-6 !py-2.5 text-xs !font-bold">
+                <PeachButton type="submit" loading={isSaving} className="!px-6 !py-2.5 text-xs !font-bold" data-testid="profile-save-btn">
                   {saveSuccess ? 'Changes Saved ✓' : 'Save Changes'}
                 </PeachButton>
               </div>
@@ -326,6 +327,7 @@ export default function ProfilePage() {
                 <button
                   onClick={() => void handleExportData()}
                   className="px-5 py-2.5 bg-white/5 hover:bg-white/10 border border-white/15 hover:border-[#FF9F7C]/50 text-white font-semibold rounded-xl text-xs transition-all cursor-pointer"
+                  data-testid="profile-export-data-btn"
                 >
                   Export Data (JSON)
                 </button>
@@ -341,6 +343,7 @@ export default function ProfilePage() {
                 <button
                   onClick={() => setShowDeleteModal(true)}
                   className="px-5 py-2.5 bg-[#D94F4F]/10 hover:bg-[#D94F4F]/20 border border-[#D94F4F]/30 text-[#FF8585] font-semibold rounded-xl text-xs transition-all cursor-pointer"
+                  data-testid="profile-delete-account-btn"
                 >
                   Delete &amp; Anonymize Account
                 </button>
@@ -376,6 +379,7 @@ export default function ProfilePage() {
                 onChange={(e) => setDeleteConfirmationText(e.target.value)}
                 placeholder="Type here..."
                 className="text-center"
+                data-testid="profile-delete-confirm-input"
               />
             </div>
 
@@ -384,6 +388,7 @@ export default function ProfilePage() {
                 onClick={() => { setShowDeleteModal(false); setDeleteConfirmationText(''); }}
                 className="px-4 py-2.5 rounded-xl text-xs text-white/60 hover:bg-white/5 transition-colors cursor-pointer"
                 disabled={isDeleting}
+                data-testid="profile-cancel-delete-btn"
               >
                 Cancel
               </button>
@@ -392,6 +397,7 @@ export default function ProfilePage() {
                 onClick={() => void handleGDPRDeletion()}
                 disabled={deleteConfirmationText !== "DELETE MY DATA" || isDeleting}
                 className="px-5 py-2.5 rounded-xl text-xs font-bold bg-[#D94F4F] hover:bg-[#B33B3B] disabled:opacity-40 text-white transition-colors cursor-pointer"
+                data-testid="profile-confirm-delete-btn"
               >
                 {isDeleting ? 'Processing...' : 'Confirm Anonymization'}
               </button>

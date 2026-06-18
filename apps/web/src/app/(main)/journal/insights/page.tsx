@@ -78,7 +78,7 @@ export default function InsightsPage() {
   };
 
   return (
-    <div className="max-w-5xl mx-auto space-y-6 w-full pb-10">
+    <div className="max-w-5xl mx-auto space-y-6 w-full pb-10" data-testid="insights-screen">
 
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-2">
@@ -93,10 +93,10 @@ export default function InsightsPage() {
         </div>
 
         {/* Week Selector */}
-        <div className="flex items-center gap-3 bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-2.5 self-start sm:self-center text-xs font-semibold font-poppins text-white/70">
-          <button className="hover:text-[#FF9F7C] transition-colors">‹</button>
+        <div className="flex items-center gap-3 bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-2.5 self-start sm:self-center text-xs font-semibold font-poppins text-white/70" data-testid="insights-week-selector">
+          <button className="hover:text-[#FF9F7C] transition-colors" data-testid="insights-week-prev-btn">‹</button>
           <span>Jun 2 – Jun 8</span>
-          <button className="hover:text-[#FF9F7C] transition-colors">›</button>
+          <button className="hover:text-[#FF9F7C] transition-colors" data-testid="insights-week-next-btn">›</button>
         </div>
       </div>
 
@@ -145,7 +145,7 @@ export default function InsightsPage() {
       {/* Charts Block */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Mood Bar Chart */}
-        <GlassCard className="p-6 space-y-4">
+        <GlassCard className="p-6 space-y-4" data-testid="insights-bar-chart">
           <div>
             <h3 className="text-base font-bold text-white font-poppins">7-Day Mood History</h3>
             <p className="text-xs text-white/50">Daily check-in scores categorized by sentiment</p>
