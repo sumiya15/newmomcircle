@@ -1,0 +1,35 @@
+{
+  "name": "newmomcircle-web-e2e",
+  "version": "1.0.0",
+  "description": "Selenium WebDriver E2E test suite for NewMomCircle web app — functionality, vulnerability, and unit-style tests",
+  "main": "index.js",
+  "scripts": {
+    "test":              "mocha 'tests/**/*.test.js' --timeout 60000 --reporter mochawesome --reporter-options reportDir=reports/mochawesome,overwrite=false,html=false,json=true",
+    "test:auth":         "mocha 'tests/auth/*.test.js' --timeout 60000 --reporter mochawesome --reporter-options reportDir=reports/mochawesome,overwrite=false,html=false,json=true",
+    "test:navigation":   "mocha 'tests/navigation/*.test.js' --timeout 60000 --reporter mochawesome --reporter-options reportDir=reports/mochawesome,overwrite=false,html=false,json=true",
+    "test:functionality":"mocha 'tests/functionality/*.test.js' --timeout 60000 --reporter mochawesome --reporter-options reportDir=reports/mochawesome,overwrite=false,html=false,json=true",
+    "test:responsive":   "mocha 'tests/responsive/*.test.js' --timeout 60000 --reporter mochawesome --reporter-options reportDir=reports/mochawesome,overwrite=false,html=false,json=true",
+    "test:vulnerability":"mocha 'tests/vulnerability/*.test.js' --timeout 60000 --reporter mochawesome --reporter-options reportDir=reports/mochawesome,overwrite=false,html=false,json=true",
+    "test:ci":           "mocha 'tests/**/*.test.js' --timeout 90000 --exit --reporter mochawesome --reporter-options reportDir=reports/mochawesome,overwrite=false,html=false,json=true",
+    "merge-reports":     "mochawesome-merge reports/mochawesome/*.json > reports/mochawesome-combined.json",
+    "generate-html":     "marge reports/mochawesome-combined.json -f report -o reports/html",
+    "generate-xlsx":     "node scripts/generateXlsxReport.js",
+    "generate-mocha-json":"node scripts/generateMochaJson.js",
+    "report:full":       "npm run merge-reports && npm run generate-html && npm run generate-xlsx && npm run generate-mocha-json",
+    "posttest:ci":       "npm run report:full"
+  },
+  "dependencies": {
+    "axios":          "^1.6.2",
+    "dotenv":         "^16.3.1",
+    "exceljs":        "^4.3.0",
+    "selenium-webdriver": "^4.16.0",
+    "winston":        "^3.11.0"
+  },
+  "devDependencies": {
+    "chai":                         "^4.3.10",
+    "mocha":                        "^10.2.0",
+    "mochawesome":                  "^7.1.3",
+    "mochawesome-merge":            "^4.3.0",
+    "mochawesome-report-generator": "^6.2.0"
+  }
+}

@@ -1,0 +1,11 @@
+# Dependencies
+node_modules/
+
+# Generated test reports (created at runtime — do not commit)
+reports/
+
+# Local environment
+.env
+
+# Logs
+*.log

@@ -1,0 +1,14 @@
+{
+  "file":    ["tests/base/baseTest.js"],
+  "timeout": 90000,
+  "retries": 0,
+  "exit":    true,
+  "reporter": "mochawesome",
+  "reporterOptions": {
+    "reportDir":      "reports/mochawesome",
+    "reportFilename": "mochawesome",
+    "overwrite":      false,
+    "html":           true,
+    "json":           true
+  }
+}

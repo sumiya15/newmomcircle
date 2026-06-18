@@ -1,0 +1,352 @@
+name: Web E2E – Selenium CI/CD
+
+# ─── Triggers ──────────────────────────────────────────────────────────────────
+on:
+  push:
+    branches: [main, develop]
+    paths:
+      - 'apps/web/**'
+      - 'packages/**'
+      - 'e2e-web/**'
+      - '.github/workflows/web-e2e.yml'
+  pull_request:
+    branches: [main, develop]
+    paths:
+      - 'apps/web/**'
+      - 'packages/**'
+      - 'e2e-web/**'
+  workflow_dispatch:          # manual trigger from GitHub UI
+    inputs:
+      suite:
+        description: 'Test suite to run (leave blank for all)'
+        required: false
+        default: 'all'
+      base_url:
+        description: 'Override the Web base URL'
+        required: false
+        default: ''
+
+# ─── Concurrency: cancel in-flight runs for same branch/PR ─────────────────────
+concurrency:
+  group: web-e2e-${{ github.ref }}
+  cancel-in-progress: true
+
+# ─── Permissions ───────────────────────────────────────────────────────────────
+permissions:
+  contents: read
+  checks:   write   # needed to publish test results
+
+jobs:
+  # ════════════════════════════════════════════════════════════════════════════
+  # JOB 1 ─ Build the Next.js web app, then serve it for E2E tests
+  # ════════════════════════════════════════════════════════════════════════════
+  build-web:
+    name: Build Web App
+    runs-on: ubuntu-latest
+    outputs:
+      base_url: ${{ steps.set-url.outputs.url }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install root dependencies
+        run: npm ci
+
+      - name: Build web app
+        run: npx turbo run build --filter=@newmomcircle/web
+        env:
+          NEXT_PUBLIC_SUPABASE_URL:      ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+
+      - name: Upload .next build artefact
+        uses: actions/upload-artifact@v4
+        with:
+          name: next-build
+          path: apps/web/.next
+          retention-days: 1
+
+      - name: Set base URL output
+        id: set-url
+        run: |
+          if [ -n "${{ github.event.inputs.base_url }}" ]; then
+            echo "url=${{ github.event.inputs.base_url }}" >> $GITHUB_OUTPUT
+          else
+            echo "url=http://localhost:3000" >> $GITHUB_OUTPUT
+          fi
+
+  # ════════════════════════════════════════════════════════════════════════════
+  # JOB 2 ─ Run Selenium E2E tests against the locally served web app
+  # ════════════════════════════════════════════════════════════════════════════
+  selenium-e2e:
+    name: Selenium E2E Tests
+    runs-on: ubuntu-latest
+    needs: build-web
+
+    strategy:
+      fail-fast: false
+      matrix:
+        suite:
+          - auth
+          - navigation
+          - functionality
+          - responsive
+
+    steps:
+      # ── Checkout ────────────────────────────────────────────────────────────
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # ── Node ────────────────────────────────────────────────────────────────
+      - name: Setup Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      # ── Chrome ──────────────────────────────────────────────────────────────
+      - name: Install Chrome
+        uses: browser-actions/setup-chrome@v1
+        with:
+          chrome-version: stable
+
+      - name: Verify Chrome version
+        run: google-chrome --version
+
+      # ── Restore web build ───────────────────────────────────────────────────
+      - name: Download .next build artefact
+        uses: actions/download-artifact@v4
+        with:
+          name: next-build
+          path: apps/web/.next
+
+      # ── Start web server ────────────────────────────────────────────────────
+      - name: Install root and workspace dependencies
+        run: npm ci
+
+      - name: Start Next.js server in background
+        run: |
+          cd apps/web
+          npx next start --port 3000 &
+          echo "WEB_PID=$!" >> $GITHUB_ENV
+        env:
+          NEXT_PUBLIC_SUPABASE_URL:      ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+
+      - name: Wait for server to be ready
+        run: |
+          for i in $(seq 1 30); do
+            if curl -sf http://localhost:3000 > /dev/null 2>&1; then
+              echo "✅ Server ready"
+              break
+            fi
+            echo "Waiting... ($i/30)"
+            sleep 2
+          done
+
+      # ── Install e2e-web deps ─────────────────────────────────────────────────
+      - name: Install e2e-web dependencies
+        run: npm ci
+        working-directory: e2e-web
+
+      # ── Run E2E Test Suite ──────────────────────────────────────────────────
+      - name: Run ${{ matrix.suite }} E2E tests
+        working-directory: e2e-web
+        env:
+          CI:                 'true'
+          WEB_BASE_URL:       ${{ needs.build-web.outputs.base_url }}
+          TEST_USER_EMAIL:    ${{ secrets.TEST_USER_EMAIL }}
+          TEST_USER_PASSWORD: ${{ secrets.TEST_USER_PASSWORD }}
+          TEST_USER_NAME:     ${{ secrets.TEST_USER_NAME || 'Test Mom' }}
+          HEADLESS:           'true'
+        run: npm run test:${{ matrix.suite }}
+
+      # ── Upload raw test artefacts ───────────────────────────────────────────
+      - name: Upload Mochawesome JSON (${{ matrix.suite }})
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mochawesome-${{ matrix.suite }}
+          path: e2e-web/reports/mochawesome/*.json
+          retention-days: 7
+
+      - name: Upload Screenshots (${{ matrix.suite }})
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: screenshots-${{ matrix.suite }}
+          path: e2e-web/reports/screenshots/
+          retention-days: 7
+
+      - name: Upload Excel report (${{ matrix.suite }})
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: xlsx-${{ matrix.suite }}
+          path: e2e-web/reports/xlsx/*.xlsx
+          retention-days: 30
+          if-no-files-found: ignore
+
+      # ── Stop server ─────────────────────────────────────────────────────────
+      - name: Stop Next.js server
+        if: always()
+        run: kill $WEB_PID 2>/dev/null || true
+
+  # ════════════════════════════════════════════════════════════════════════════
+  # JOB 3 ─ Merge all JSON shards → single HTML + consolidated XLSX report
+  # ════════════════════════════════════════════════════════════════════════════
+  merge-reports:
+    name: Merge & Publish Reports
+    runs-on: ubuntu-latest
+    needs: [build-web, selenium-e2e]
+    if: always()    # run even if tests fail so we always get a report
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install e2e-web dependencies
+        run: npm ci
+        working-directory: e2e-web
+
+      # Download all JSON shards from the matrix jobs
+      - name: Download all Mochawesome JSON shards
+        uses: actions/download-artifact@v4
+        with:
+          pattern: mochawesome-*
+          path: e2e-web/reports/mochawesome
+          merge-multiple: true
+
+      - name: List downloaded files
+        run: ls -la e2e-web/reports/mochawesome/ 2>/dev/null || true
+
+      # Merge JSON shards → single file
+      - name: Merge Mochawesome JSON reports
+        working-directory: e2e-web
+        run: |
+          shopt -s nullglob
+          jsons=(reports/mochawesome/*.json)
+          if [ ${#jsons[@]} -eq 0 ]; then
+            echo '{"stats":{"suites":0,"tests":0,"passes":0,"pending":0,"failures":0},"results":[]}' > reports/mochawesome-combined.json
+            echo "⚠️  No JSON shards found — wrote empty placeholder"
+          else
+            npx mochawesome-merge reports/mochawesome/*.json > reports/mochawesome-combined.json
+            echo "Combined JSON size: $(wc -c < reports/mochawesome-combined.json) bytes"
+          fi
+
+      # Generate HTML report
+      - name: Generate HTML report
+        working-directory: e2e-web
+        run: |
+          npx marge reports/mochawesome-combined.json \
+            --reportDir reports/html \
+            --reportFilename web-e2e-report \
+            --charts
+
+      # Generate consolidated XLSX report
+      - name: Generate consolidated Excel report
+        working-directory: e2e-web
+        env:
+          WEB_BASE_URL: ${{ needs.build-web.outputs.base_url || 'http://localhost:3000' }}
+        run: node scripts/generateXlsxReport.js reports/mochawesome-combined.json
+
+      # Generate standard Mocha JSON report (for dorny/test-reporter compatibility)
+      - name: Generate standard Mocha JSON report
+        working-directory: e2e-web
+        run: node scripts/generateMochaJson.js reports/mochawesome-combined.json reports/mocha-combined.json
+
+      # Upload all final reports
+      - name: Upload HTML report
+        uses: actions/upload-artifact@v4
+        with:
+          name: web-e2e-html-report
+          path: e2e-web/reports/html/
+          retention-days: 30
+
+      - name: Upload consolidated Excel report
+        uses: actions/upload-artifact@v4
+        with:
+          name: web-e2e-xlsx-report
+          path: e2e-web/reports/xlsx/*.xlsx
+          retention-days: 30
+
+      # Publish test results as GitHub Check (visible in PR)
+      - name: Publish Test Results
+        uses: dorny/test-reporter@v1
+        if: always()
+        with:
+          name:   'Web E2E Test Results'
+          path:   'e2e-web/reports/mocha-combined.json'
+          reporter: mocha-json
+
+      # Print summary to GitHub Actions job log
+      - name: Print test summary
+        working-directory: e2e-web
+        if: always()
+        run: |
+          node -e "
+            const r = require('./reports/mochawesome-combined.json');
+            const s = r.stats || {};
+            const total   = s.tests    || 0;
+            const passed  = s.passes   || 0;
+            const failed  = s.failures || 0;
+            const pending = s.pending  || 0;
+            const rate    = total > 0 ? ((passed/total)*100).toFixed(1) : '0.0';
+            console.log('');
+            console.log('══════════════════════════════════════════');
+            console.log('  🧪 NewMomCircle Web E2E — Test Summary  ');
+            console.log('══════════════════════════════════════════');
+            console.log(\`  Total   : \${total}\`);
+            console.log(\`  ✅ Passed : \${passed}\`);
+            console.log(\`  ❌ Failed : \${failed}\`);
+            console.log(\`  ⏭ Skipped: \${pending}\`);
+            console.log(\`  Pass Rate: \${rate}%\`);
+            console.log('══════════════════════════════════════════');
+            console.log('');
+            process.exit(failed > 0 ? 1 : 0);
+          "
+
+  # ════════════════════════════════════════════════════════════════════════════
+  # JOB 4 ─ Deploy (runs only on main branch after all tests pass)
+  # ════════════════════════════════════════════════════════════════════════════
+  deploy:
+    name: Deploy to Production
+    runs-on: ubuntu-latest
+    needs: [selenium-e2e, merge-reports]
+    if: github.ref == 'refs/heads/main' && needs.selenium-e2e.result == 'success' && needs.merge-reports.result == 'success'
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build for production
+        run: npx turbo run build --filter=@newmomcircle/web
+        env:
+          NEXT_PUBLIC_SUPABASE_URL:      ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+
+      - name: Deploy
+        run: echo "🚀 Deploy step — replace this with your actual deploy command (Vercel, Render, etc.)"
+        # Example Vercel deploy:
+        # run: npx vercel --prod --token ${{ secrets.VERCEL_TOKEN }}
