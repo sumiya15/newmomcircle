@@ -10,6 +10,13 @@ class LoginPage extends BasePage {
     await this.type('login-email-input', email);
     await this.type('login-password-input', password);
     await this.click('login-submit-btn');
+    // Settle as soon as /feed redirect OR an auth/validation error appears
+    try {
+      await Promise.race([
+        this.waitForUrl('/feed', 10000),
+        this.el('login-error-message', 8000),
+      ]);
+    } catch { /* neither happened — subsequent assertions will catch this */ }
   }
 
   async getErrorText() {

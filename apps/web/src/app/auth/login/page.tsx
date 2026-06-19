@@ -107,7 +107,7 @@ export default function LoginPage() {
           </div>
 
           {/* Form */}
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4" data-testid="login-form">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4" noValidate data-testid="login-form">
             {/* Email */}
             <div className="space-y-1.5">
               <label className="text-[11.5px] font-semibold text-white/50 uppercase tracking-wide font-poppins">
@@ -127,7 +127,7 @@ export default function LoginPage() {
                 }
               />
               {errors.email && (
-                <p className="text-[#FF8585] text-[11.5px] font-medium pl-0.5">{errors.email.message}</p>
+                <p className="text-[#FF8585] text-[11.5px] font-medium pl-0.5" data-testid="login-error-message">{errors.email.message}</p>
               )}
             </div>
 
@@ -137,7 +137,7 @@ export default function LoginPage() {
                 <label className="text-[11.5px] font-semibold text-white/50 uppercase tracking-wide font-poppins">
                   Password
                 </label>
-                <Link href="/auth/forgot-password" className="text-[11.5px] text-[#FF9F7C] hover:text-[#FFCFBB] transition-colors font-medium" data-testid="login-forgot-link">
+                <Link href="/auth/forgot-password" className="text-[11.5px] text-[#FF9F7C] hover:text-[#FFCFBB] transition-colors font-medium" data-testid="login-forgot-password-link">
                   Forgot password?
                 </Link>
               </div>
@@ -168,6 +168,10 @@ export default function LoginPage() {
                 <p className="text-[#FF8585] text-[11.5px] font-medium pl-0.5">{errors.password.message}</p>
               )}
             </div>
+
+            {errorMsg && (
+              <p className="text-[#FF8585] text-[12px] text-center font-medium" data-testid="login-error-message">{errorMsg}</p>
+            )}
 
             <PeachButton
               type="submit"

@@ -21,7 +21,10 @@ class SignupPage extends BasePage {
     return el ? el.getText() : '';
   }
 
-  async clickLoginLink() { await this.click('signup-login-link'); }
+  async clickLoginLink() {
+    await this.scrollIntoView('signup-login-link');
+    await this.click('signup-login-link');
+  }
 }
 
 module.exports = SignupPage;

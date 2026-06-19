@@ -67,10 +67,14 @@ export default function SignupPage() {
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  const { register, handleSubmit, formState: { errors } } = useForm<SignupFormValues>({
+  const { register, handleSubmit, formState: { errors }, watch } = useForm<SignupFormValues>({
     resolver: zodResolver(signupSchema),
     defaultValues: { acceptTerms: false },
   });
+
+  const pwdWatch = watch('password', '');
+  const cpwdWatch = watch('confirmPassword', '');
+  const livePasswordMismatch = cpwdWatch.length > 0 && pwdWatch !== cpwdWatch;
 
   const onSubmit = async (data: SignupFormValues) => {
     setIsLoading(true);
@@ -144,7 +148,7 @@ export default function SignupPage() {
             </p>
           </div>
 
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4" data-testid="signup-form">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4" noValidate data-testid="signup-form">
 
             {/* Full Name */}
             <div className="space-y-1.5">
@@ -272,6 +276,16 @@ export default function SignupPage() {
               </label>
               <FieldError msg={errors.acceptTerms?.message} />
             </div>
+
+            {livePasswordMismatch ? (
+              <p className="text-[#FF8585] text-[11.5px] text-center font-medium" data-testid="signup-error-message">
+                Passwords do not match
+              </p>
+            ) : (errors.fullName || errors.email || errors.password || errors.babyDate || errors.language || errors.acceptTerms)?.message ? (
+              <p className="text-[#FF8585] text-[11.5px] text-center font-medium" data-testid="signup-error-message">
+                {String((errors.fullName || errors.email || errors.password || errors.babyDate || errors.language || errors.acceptTerms)?.message)}
+              </p>
+            ) : null}
 
             <PeachButton
               type="submit"

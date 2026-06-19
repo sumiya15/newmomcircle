@@ -168,8 +168,8 @@ export default function LandingPage() {
 
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row items-center gap-4 mb-16">
-            <Link href="/auth/signup" data-testid="landing-hero-cta-btn">
-              <PeachButton className="!px-10 !py-4.5 text-lg !font-semibold shadow-[0_8px_32px_rgba(232,115,74,0.45)] hover:scale-[1.02] transition-transform">
+            <Link href="/auth/signup">
+              <PeachButton data-testid="landing-hero-cta-btn" className="!px-10 !py-4.5 text-lg !font-semibold shadow-[0_8px_32px_rgba(232,115,74,0.45)] hover:scale-[1.02] transition-transform">
                 Begin Your Journey →
               </PeachButton>
             </Link>

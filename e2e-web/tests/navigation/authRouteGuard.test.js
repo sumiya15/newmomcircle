@@ -10,7 +10,7 @@ const baseTest   = require('../base/baseTest');
 const BasePage   = require('../../helpers/pages/BasePage');
 
 const PROTECTED_ROUTES = [
-  { name: 'Feed',      path: '/' },
+  { name: 'Feed',      path: '/feed' },
   { name: 'Journal',   path: '/journal' },
   { name: 'Resources', path: '/resources' },
   { name: 'Safety',    path: '/safety' },
@@ -27,6 +27,9 @@ describe('WEB – Navigation: Auth Route Guard', function () {
 
   PROTECTED_ROUTES.forEach(({ name, path }, idx) => {
     it(`RTG-W-0${idx + 1}: Unauthenticated access to "${name}" redirects to /auth/login`, async function () {
+      // Navigate to base URL first so localStorage is accessible (data: URLs block it)
+      await page.navigate('/');
+      await page.driver.sleep(300);
       // Clear storage to simulate logged-out state
       await page.driver.executeScript(
         'window.localStorage.clear(); window.sessionStorage.clear();'
@@ -34,7 +37,8 @@ describe('WEB – Navigation: Auth Route Guard', function () {
       await page.driver.manage().deleteAllCookies();
 
       await page.navigate(path);
-      await page.driver.sleep(1500);
+      // Use waitForUrl instead of fixed sleep — dev mode auth redirects can be slow
+      await page.waitForUrl('login', 10000).catch(() => {});
 
       const url = await page.currentUrl();
       expect(url, `"${name}" did not redirect to login — still at ${url}`)
