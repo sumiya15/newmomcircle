@@ -90,7 +90,7 @@ export default function ForgotPasswordPage() {
 
         <div className="bg-white/[0.04] border border-white/[0.08] rounded-2xl p-8 backdrop-blur-sm">
           {successMsg ? (
-            <div className="space-y-6">
+            <div className="space-y-6" data-testid="forgot-password-success">
               {/* Success state */}
               <div className="text-center space-y-2">
                 <div className="w-12 h-12 rounded-full bg-[#4CAF7D]/20 border border-[#4CAF7D]/30 flex items-center justify-center mx-auto mb-4">
@@ -124,22 +124,22 @@ export default function ForgotPasswordPage() {
                     placeholder="you@example.com"
                     type="email"
                     error={!!errors.email}
-                    data-testid="forgot-email-input"
+                    data-testid="forgot-password-email-input"
                     {...register('email')}
                     leftIcon={<MailIcon />}
                   />
                   {errors.email && (
-                    <p className="text-[#E85555] text-xs font-medium pl-0.5">{errors.email.message}</p>
+                    <p className="text-[#E85555] text-xs font-medium pl-0.5" data-testid="forgot-password-error">{errors.email.message}</p>
                   )}
                 </div>
 
-                <PeachButton type="submit" loading={isLoading} className="w-full !h-12 font-semibold text-sm mt-1" data-testid="forgot-submit-btn">
+                <PeachButton type="submit" loading={isLoading} className="w-full !h-12 font-semibold text-sm mt-1" data-testid="forgot-password-submit-btn">
                   {!isLoading && "Send Recovery Link"}
                 </PeachButton>
 
                 <p className="text-center text-sm text-white/40">
                   Remember your password?{' '}
-                  <Link href="/auth/login" className="text-[#FF9F7C] font-semibold hover:text-[#FFCFBB] transition-colors" data-testid="forgot-back-link">
+                  <Link href="/auth/login" className="text-[#FF9F7C] font-semibold hover:text-[#FFCFBB] transition-colors" data-testid="forgot-password-back-link">
                     Sign in
                   </Link>
                 </p>

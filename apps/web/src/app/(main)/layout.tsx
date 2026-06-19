@@ -172,6 +172,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
                 key={item.path}
                 href={item.path}
                 className={`sidebar-item ${active ? 'active' : ''} ${item.critical ? 'danger' : ''}`}
+                data-testid={`nav-${item.name.toLowerCase().replace(/ /g, '-')}-link`}
               >
                 <span className="sidebar-icon flex-shrink-0 w-[17px]">
                   <item.icon />
@@ -203,6 +204,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
               onClick={handleLogout}
               title="Sign Out"
               className="p-1.5 rounded-lg text-white/30 hover:text-white/70 hover:bg-white/[0.06] transition-colors flex-shrink-0"
+              data-testid="profile-logout-btn"
             >
               <Icon.Logout />
             </button>
@@ -256,6 +258,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
                 key={item.path}
                 href={item.path}
                 className="flex flex-col items-center -mt-5"
+                data-testid={`tab-${item.name.toLowerCase()}-link`}
               >
                 <div className="w-12 h-12 rounded-full bg-[#E85555] flex items-center justify-center shadow-[0_4px_20px_rgba(232,85,85,0.5)] border-2 border-[#0E0705] animate-sos-pulse">
                   <span className="text-[10px] font-bold text-white font-poppins tracking-wide">SOS</span>
@@ -271,6 +274,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
               className={`flex flex-col items-center gap-0.5 py-1 px-2 rounded-xl transition-colors ${
                 active ? 'text-[#FF9F7C]' : 'text-white/40'
               }`}
+              data-testid={`tab-${item.name.toLowerCase()}-link`}
             >
               <item.icon />
               <span className="text-[9px] font-semibold font-poppins">{item.name}</span>

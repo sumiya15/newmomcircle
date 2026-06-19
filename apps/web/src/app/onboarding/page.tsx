@@ -78,7 +78,7 @@ export default function OnboardingPage() {
   }
 
   return (
-    <div className="relative min-h-screen bg-[#0E0705] flex items-center justify-center overflow-hidden">
+    <div className="relative min-h-screen bg-[#0E0705] flex items-center justify-center overflow-hidden" data-testid="onboarding-screen">
       {/* Ambient */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         <div className="absolute top-[-10%] left-[35%] w-[500px] h-[500px] rounded-full bg-[#E8734A]/8 blur-[140px]" />
@@ -135,6 +135,7 @@ export default function OnboardingPage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: idx * 0.05, duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
                 onClick={() => handleSelect(lang.code)}
+                data-testid={`onboarding-lang-${lang.code}-btn`}
                 className={`w-full flex items-center justify-between px-4 py-3.5 rounded-[14px] border transition-all duration-150 text-left ${
                   isSelected
                     ? 'bg-white/[0.10] border-white/25 shadow-[0_2px_16px_rgba(255,159,124,0.12)]'
@@ -177,6 +178,7 @@ export default function OnboardingPage() {
             whileHover={{ scale: isContinuing ? 1 : 1.01 }}
             whileTap={{ scale: 0.99 }}
             className="w-full py-[14px] rounded-full font-poppins font-semibold text-[15px] text-[#2D1B13] transition-all duration-200 disabled:opacity-60"
+            data-testid="onboarding-continue-btn"
             style={{
               background: 'linear-gradient(135deg, #FFCFBB 0%, #FF9F7C 50%, #E8734A 100%)',
               boxShadow: isContinuing ? 'none' : '0 6px 24px rgba(232,115,74,0.40)',

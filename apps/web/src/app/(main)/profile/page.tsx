@@ -214,7 +214,7 @@ export default function ProfilePage() {
             </div>
 
             <div>
-              <h3 className="text-lg font-bold text-white font-poppins">{userProfile?.displayName || 'New Mom'}</h3>
+              <h3 className="text-lg font-bold text-white font-poppins" data-testid="profile-name-text">{userProfile?.displayName || 'New Mom'}</h3>
               <p className="text-xs text-[#FFCFBB] font-semibold tracking-wider uppercase mt-0.5">
                 Role: {userProfile?.role || 'Member'}
               </p>
@@ -257,7 +257,7 @@ export default function ProfilePage() {
 
           {/* Profile Form */}
           <GlassCard className="p-6 space-y-6">
-            <h3 className="text-lg font-bold text-white font-poppins border-b border-white/10 pb-3">
+            <h3 className="text-lg font-bold text-white font-poppins border-b border-white/10 pb-3" data-testid="profile-settings-btn">
               Personal Information
             </h3>
 
@@ -283,6 +283,7 @@ export default function ProfilePage() {
                     onChange={(e) => setBabyDate(e.target.value)}
                     className="glass-input text-white cursor-pointer"
                     required
+                    data-testid="profile-baby-date-input"
                   />
                 </div>
 
@@ -293,6 +294,7 @@ export default function ProfilePage() {
                     onChange={(e) => setLanguage(e.target.value as SupportedLocale)}
                     className="glass-input cursor-pointer"
                     required
+                    data-testid="profile-language-select"
                   >
                     <option value="en" className="bg-[#140804] text-white">English (Default)</option>
                     <option value="hi" className="bg-[#140804] text-white">हिंदी (Hindi)</option>

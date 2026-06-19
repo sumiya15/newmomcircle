@@ -204,10 +204,20 @@ export default function JournalPage() {
           <h1 className="text-[22px] font-bold text-white font-poppins tracking-tight">My Journal</h1>
           <p className="text-[13px] text-white/40 mt-0.5">{new Date().toLocaleDateString(undefined, { weekday: 'long', month: 'long', day: 'numeric' })}</p>
         </div>
-        <Link href="/journal/insights" className="text-[12.5px] font-semibold text-[#FF9F7C] hover:text-[#FFCFBB] flex items-center gap-1.5 transition-colors" data-testid="journal-insights-link">
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-          Insights
-        </Link>
+        <div className="flex items-center gap-3">
+          <button
+            type="button"
+            data-testid="journal-new-btn"
+            onClick={() => (document.querySelector<HTMLTextAreaElement>('[data-testid="journal-content-input"]'))?.focus()}
+            className="text-xs font-semibold px-3 py-1.5 rounded-xl bg-[#FF9F7C]/10 border border-[#FF9F7C]/20 text-[#FF9F7C] hover:bg-[#FF9F7C]/20 transition-colors"
+          >
+            + New Entry
+          </button>
+          <Link href="/journal/insights" className="text-[12.5px] font-semibold text-[#FF9F7C] hover:text-[#FFCFBB] flex items-center gap-1.5 transition-colors" data-testid="journal-insights-link">
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+            Insights
+          </Link>
+        </div>
       </div>
 
       {/* Main entry card */}
@@ -354,7 +364,7 @@ export default function JournalPage() {
       <div className="space-y-4" data-testid="journal-entries-list">
         <h3 className="text-lg font-bold text-[#FFCFBB] pl-1 font-poppins">Past Entries</h3>
         {pastEntries.length === 0 ? (
-          <p className="text-xs text-white/40 italic pl-1">Your past logs will appear here once saved.</p>
+          <p className="text-xs text-white/40 italic pl-1" data-testid="journal-empty-state">Your past logs will appear here once saved.</p>
         ) : (
           <div className="grid grid-cols-1 gap-4">
             {pastEntries.map((entry) => {

@@ -179,6 +179,7 @@ export default function ResourcesPage() {
 
           {/* Search and Filters */}
           <div className="space-y-4">
+            <div data-testid="resources-search-toggle">
             <GlassInput
               type="text"
               placeholder="Search articles, topics, or authors..."
@@ -191,6 +192,7 @@ export default function ResourcesPage() {
                 </svg>
               }
             />
+            </div>
 
             {/* Category Pills */}
             <div className="flex flex-wrap gap-2">
@@ -213,14 +215,14 @@ export default function ResourcesPage() {
 
           {/* Grid Layout of Articles */}
           {filteredResources.length === 0 ? (
-            <GlassCard className="p-12 text-center flex flex-col items-center justify-center space-y-4">
+            <GlassCard className="p-12 text-center flex flex-col items-center justify-center space-y-4" data-testid="resources-empty-state">
               <span className="text-5xl">🔍</span>
               <h3 className="text-lg font-bold text-[#FFCFBB] font-poppins">No articles found</h3>
               <p className="text-sm text-white/60">Try modifying your search keywords or selection filters.</p>
             </GlassCard>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {filteredResources.map((res) => (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6" data-testid="resources-list">
+              {filteredResources.map((res, idx) => (
                 <GlassCard key={res.id} className="flex flex-col h-full overflow-hidden p-0 border border-white/10 group">
                   {/* Article Thumbnail */}
                   <div className="relative h-44 w-full overflow-hidden border-b border-white/10 flex-shrink-0">
@@ -257,7 +259,7 @@ export default function ResourcesPage() {
                       <button
                         onClick={() => setActiveArticle(res)}
                         className="flex-shrink-0 text-xs font-bold text-[#FF9F7C] hover:text-[#E8734A] transition-colors flex items-center gap-1 cursor-pointer"
-                        data-testid={`resources-article-${res.id}-btn`}
+                        data-testid={idx === 0 ? 'resources-featured-article-btn' : `resources-article-${res.id}-btn`}
                       >
                         Read Now →
                       </button>

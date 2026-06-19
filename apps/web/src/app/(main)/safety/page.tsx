@@ -343,7 +343,7 @@ export default function SafetyPage() {
 
             {/* Add Guardian Form */}
             <form onSubmit={handleAddGuardian} className="space-y-4 pt-4 border-t border-white/10" data-testid="safety-add-guardian-form">
-              <h4 className="text-xs uppercase font-bold tracking-widest text-[#FFCFBB] font-poppins">Add New Contact</h4>
+              <h4 className="text-xs uppercase font-bold tracking-widest text-[#FFCFBB] font-poppins" data-testid="safety-add-guardian-btn">Add New Contact</h4>
 
               <div className="space-y-3">
                 <GlassInput
