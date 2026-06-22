@@ -2,7 +2,7 @@
 const BasePage = require('./BasePage');
 
 class FeedPage extends BasePage {
-  async open()  { await this.navigate('/'); }
+  async open()  { await this.navigate('/feed'); }
   async isAt()  { return this.exists('feed-screen', 8000); }
 
   async createPost(text) {

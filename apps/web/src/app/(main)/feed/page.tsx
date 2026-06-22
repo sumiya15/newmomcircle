@@ -228,11 +228,20 @@ export default function FeedPage() {
             <h1 className="text-[22px] font-bold text-white font-poppins tracking-tight">Community Circle</h1>
             <p className="text-[13px] text-white/40 mt-0.5">Connect with mothers in your language</p>
           </div>
-          <button
-            onClick={() => setNotificationsCount(0)}
-            className="relative p-2 rounded-xl bg-white/[0.05] hover:bg-white/[0.09] border border-white/8 text-white/60 hover:text-white transition-all"
-            data-testid="feed-notification-btn"
-          >
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => (document.querySelector<HTMLTextAreaElement>('[data-testid="create-post-input"]'))?.focus()}
+              className="text-xs font-semibold px-3 py-1.5 rounded-xl bg-[#FF9F7C]/10 border border-[#FF9F7C]/20 text-[#FF9F7C] hover:bg-[#FF9F7C]/20 transition-colors"
+              data-testid="feed-create-btn"
+            >
+              + New Post
+            </button>
+            <button
+              onClick={() => setNotificationsCount(0)}
+              className="relative p-2 rounded-xl bg-white/[0.05] hover:bg-white/[0.09] border border-white/8 text-white/60 hover:text-white transition-all"
+              data-testid="feed-notification-btn"
+            >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
               <path strokeLinecap="round" strokeLinejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
             </svg>
@@ -241,7 +250,8 @@ export default function FeedPage() {
                 {notificationsCount}
               </span>
             )}
-          </button>
+            </button>
+          </div>
         </div>
 
         {/* Trending Topics Marquee */}
@@ -281,7 +291,7 @@ export default function FeedPage() {
                     placeholder={`What's on your mind, ${isAnonymous ? 'Anonymous Mom' : userProfile.displayName.split(' ')[0]}?`}
                     className="w-full bg-white/[0.04] border border-white/10 rounded-xl p-3 text-white placeholder-white/30 focus:outline-none focus:border-[#FF9F7C]/60 focus:bg-white/[0.06] transition-all resize-none text-[13.5px] font-inter h-[88px] leading-relaxed"
                     required
-                    data-testid="feed-post-input"
+                    data-testid="create-post-input"
                   />
                 </div>
               </div>
@@ -324,7 +334,7 @@ export default function FeedPage() {
                   </label>
                 </div>
 
-                <PeachButton type="submit" loading={isSubmitting} className="!px-6 !py-2 text-sm !font-semibold" data-testid="feed-submit-btn">
+                <PeachButton type="submit" loading={isSubmitting} disabled={!postContent.trim()} className="!px-6 !py-2 text-sm !font-semibold" data-testid="create-post-submit-btn">
                   Post
                 </PeachButton>
               </div>
