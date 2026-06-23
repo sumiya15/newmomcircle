@@ -8,10 +8,7 @@
     "outDir": "./dist",
     "rootDir": "./src",
     "declaration": true,
-    "declarationMap": true,
-    "paths": {
-      "@newmomcircle/types": ["../types/src/index.ts"]
-    }
+    "declarationMap": true
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"]
