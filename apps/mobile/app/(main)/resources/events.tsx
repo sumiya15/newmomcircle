@@ -413,14 +413,14 @@ function FeaturedEventCard({
         <View style={styles.featuredCover}>
           <Image
             source={{ uri: event.coverUrl }}
-            style={StyleSheet.absoluteFillObject}
+            style={StyleSheet.absoluteFill}
             contentFit="cover"
             placeholder={event.coverBlur}
             transition={300}
           />
           <LinearGradient
             colors={['transparent', 'rgba(20,8,2,0.72)']}
-            style={StyleSheet.absoluteFillObject}
+            style={StyleSheet.absoluteFill}
           />
           {/* Date badge */}
           <View style={styles.dateBadge}>
@@ -470,14 +470,14 @@ function EventCard({
       <View style={styles.eventThumb}>
         <Image
           source={{ uri: event.coverUrl }}
-          style={StyleSheet.absoluteFillObject}
+          style={StyleSheet.absoluteFill}
           contentFit="cover"
           placeholder={event.coverBlur}
           transition={300}
         />
         <LinearGradient
           colors={['transparent', 'rgba(20,8,2,0.55)']}
-          style={StyleSheet.absoluteFillObject}
+          style={StyleSheet.absoluteFill}
         />
         {/* Date badge */}
         <View style={[styles.dateBadge, styles.dateBadgeSm]}>

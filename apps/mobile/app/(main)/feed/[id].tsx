@@ -156,9 +156,9 @@ export default function PostDetailScreen() {
               ? <CommentSkeletons />
               : (
                 <EmptyState
-                  icon="chatbubble-outline"
+                  emoji="💬"
                   title="No comments yet"
-                  message="Be the first to say something kind."
+                  subtitle="Be the first to say something kind."
                 />
               )
           }

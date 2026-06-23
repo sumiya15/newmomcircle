@@ -472,7 +472,7 @@ function EventsBanner({ onPress }: { onPress: () => void }) {
       >
         <Image
           source={{ uri: outdoorWalks[3]!.url }}
-          style={StyleSheet.absoluteFillObject}
+          style={StyleSheet.absoluteFill}
           contentFit="cover"
           transition={300}
         />
@@ -480,7 +480,7 @@ function EventsBanner({ onPress }: { onPress: () => void }) {
           colors={['rgba(232,115,74,0.72)', 'rgba(123,104,200,0.72)']}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
-          style={StyleSheet.absoluteFillObject}
+          style={StyleSheet.absoluteFill}
         />
         <View style={styles.eventsBannerContent}>
           <View style={styles.eventsBannerLeft}>
@@ -520,14 +520,14 @@ function FeaturedCard({
       >
         <Image
           source={{ uri: article.imageUrl }}
-          style={StyleSheet.absoluteFillObject}
+          style={StyleSheet.absoluteFill}
           contentFit="cover"
           placeholder={article.imageBlurHash}
           transition={300}
         />
         <LinearGradient
           colors={['transparent', 'rgba(20,8,2,0.78)']}
-          style={StyleSheet.absoluteFillObject}
+          style={StyleSheet.absoluteFill}
         />
         {/* Bookmark */}
         <Pressable

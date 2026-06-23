@@ -61,7 +61,7 @@ export default function LanguageScreen() {
       {/* Background photo */}
       <Image
         source={{ uri: "https://images.unsplash.com/photo-1588776813677-77aef5595b83?w=800" }}
-        style={StyleSheet.absoluteFillObject}
+        style={StyleSheet.absoluteFill}
         contentFit="cover"
       />
 
@@ -73,7 +73,7 @@ export default function LanguageScreen() {
           "rgba(20,8,4,0.82)",
         ]}
         locations={[0, 0.5, 1]}
-        style={StyleSheet.absoluteFillObject}
+        style={StyleSheet.absoluteFill}
       />
 
       <ScrollView

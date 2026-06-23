@@ -68,7 +68,7 @@ const BADGES: Badge[] = [
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
-function parseBabyDOB(raw: string | undefined): Date | null {
+function parseBabyDOB(raw: string | null | undefined): Date | null {
   if (!raw) return null;
   // Support DD/MM/YYYY and YYYY-MM-DD
   const d1 = parse(raw, 'dd/MM/yyyy', new Date());
@@ -155,7 +155,7 @@ export default function ProfileScreen() {
     setDeleting(true);
     setErrorMsg('');
     try {
-      await requestAccountDeletion(user, deletePass);
+      await requestAccountDeletion(deletePass);
       router.replace('/(auth)/login');
     } catch {
       setErrorMsg('Incorrect password. Please try again.');
@@ -801,7 +801,11 @@ const styles = StyleSheet.create({
 
   // Delete sheet
   scrim: {
-    ...StyleSheet.absoluteFillObject,
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
     backgroundColor: 'rgba(20,8,4,0.45)',
     zIndex: 30,
   },

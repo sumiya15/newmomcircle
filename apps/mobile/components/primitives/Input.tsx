@@ -72,7 +72,7 @@ export default function Input({
               : focused
               ? Colors.peachDark
               : Colors.textMuted,
-          }}
+          } as any}
           transition={{ type: 'timing', duration: 180 }}
           style={[styles.label, leftIcon && styles.labelWithIcon]}
         >

@@ -26,7 +26,7 @@ import { useTranslation } from 'react-i18next';
 import Carousel from 'react-native-reanimated-carousel';
 import Animated, {
   useSharedValue, useAnimatedStyle, interpolate, Extrapolation,
-  withSpring,
+  withSpring, type SharedValue,
 } from 'react-native-reanimated';
 import { MotiView } from 'moti';
 import { Ionicons } from '@expo/vector-icons';
@@ -151,7 +151,7 @@ export default function OnboardingScreen() {
 interface SlideProps {
   slide: Slide;
   index: number;
-  animationValue: Animated.SharedValue<number>;
+  animationValue: SharedValue<number>;
   active: number;
   isLast: boolean;
   onNext: () => void;

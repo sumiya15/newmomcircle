@@ -130,14 +130,14 @@ export default function ArticleDetailScreen() {
         <View style={styles.hero}>
           <Image
             source={{ uri: article.imageUrl }}
-            style={StyleSheet.absoluteFillObject}
+            style={StyleSheet.absoluteFill}
             contentFit="cover"
             placeholder={article.imageBlurHash}
             transition={300}
           />
           <LinearGradient
             colors={['rgba(0,0,0,0.08)', 'rgba(20,8,2,0.65)']}
-            style={StyleSheet.absoluteFillObject}
+            style={StyleSheet.absoluteFill}
           />
         </View>
 
@@ -339,7 +339,7 @@ function RelatedCard({
         />
         <LinearGradient
           colors={['transparent', 'rgba(20,8,2,0.7)']}
-          style={StyleSheet.absoluteFillObject}
+          style={StyleSheet.absoluteFill}
         />
         <View style={styles.relatedMeta}>
           <View style={[styles.catBadge, { backgroundColor: Colors.peach }]}>
@@ -609,7 +609,11 @@ const styles = StyleSheet.create({
     ...Shadow.card,
   },
   relatedThumb: {
-    ...StyleSheet.absoluteFillObject,
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
   },
   relatedMeta: {
     position: 'absolute',

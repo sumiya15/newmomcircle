@@ -553,7 +553,11 @@ const styles = StyleSheet.create({
     borderWidth: 3, borderColor: Colors.white,
   },
   avatarOverlay: {
-    ...StyleSheet.absoluteFillObject,
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
     borderRadius: 48,
     backgroundColor: 'rgba(0,0,0,0.32)',
     alignItems: 'center', justifyContent: 'center',

@@ -214,9 +214,9 @@ export default function MessagesScreen() {
         <SkeletonList />
       ) : filtered.length === 0 ? (
         <EmptyState
-          icon="chatbubbles-outline"
+          emoji="💬"
           title={query ? 'No results' : 'No messages yet'}
-          message={query
+          subtitle={query
             ? 'Try a different name or keyword.'
             : 'Connect with another mama — start a conversation from her profile.'
           }

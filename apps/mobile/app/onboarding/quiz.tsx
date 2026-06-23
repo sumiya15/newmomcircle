@@ -102,10 +102,11 @@ export default function OnboardingQuizScreen() {
   const router   = useRouter();
   const insets   = useSafeAreaInsets();
   const user     = useAuthStore((s) => s.user);
+  const profile  = useAuthStore((s) => s.profile);
 
   const [step,           setStep]           = useState(0);
   const [direction,      setDirection]      = useState<1 | -1>(1);
-  const [name,           setName]           = useState(user?.displayName ?? '');
+  const [name,           setName]           = useState(profile?.displayName ?? user?.user_metadata?.display_name ?? '');
   const [selectedStage,  setSelectedStage]  = useState<string | null>(null);
   const [selectedTopics, setSelectedTopics] = useState<Set<string>>(new Set());
   const [communityStyle, setCommunityStyle] = useState<string | null>(null);
@@ -275,7 +276,6 @@ function StepName({ name, onChange }: { name: string; onChange: (v: string) => v
           autoCapitalize="words"
           autoFocus
           returnKeyType="done"
-          fontFamily={Typography.fontFamily}
         />
       </View>
     </View>
