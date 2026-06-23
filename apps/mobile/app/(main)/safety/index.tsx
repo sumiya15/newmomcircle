@@ -120,7 +120,7 @@ export default function SafetyScreen() {
     <View style={styles.root} testID="safety-screen">
       {/* WebWrapper: centres content in 480px on wide web; passthrough on native */}
       <WebWrapper>
-        <LinearGradient colors={["#D94F4F", "#B03030"]} style={styles.header}>
+        <LinearGradient testID="safety-header" colors={["#D94F4F", "#B03030"]} style={styles.header}>
           <Text style={styles.headerTitle}>{t("safety_title")}</Text>
           <Text style={styles.headerEmoji}>🛡️</Text>
         </LinearGradient>
@@ -162,7 +162,7 @@ export default function SafetyScreen() {
             <Text style={styles.emptyText}>{t("no_guardians")}</Text>
           ) : (
             guardians.map((g) => (
-              <View key={g.id} style={styles.guardianCard}>
+              <View key={g.id} testID="safety-guardian-card" style={styles.guardianCard}>
                 <View style={styles.guardianAvatar}>
                   <Text style={{ fontSize: 20 }}>👤</Text>
                 </View>
@@ -172,7 +172,7 @@ export default function SafetyScreen() {
                   {pendingDeleteId === g.id && (
                     <View style={styles.deleteConfirmRow}>
                       <Text style={styles.deleteConfirmLabel}>Remove?</Text>
-                      <TouchableOpacity testID="safety-confirm-delete-btn" onPress={confirmDeleteGuardian} style={styles.deleteYesBtn}>
+                      <TouchableOpacity testID="safety-delete-confirm-yes" onPress={confirmDeleteGuardian} style={styles.deleteYesBtn}>
                         <Text style={styles.deleteYesText}>{t("delete_confirm_yes")}</Text>
                       </TouchableOpacity>
                       <TouchableOpacity testID="safety-cancel-delete-btn" onPress={() => setPendingDeleteId(null)}>
@@ -208,10 +208,10 @@ export default function SafetyScreen() {
       {/* SOS Countdown Overlay (Modal — outside WebWrapper) */}
       <Modal visible={sosActive} transparent animationType="fade">
         <View style={styles.sosOverlay}>
-          <View style={styles.sosCountdownCard}>
+          <View testID="safety-sos-countdown" style={styles.sosCountdownCard}>
             <Text style={styles.sosCountdownTitle}>{t("sos_confirm_title")}</Text>
             <Text style={styles.sosCountdownNum}>{countdown}</Text>
-            <TouchableOpacity testID="safety-sos-cancel-btn" style={styles.cancelBtn} onPress={cancelSOS}>
+            <TouchableOpacity testID="safety-cancel-btn" style={styles.cancelBtn} onPress={cancelSOS}>
               <Text style={styles.cancelBtnText}>{t("sos_cancel")}</Text>
             </TouchableOpacity>
           </View>
@@ -252,7 +252,7 @@ export default function SafetyScreen() {
                 <Text style={styles.saveGuardianBtnText}>{t("save_guardian")}</Text>
               )}
             </TouchableOpacity>
-            <TouchableOpacity testID="safety-cancel-guardian-btn" style={styles.cancelModalBtn} onPress={() => { setShowAddGuardian(false); setModalError(""); }}>
+            <TouchableOpacity testID="safety-cancel-modal-btn" style={styles.cancelModalBtn} onPress={() => { setShowAddGuardian(false); setModalError(""); }}>
               <Text style={styles.cancelModalText}>{t("delete_confirm_no")}</Text>
             </TouchableOpacity>
           </View>

@@ -230,7 +230,7 @@ export default function NotificationsScreen() {
       <StatusBar barStyle="dark-content" />
 
       {/* ── Header ── */}
-      <View style={styles.header}>
+      <View testID="notifications-header" style={styles.header}>
         <Pressable style={styles.headerBtn} onPress={() => router.back()} hitSlop={12}>
           <Ionicons name="chevron-back" size={22} color={Colors.textPrimary} />
         </Pressable>
@@ -274,6 +274,7 @@ export default function NotificationsScreen() {
             return (
               <Pressable
                 key={f}
+                testID="notifications-filter-tab"
                 style={({ pressed }) => [
                   styles.filterChip,
                   active && styles.filterChipActive,
@@ -367,6 +368,7 @@ function NotifRow({
 
   return (
     <Pressable
+      testID="notifications-item"
       style={({ pressed }) => [
         styles.row,
         !notif.read && styles.rowUnread,

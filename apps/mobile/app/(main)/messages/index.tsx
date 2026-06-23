@@ -150,7 +150,7 @@ export default function MessagesScreen() {
       <StatusBar barStyle="dark-content" />
 
       {/* ── Header ── */}
-      <View style={styles.header}>
+      <View testID="messages-header" style={styles.header}>
         <Pressable style={styles.headerBack} onPress={() => router.back()} hitSlop={12}>
           <Ionicons name="chevron-back" size={22} color={Colors.textPrimary} />
         </Pressable>
@@ -268,6 +268,7 @@ function ConversationRow({ conv, index, onPress }: RowProps) {
       transition={{ type: 'timing', duration: Motion.duration.base, delay: index * 55 }}
     >
       <Pressable
+        testID="messages-conversation-row"
         style={({ pressed }) => [styles.row, pressed && styles.rowPressed]}
         onPress={onPress}
       >

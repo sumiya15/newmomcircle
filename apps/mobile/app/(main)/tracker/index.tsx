@@ -183,7 +183,7 @@ export default function TrackerScreen() {
       <StatusBar barStyle="dark-content" />
 
       {/* ── Header ── */}
-      <View style={styles.header}>
+      <View testID="tracker-header" style={styles.header}>
         <Pressable style={styles.headerBack} onPress={() => router.back()} hitSlop={12}>
           <Ionicons name="chevron-back" size={22} color={Colors.textPrimary} />
         </Pressable>
@@ -233,7 +233,7 @@ export default function TrackerScreen() {
             animate={{ opacity: 1, translateY: 0 }}
             transition={{ type: 'timing', duration: Motion.duration.base, delay: 60 }}
           >
-            <View style={styles.tilesRow}>
+            <View testID="tracker-today-summary" style={styles.tilesRow}>
               <SummaryTile
                 icon="nutrition-outline"
                 color={TYPE_META.feed.color}
@@ -380,7 +380,7 @@ function TimelineEntry({
       </View>
 
       {/* Entry card */}
-      <View style={styles.timelineCard}>
+      <View testID="tracker-entry-card" style={styles.timelineCard}>
         <View style={styles.timelineCardTop}>
           <Text style={styles.timelineType}>{meta.label}</Text>
           <Text style={styles.timelineTime}>{format(entry.startTime, 'HH:mm')}</Text>
@@ -539,7 +539,7 @@ function LogSheet({ open, onClose, onSave, defaultDay }: LogSheetProps) {
                 return (
                   <Pressable
                     key={t}
-                    testID={`tracker-add-${t}-btn`}
+                    testID={`tracker-log-${t}-btn`}
                     style={({ pressed }) => [
                       styles.typeCell,
                       active && { borderColor: m.color, backgroundColor: m.bg },
@@ -608,6 +608,7 @@ function LogSheet({ open, onClose, onSave, defaultDay }: LogSheetProps) {
                       {type === 'feed' ? 'Amount (ml)' : 'Pumped (ml)'}
                     </Text>
                     <TextInput
+                      testID="tracker-amount-input"
                       style={styles.numericInput}
                       value={amount}
                       onChangeText={setAmount}
@@ -631,6 +632,7 @@ function LogSheet({ open, onClose, onSave, defaultDay }: LogSheetProps) {
                   <>
                     <Text style={styles.fieldLabel}>Duration (min)</Text>
                     <TextInput
+                      testID="tracker-amount-input"
                       style={styles.numericInput}
                       value={duration}
                       onChangeText={setDuration}
@@ -645,6 +647,7 @@ function LogSheet({ open, onClose, onSave, defaultDay }: LogSheetProps) {
                   <>
                     <Text style={styles.fieldLabel}>Duration (min)</Text>
                     <TextInput
+                      testID="tracker-amount-input"
                       style={styles.numericInput}
                       value={duration}
                       onChangeText={setDuration}
@@ -658,13 +661,20 @@ function LogSheet({ open, onClose, onSave, defaultDay }: LogSheetProps) {
                 {type === 'diaper' && (
                   <>
                     <Text style={styles.fieldLabel}>Type</Text>
-                    <SegmentControl
-                      options={['wet', 'dirty', 'both'] as DiaperT[]}
-                      value={diaperT}
-                      onChange={setDiaperT}
-                      labels={{ wet: 'Wet 💧', dirty: 'Dirty 💩', both: 'Both' }}
-                      activeColor={meta.color}
-                    />
+                    <View style={{ flexDirection: 'row', gap: 8 }}>
+                      {(['wet', 'dirty', 'both'] as DiaperT[]).map((dt) => (
+                        <Pressable
+                          key={dt}
+                          testID={`tracker-diaper-type-${dt}`}
+                          onPress={() => setDiaperT(dt)}
+                          style={{ flex: 1, padding: 8, borderRadius: 8, backgroundColor: diaperT === dt ? meta.color : Colors.warmGrey, alignItems: 'center' }}
+                        >
+                          <Text style={{ color: diaperT === dt ? Colors.white : Colors.textSecondary, fontSize: 12 }}>
+                            {{ wet: 'Wet 💧', dirty: 'Dirty 💩', both: 'Both' }[dt]}
+                          </Text>
+                        </Pressable>
+                      ))}
+                    </View>
                   </>
                 )}
 
@@ -702,6 +712,7 @@ function LogSheet({ open, onClose, onSave, defaultDay }: LogSheetProps) {
               <>
                 <Text style={styles.fieldLabel}>Notes (optional)</Text>
                 <TextInput
+                  testID="tracker-notes-input"
                   style={[styles.numericInput, styles.notesInput]}
                   value={notes}
                   onChangeText={setNotes}
@@ -717,6 +728,7 @@ function LogSheet({ open, onClose, onSave, defaultDay }: LogSheetProps) {
           {/* Sticky save bar */}
           <View style={[styles.sheetSaveBar, { paddingBottom: Math.max(insets.bottom, Spacing.md) }]}>
             <Pressable
+              testID="tracker-save-btn"
               style={({ pressed }) => [styles.sheetSaveBarBtn, pressed && { opacity: 0.85 }]}
               onPress={handleSave}
             >

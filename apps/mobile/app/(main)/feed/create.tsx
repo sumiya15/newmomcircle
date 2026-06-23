@@ -150,7 +150,7 @@ export default function CreatePostScreen() {
     <View style={[styles.root, { paddingTop: insets.top }]} testID="create-post-screen">
 
       {/* ── Header ── */}
-      <View style={styles.header}>
+      <View testID="create-post-header" style={styles.header}>
         <Pressable
           testID="create-post-back-btn"
           style={styles.cancelBtn}

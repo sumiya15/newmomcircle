@@ -18,10 +18,10 @@ class MessagesPage extends BasePage {
   get chatInput()        { return '~chat-input'; }
   get sendBtn()          { return '~chat-send-btn'; }
   get typingIndicator()  { return '~chat-typing-indicator'; }
-  get bottomNavTab()     { return '~tab-messages'; }
+  get feedMessagesBtn()  { return '~feed-messages-btn'; }
 
   async navigateToMessages() {
-    await this.click(this.bottomNavTab);
+    await this.click(this.feedMessagesBtn);
     await this.isAt();
   }
 

@@ -73,6 +73,7 @@ export default function PostCard({
       transition={{ type: 'timing', duration: 350, delay: index * 80 }}
     >
       <Pressable
+        testID="feed-post-card"
         style={({ pressed }) => [
           styles.card,
           pressed && styles.cardPressed,
@@ -125,7 +126,7 @@ export default function PostCard({
         <View style={styles.footer}>
           <View style={styles.actions}>
             {/* Like — animated heart */}
-            <Pressable style={styles.actionBtn} onPress={handleLike} hitSlop={12}>
+            <Pressable testID="feed-post-like-btn" style={styles.actionBtn} onPress={handleLike} hitSlop={12}>
               <MotiView state={heartAnim} transition={{ type: 'spring', damping: 10, stiffness: 280 }}>
                 <Ionicons
                   name={liked ? 'heart' : 'heart-outline'}
@@ -140,6 +141,7 @@ export default function PostCard({
 
             {/* Comment */}
             <Pressable
+              testID="feed-post-comment-btn"
               style={styles.actionBtn}
               onPress={() => onComment?.(post)}
               hitSlop={12}

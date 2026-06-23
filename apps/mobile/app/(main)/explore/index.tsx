@@ -178,7 +178,7 @@ export default function ExploreCirclesScreen() {
       <StatusBar barStyle="dark-content" />
 
       {/* ── Header ── */}
-      <View style={styles.header}>
+      <View testID="explore-header" style={styles.header}>
         <Pressable style={styles.headerBack} onPress={() => router.back()} hitSlop={12}>
           <Ionicons name="chevron-back" size={22} color={Colors.textPrimary} />
         </Pressable>
@@ -212,6 +212,7 @@ export default function ExploreCirclesScreen() {
           const active = item === activeCategory;
           return (
             <Pressable
+              testID={`explore-category-${item.toLowerCase().replace(/ & /g, '-').replace(/ /g, '-')}`}
               style={({ pressed }) => [
                 styles.catPill,
                 active && styles.catPillActive,
@@ -275,6 +276,7 @@ function CircleCard({ circle, index, onPress, onToggleJoin }: CardProps) {
       style={styles.cardWrap}
     >
       <Pressable
+        testID="explore-circle-card"
         style={({ pressed }) => [styles.card, pressed && styles.cardPressed]}
         onPress={onPress}
       >
@@ -309,6 +311,7 @@ function CircleCard({ circle, index, onPress, onToggleJoin }: CardProps) {
 
           {/* Join button */}
           <Pressable
+            testID={circle.isJoined ? 'explore-leave-btn' : 'explore-join-btn'}
             style={({ pressed }) => [
               styles.joinBtn,
               circle.isJoined && styles.joinBtnActive,

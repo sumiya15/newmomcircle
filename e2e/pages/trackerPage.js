@@ -11,6 +11,7 @@ const GestureUtils = require('../utilities/gestureUtils');
 
 class TrackerPage extends BasePage {
   get header()       { return '~tracker-header'; }
+  get fab()          { return '~tracker-fab-btn'; }
   get logFeedBtn()   { return '~tracker-log-feed-btn'; }
   get logSleepBtn()  { return '~tracker-log-sleep-btn'; }
   get logDiaperBtn() { return '~tracker-log-diaper-btn'; }
@@ -21,14 +22,20 @@ class TrackerPage extends BasePage {
   get entryCard()    { return '~tracker-entry-card'; }
   get todaySummary() { return '~tracker-today-summary'; }
   get emptyState()   { return '~tracker-empty-state'; }
-  get bottomNavTab() { return '~tab-tracker'; }
+  get feedTrackerBtn() { return '~feed-tracker-btn'; }
 
   async navigateToTracker() {
-    await this.click(this.bottomNavTab);
+    await this.click(this.feedTrackerBtn);
     await this.isAt();
   }
 
+  async openLogSheet() {
+    await this.click(this.fab);
+    await this._sleep(500);
+  }
+
   async logFeeding(amount, notes = '') {
+    await this.openLogSheet();
     await this.click(this.logFeedBtn);
     if (await this.isElementDisplayed(this.amountInput, 3000)) {
       await this.clearAndType(this.amountInput, amount);
@@ -41,6 +48,7 @@ class TrackerPage extends BasePage {
   }
 
   async logSleep(duration = '', notes = '') {
+    await this.openLogSheet();
     await this.click(this.logSleepBtn);
     if (duration && await this.isElementDisplayed(this.amountInput, 3000)) {
       await this.clearAndType(this.amountInput, duration);
@@ -53,6 +61,7 @@ class TrackerPage extends BasePage {
   }
 
   async logDiaper(type = 'wet') {
+    await this.openLogSheet();
     await this.click(this.logDiaperBtn);
     await this.click(`~tracker-diaper-type-${type}`);
     await this.click(this.saveBtn);

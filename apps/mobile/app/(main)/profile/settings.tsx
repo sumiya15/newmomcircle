@@ -74,7 +74,7 @@ export default function SettingsScreen() {
       <StatusBar barStyle="dark-content" />
 
       {/* ── Header ── */}
-      <View style={styles.header}>
+      <View testID="settings-header" style={styles.header}>
         <Pressable testID="settings-back-btn" style={styles.backBtn} onPress={() => router.back()} hitSlop={12}>
           <Ionicons name="chevron-back" size={22} color={Colors.textPrimary} />
         </Pressable>

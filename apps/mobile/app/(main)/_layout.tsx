@@ -62,6 +62,7 @@ export default function MainLayout() {
         name="feed/index"
         options={{
           title: t("feed_title"),
+          tabBarAccessibilityLabel: "tab-feed",
           tabBarIcon: ({ focused }) =>
             tabIcon("home", "home-outline", focused),
         }}
@@ -70,6 +71,7 @@ export default function MainLayout() {
         name="journal/index"
         options={{
           title: t("journal_title"),
+          tabBarAccessibilityLabel: "tab-journal",
           tabBarIcon: ({ focused }) =>
             tabIcon("journal", "journal-outline", focused),
         }}
@@ -78,6 +80,7 @@ export default function MainLayout() {
         name="toolbox/index"
         options={{
           title: "Toolbox",
+          tabBarAccessibilityLabel: "tab-toolbox",
           tabBarIcon: ({ focused }) =>
             tabIcon("heart", "heart-outline", focused),
         }}
@@ -86,6 +89,7 @@ export default function MainLayout() {
         name="safety/index"
         options={{
           title: t("safety_title"),
+          tabBarAccessibilityLabel: "tab-safety",
           tabBarIcon: ({ focused }) =>
             tabIcon("shield-checkmark", "shield-checkmark-outline", focused),
         }}
@@ -94,6 +98,7 @@ export default function MainLayout() {
         name="resources/index"
         options={{
           title: t("resources_title"),
+          tabBarAccessibilityLabel: "tab-resources",
           tabBarIcon: ({ focused }) =>
             tabIcon("library", "library-outline", focused),
         }}
@@ -102,6 +107,7 @@ export default function MainLayout() {
         name="profile/index"
         options={{
           title: t("profile_title"),
+          tabBarAccessibilityLabel: "tab-profile",
           tabBarIcon: ({ focused }) =>
             tabIcon("person-circle", "person-circle-outline", focused),
         }}

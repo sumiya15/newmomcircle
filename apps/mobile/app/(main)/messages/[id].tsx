@@ -218,7 +218,7 @@ export default function ChatScreen() {
       <StatusBar barStyle="dark-content" />
 
       {/* ── Header ── */}
-      <View style={styles.header}>
+      <View testID="chat-header" style={styles.header}>
         <Pressable testID="chat-back-btn" style={styles.backBtn} onPress={() => router.back()} hitSlop={12}>
           <Ionicons name="chevron-back" size={22} color={Colors.textPrimary} />
         </Pressable>
@@ -305,7 +305,7 @@ export default function ChatScreen() {
 
           {/* Text input */}
           <TextInput
-            testID="chat-message-input"
+            testID="chat-input"
             style={styles.input}
             value={inputText}
             onChangeText={setInputText}
@@ -483,6 +483,7 @@ function MessageBubble({
 
         {/* Bubble */}
         <Pressable
+          testID="chat-message-bubble"
           style={({ pressed }) => [pressed && { opacity: 0.88 }]}
           onLongPress={onLongPress}
           delayLongPress={350}

@@ -157,7 +157,7 @@ export default function EditProfileScreen() {
         <StatusBar barStyle="dark-content" />
 
         {/* ── Header ── */}
-        <View style={styles.header}>
+        <View testID="edit-profile-header" style={styles.header}>
           <Pressable testID="edit-profile-back-btn" style={styles.headerBtn} onPress={() => router.back()} hitSlop={12}>
             <Ionicons name="chevron-back" size={22} color={Colors.textPrimary} />
           </Pressable>

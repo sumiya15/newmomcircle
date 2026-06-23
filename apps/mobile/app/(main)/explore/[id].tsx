@@ -180,7 +180,7 @@ export default function CircleDetailScreen() {
         />
 
         {/* Nav buttons */}
-        <View style={[styles.heroNav, { top: insets.top + Spacing.xs }]}>
+        <View testID="circle-detail-header" style={[styles.heroNav, { top: insets.top + Spacing.xs }]}>
           <Pressable testID="circle-detail-back-btn" style={styles.heroNavBtn} onPress={() => router.back()} hitSlop={12}>
             <Ionicons name="chevron-back" size={22} color={Colors.white} />
           </Pressable>
@@ -207,7 +207,7 @@ export default function CircleDetailScreen() {
       {/* ── Join CTA strip ── */}
       <View style={styles.joinStrip}>
         <Pressable
-          testID="circle-join-btn"
+          testID="circle-detail-join-btn"
           style={({ pressed }) => [
             styles.joinBtn,
             isJoined && styles.joinBtnActive,
@@ -254,7 +254,7 @@ export default function CircleDetailScreen() {
         {TABS.map((tab) => (
           <Pressable
             key={tab}
-            testID={`circle-${tab.toLowerCase()}-tab`}
+            testID={`circle-detail-tab-${tab.toLowerCase()}`}
             style={styles.tabItem}
             onPress={() => setActiveTab(tab)}
           >

@@ -177,6 +177,7 @@ export default function ProfileScreen() {
         >
         {/* ── Hero ── */}
         <LinearGradient
+          testID="profile-header"
           colors={[Colors.peachLight, Colors.offWhite]}
           style={styles.hero}
         >
@@ -214,7 +215,7 @@ export default function ProfileScreen() {
           </MotiView>
 
           {/* Name + email */}
-          <Text testID="profile-name-text" style={styles.heroName}>{profile?.displayName ?? '—'}</Text>
+          <Text testID="profile-username" style={styles.heroName}>{profile?.displayName ?? '—'}</Text>
           <Text style={styles.heroEmail}>{profile?.email ?? ''}</Text>
 
           {/* Baby age pill */}
@@ -224,7 +225,7 @@ export default function ProfileScreen() {
               animate={{ opacity: 1, scale: 1 }}
               transition={{ type: 'spring', ...Motion.spring.snappy, delay: 100 }}
             >
-              <View style={styles.babyPill}>
+              <View testID="profile-baby-age-pill" style={styles.babyPill}>
                 <Text style={styles.babyPillText}>👶  {ageLabel}</Text>
               </View>
             </MotiView>
@@ -237,11 +238,11 @@ export default function ProfileScreen() {
             transition={{ type: 'timing', duration: Motion.duration.base, delay: 120 }}
           >
             <View style={styles.statsRow}>
-              <StatPill icon="create-outline"        value="12" label="Posts"   />
+              <View testID="profile-stats-posts"><StatPill icon="create-outline"  value="12" label="Posts"   /></View>
               <View style={styles.statDivider} />
-              <StatPill icon="people-outline"        value="4"  label="Circles" />
+              <View testID="profile-stats-circles"><StatPill icon="people-outline"  value="4"  label="Circles" /></View>
               <View style={styles.statDivider} />
-              <StatPill icon="journal-outline"       value="7"  label="Journal" />
+              <View testID="profile-stats-journal"><StatPill icon="journal-outline" value="7"  label="Journal" /></View>
             </View>
           </MotiView>
         </LinearGradient>

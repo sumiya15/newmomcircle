@@ -138,7 +138,7 @@ export default function LoginScreen() {
             transition={{ type: 'timing', duration: Motion.duration.base, delay: 100 }}
             style={styles.headline}
           >
-            <Text style={styles.headlineTitle}>Welcome back.</Text>
+            <Text testID="login-title" style={styles.headlineTitle}>Welcome back.</Text>
             <Text style={styles.headlineSub}>
               Your circle has missed you — pick up right where you left off.
             </Text>
@@ -180,7 +180,7 @@ export default function LoginScreen() {
 
               {/* Forgot password — right-aligned, below password */}
               <Link href="/(auth)/forgot-password" asChild>
-                <Pressable style={styles.forgotRow} hitSlop={12} testID="login-forgot-link">
+                <Pressable style={styles.forgotRow} hitSlop={12} testID="login-forgot-btn">
                   <Text style={styles.forgotText}>Forgot password?</Text>
                 </Pressable>
               </Link>

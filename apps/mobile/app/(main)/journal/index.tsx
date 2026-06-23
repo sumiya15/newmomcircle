@@ -96,9 +96,9 @@ export default function JournalScreen() {
     <View style={styles.root} testID="journal-screen">
       {/* WebWrapper: centres content in 480px column on wide web viewports */}
       <WebWrapper>
-        <LinearGradient colors={[Colors.peach, Colors.peachDark]} style={styles.header}>
+        <LinearGradient testID="journal-header" colors={[Colors.peach, Colors.peachDark]} style={styles.header}>
           <Text style={styles.headerTitle}>{t("journal_title")}</Text>
-          <TouchableOpacity testID="journal-new-btn" style={styles.newBtn} onPress={() => setShowNew(true)}>
+          <TouchableOpacity testID="journal-new-entry-btn" style={styles.newBtn} onPress={() => setShowNew(true)}>
             <Text style={styles.newBtnText}>+ {t("new_entry")}</Text>
           </TouchableOpacity>
         </LinearGradient>
@@ -164,13 +164,13 @@ export default function JournalScreen() {
           <View style={styles.modalCard}>
             <View style={styles.modalHeader}>
               <Text style={styles.modalTitle}>{t("new_entry")}</Text>
-              <TouchableOpacity onPress={() => { setShowNew(false); setSaveError(""); }}>
+              <TouchableOpacity testID="journal-modal-close" onPress={() => { setShowNew(false); setSaveError(""); }}>
                 <Text style={styles.modalClose}>✕</Text>
               </TouchableOpacity>
             </View>
 
             <TextInput
-              testID="journal-content-input"
+              testID="journal-text-area"
               style={styles.textArea}
               multiline
               value={entryText}
@@ -195,7 +195,7 @@ export default function JournalScreen() {
             )}
 
             <TouchableOpacity
-              testID="journal-submit-btn"
+              testID="journal-save-btn"
               style={[styles.saveBtn, (saving || !entryText.trim()) && { opacity: 0.5 }]}
               onPress={handleSave}
               disabled={saving || !entryText.trim()}
@@ -230,7 +230,7 @@ function EntryCard({ entry, index }: { entry: JournalEntry; index: number }) {
         onPressIn={() => setPressed(true)}
         onPressOut={() => setPressed(false)}
       >
-        <View style={styles.card}>
+        <View testID="journal-entry-card" style={styles.card}>
           <View style={styles.cardTop}>
             <Text style={styles.cardDate}>{date}</Text>
             {entry.sentiment && (

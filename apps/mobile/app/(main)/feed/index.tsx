@@ -321,7 +321,7 @@ export default function FeedScreen() {
               style={[styles.fabWrap, { bottom: insets.bottom + 90 }]}
             >
               <Pressable
-                testID="feed-create-btn"
+                testID="feed-fab"
                 style={({ pressed }) => [
                   styles.fab,
                   pressed && styles.fabPressed,
@@ -374,7 +374,7 @@ function FeedHeader({ profile }: { profile: { displayName: string } | null }) {
   const router = useRouter();
 
   return (
-    <View style={styles.header}>
+    <View testID="feed-header" style={styles.header}>
       <View style={styles.headerRow}>
         <View>
           <Text style={styles.greeting}>{greeting}, {firstName} 🌸</Text>

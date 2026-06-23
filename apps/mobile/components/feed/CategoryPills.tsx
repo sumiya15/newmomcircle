@@ -55,6 +55,7 @@ export default function CategoryPills({ active, onChange }: Props) {
             transition={{ type: 'spring', damping: 18, stiffness: 280 }}
           >
             <Pressable
+              testID={`feed-category-${cat.split(' ')[0].toLowerCase()}`}
               style={({ pressed }) => [
                 styles.pill,
                 isActive ? styles.pillActive : styles.pillInactive,

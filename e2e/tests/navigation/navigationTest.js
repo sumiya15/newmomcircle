@@ -53,9 +53,9 @@ describe('Navigation - Bottom Tabs & Screen Transitions', function () {
 
   it('NAV-05: Should navigate to Notifications (hidden route)', async function () {
     // Notifications is accessed via bell icon in header or hidden tab
-    const notifVisible = await feedPage.isElementDisplayed('~header-notifications-btn', 3000);
+    const notifVisible = await feedPage.isElementDisplayed('~feed-notification-btn', 3000);
     if (notifVisible) {
-      await feedPage.click('~header-notifications-btn');
+      await feedPage.click('~feed-notification-btn');
       const atNotif = await notifPage.isAt();
       expect(atNotif).to.be.true;
       await notifPage.pressBack();
@@ -65,9 +65,9 @@ describe('Navigation - Bottom Tabs & Screen Transitions', function () {
   });
 
   it('NAV-06: Should navigate to Search (hidden route)', async function () {
-    const searchBtn = await feedPage.isElementDisplayed('~header-search-btn', 3000);
+    const searchBtn = await feedPage.isElementDisplayed('~feed-search-btn', 3000);
     if (searchBtn) {
-      await feedPage.click('~header-search-btn');
+      await feedPage.click('~feed-search-btn');
       const atSearch = await searchPage.isAt();
       expect(atSearch).to.be.true;
       await searchPage.pressBack();

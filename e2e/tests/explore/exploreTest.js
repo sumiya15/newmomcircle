@@ -43,7 +43,7 @@ describe('Explore - Circles Discovery', function () {
   });
 
   it('EXP-04: Should filter circles by category', async function () {
-    await explorePage.filterByCategory('nutrition');
+    await explorePage.filterByCategory('feeding');
     await explorePage._sleep(600);
     const atExplore = await explorePage.isAt();
     expect(atExplore).to.be.true;

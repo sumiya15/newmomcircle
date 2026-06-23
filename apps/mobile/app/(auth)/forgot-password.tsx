@@ -127,7 +127,7 @@ export default function ForgotPasswordScreen() {
             transition={{ type: 'timing', duration: Motion.duration.base, delay: 100 }}
             style={styles.headline}
           >
-            <Text style={styles.headlineTitle}>Reset your password.</Text>
+            <Text testID="forgot-password-title" style={styles.headlineTitle}>Reset your password.</Text>
             <Text style={styles.headlineSub}>
               Enter the email you signed up with and we'll send you a reset link.
             </Text>

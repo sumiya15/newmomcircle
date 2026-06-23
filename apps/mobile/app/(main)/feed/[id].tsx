@@ -119,7 +119,7 @@ export default function PostDetailScreen() {
       <StatusBar barStyle="dark-content" />
 
       {/* ── Header ── */}
-      <View style={styles.header}>
+      <View testID="post-detail-header" style={styles.header}>
         <Pressable testID="post-detail-back-btn" style={styles.headerBack} onPress={() => router.back()} hitSlop={12}>
           <Ionicons name="chevron-back" size={22} color={Colors.textPrimary} />
         </Pressable>

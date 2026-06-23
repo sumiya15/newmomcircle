@@ -28,19 +28,25 @@ describe('Tracker - Baby Activity Logging', function () {
     expect(atTracker).to.be.true;
   });
 
-  it('TRK-02: Should display feeding log button', async function () {
+  it('TRK-02: Should display feeding log button in sheet', async function () {
+    await trackerPage.openLogSheet();
     const visible = await trackerPage.isElementDisplayed(trackerPage.logFeedBtn);
     expect(visible).to.be.true;
+    await trackerPage.pressBack();
   });
 
-  it('TRK-03: Should display sleep log button', async function () {
+  it('TRK-03: Should display sleep log button in sheet', async function () {
+    await trackerPage.openLogSheet();
     const visible = await trackerPage.isElementDisplayed(trackerPage.logSleepBtn);
     expect(visible).to.be.true;
+    await trackerPage.pressBack();
   });
 
-  it('TRK-04: Should display diaper log button', async function () {
+  it('TRK-04: Should display diaper log button in sheet', async function () {
+    await trackerPage.openLogSheet();
     const visible = await trackerPage.isElementDisplayed(trackerPage.logDiaperBtn);
     expect(visible).to.be.true;
+    await trackerPage.pressBack();
   });
 
   it('TRK-05: Should log a feeding entry', async function () {

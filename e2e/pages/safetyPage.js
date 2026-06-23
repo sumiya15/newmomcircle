@@ -21,7 +21,7 @@ class SafetyPage extends BasePage {
   get relationshipInput()   { return '~safety-guardian-relationship-input'; }
   get saveGuardianBtn()     { return '~safety-save-guardian-btn'; }
   get cancelModalBtn()      { return '~safety-cancel-modal-btn'; }
-  get deleteGuardianBtn()   { return '~safety-delete-guardian-btn'; }
+  get deleteGuardianBtn()   { return '//*[contains(@content-desc,"safety-delete-guardian-")]'; }
   get deleteConfirmYes()    { return '~safety-delete-confirm-yes'; }
   get toast()               { return '~safety-toast'; }
   get bottomNavTab()        { return '~tab-safety'; }

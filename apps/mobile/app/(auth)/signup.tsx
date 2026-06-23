@@ -184,7 +184,7 @@ export default function SignupScreen() {
             transition={{ type: 'timing', duration: Motion.duration.base, delay: 100 }}
             style={styles.headline}
           >
-            <Text style={styles.headlineTitle}>Join your village.</Text>
+            <Text testID="signup-title" style={styles.headlineTitle}>Join your village.</Text>
             <Text style={styles.headlineSub}>
               Connect with a supportive community of mothers who understand your journey.
             </Text>
@@ -257,7 +257,7 @@ export default function SignupScreen() {
                         />
                       ))}
                     </View>
-                    <Text style={[styles.strengthLabel, { color: STRENGTH_COLOR[strength] }]}>
+                    <Text testID="signup-password-strength" style={[styles.strengthLabel, { color: STRENGTH_COLOR[strength] }]}>
                       {STRENGTH_LABEL[strength]}
                     </Text>
                   </MotiView>
