@@ -10,20 +10,21 @@ class LoginPage extends BasePage {
     await this.type('login-email-input', email);
     await this.type('login-password-input', password);
     await this.click('login-submit-btn');
-    // Settle as soon as /feed redirect OR an auth/validation error appears
+    // Settle as soon as /feed redirect OR an auth/validation error appears.
+    // 15s for error (Supabase can be slow when rate-limited)
     try {
       await Promise.race([
         this.waitForUrl('/feed', 10000),
-        this.el('login-error-message', 8000),
+        this.el('login-error-message', 15000),
       ]);
     } catch { /* neither happened — subsequent assertions will catch this */ }
   }
 
   async getErrorText() {
-    // Wait briefly for error to appear
-    await this.driver.sleep(1000);
-    const el = await this.elOrNull('login-error-message', 4000)
-            || await this.elOrNull('form-error', 4000);
+    await this.driver.sleep(500);
+    // 10s window in case Supabase rate-limits the wrong-password response
+    const el = await this.elOrNull('login-error-message', 10000)
+            || await this.elOrNull('form-error', 3000);
     return el ? el.getText() : '';
   }
 

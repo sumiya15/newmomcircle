@@ -17,7 +17,7 @@ export const HeroVideo: React.FC<HeroVideoProps> = ({
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden w-full">
       {/* Layer 1: Looping background video */}
       <video
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 min-w-full min-h-full w-auto h-auto object-cover z-0 filter saturate-[0.85] brightness-[0.7]"
+        className="absolute inset-0 w-full h-full object-cover z-0 filter saturate-[0.85] brightness-[0.7]"
         autoPlay
         muted
         loop

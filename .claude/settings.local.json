@@ -32,7 +32,11 @@
       "Bash(xargs grep -l \"getAuthErrorMessage\")",
       "PowerShell(git *)",
       "PowerShell(Get-ChildItem -Path \"C:\\\\Users\\\\sumiy\\\\Documents\\\\sumiya\\\\OneDrive\\\\Desktop\\\\newmomcircle\\\\e2e-web\\\\tests\" -Recurse | Where-Object { $_.Extension -eq \".js\" } | Select-Object Name, DirectoryName)",
-      "PowerShell(Get-ChildItem -Path \"C:\\\\Users\\\\sumiy\\\\Documents\\\\sumiya\\\\OneDrive\\\\Desktop\\\\newmomcircle\\\\apps\\\\web\\\\src\" -Recurse | Where-Object { $_.Extension -in \".css\",\".scss\" } | Select-Object FullName)"
+      "PowerShell(Get-ChildItem -Path \"C:\\\\Users\\\\sumiy\\\\Documents\\\\sumiya\\\\OneDrive\\\\Desktop\\\\newmomcircle\\\\apps\\\\web\\\\src\" -Recurse | Where-Object { $_.Extension -in \".css\",\".scss\" } | Select-Object FullName)",
+      "PowerShell(Get-Process *)",
+      "PowerShell(try { $r = Invoke-WebRequest -Uri \"http://localhost:3000\" -TimeoutSec 5 -UseBasicParsing -ErrorAction Stop; Write-Output \"UP: $\\($r.StatusCode\\)\" } catch { Write-Output \"NOT UP: $_\" })",
+      "Bash(npm test *)",
+      "Skill(run)"
     ]
   }
 }

@@ -24,7 +24,7 @@ module.exports = {
 
   // ── Browser options ───────────────────────────────────────────
   browser: {
-    headless:   process.env.CI === 'true',     // headless in CI; headed locally
+    headless:   process.env.CI === 'true' || process.env.HEADLESS === 'true',     // headless in CI/env; headed locally
     windowSize: { width: 1280, height: 900 },
   },
 

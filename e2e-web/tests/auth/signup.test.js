@@ -17,7 +17,14 @@ describe('WEB – Auth: Signup', function () {
     login  = new LoginPage(baseTest.getDriver());
   });
 
-  beforeEach(async function () { await signup.open(); });
+  beforeEach(async function () {
+    const driver = baseTest.getDriver();
+    try {
+      await driver.executeScript('try{localStorage.clear()}catch(e){} try{sessionStorage.clear()}catch(e){}');
+      await driver.manage().deleteAllCookies();
+    } catch (_) {}
+    await signup.open();
+  });
 
   it('SGN-W-01: Signup page loads with form visible', async function () {
     const at = await signup.isAt();

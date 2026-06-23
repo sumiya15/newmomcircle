@@ -7,7 +7,7 @@ import { HeroVideo } from '@/components/ui/HeroVideo';
 import { GlassCard } from '@/components/ui/GlassCard';
 import { PeachButton } from '@/components/ui/PeachButton';
 
-const FadeIn: React.FC<{ children: React.ReactNode; delay?: number; className?: string }> = ({ children, delay = 0, className = '' }) => {
+function FadeIn({ children, delay = 0, className = '' }: { children: React.ReactNode; delay?: number; className?: string }) {
   const ref = React.useRef(null);
   const inView = useInView(ref, { once: true, margin: '-60px' });
   return (
@@ -15,13 +15,14 @@ const FadeIn: React.FC<{ children: React.ReactNode; delay?: number; className?: 
       ref={ref}
       initial={{ opacity: 0, y: 20 }}
       animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-      transition={{ duration: 0.5, delay, ease: [0.16, 1, 0.3, 1] }}
+      transition={{ duration: 0.5, delay, ease: [0.16, 1, 0.3, 1] as const }}
       className={className}
     >
-      {children}
+      {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+      {children as any}
     </motion.div>
   );
-};
+}
 
 export default function LandingPage() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -42,7 +43,7 @@ export default function LandingPage() {
   }, []);
 
   return (
-    <div className="relative min-h-screen bg-[#140804] text-white">
+    <div className="relative min-h-screen bg-[#140804] text-white overflow-x-hidden">
       {/* 4.1.1 — Fixed Navbar */}
       <nav
         className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 font-poppins ${
@@ -145,7 +146,7 @@ export default function LandingPage() {
         <div className="flex flex-col items-center text-center max-w-4xl mx-auto pt-24 pb-12">
           {/* Badge */}
           <div className="hero-badge cursor-default">
-            🌸 Trusted by 2,400+ Indian mothers · Built with clinical research
+            <span className="min-w-0 break-words">🌸 Trusted by 2,400+ Indian mothers · Built with clinical research</span>
           </div>
 
           {/* Heading */}

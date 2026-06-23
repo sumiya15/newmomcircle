@@ -75,7 +75,7 @@
 /* ── Base Reset ───────────────────────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; }
 
-html { scroll-behavior: smooth; }
+html { scroll-behavior: smooth; overflow-x: hidden; }
 
 body {
   background: var(--bg-base);
@@ -493,6 +493,8 @@ body {
   align-items: center;
   gap: 8px;
   padding: 6px 18px;
+  max-width: 100%;
+  overflow: hidden;
   border-radius: var(--radius-full);
   background: rgba(255,159,124,0.10);
   border: 1px solid rgba(255,159,124,0.28);

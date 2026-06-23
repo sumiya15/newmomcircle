@@ -120,7 +120,7 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="relative min-h-screen bg-[#0E0705] flex items-center justify-center px-4 py-10 overflow-hidden" data-testid="signup-screen">
+    <div className="relative min-h-screen bg-[#0E0705] flex items-center justify-center px-4 py-10 overflow-hidden">
       {/* Ambient glow */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         <div className="absolute top-[-5%] right-[25%] w-[500px] h-[500px] rounded-full bg-[#E8734A]/8 blur-[130px]" />
@@ -132,6 +132,7 @@ export default function SignupPage() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
         className="relative z-10 w-full max-w-[460px]"
+        data-testid="signup-screen"
       >
         <div className="bg-white/[0.05] border border-white/10 rounded-[24px] p-8 backdrop-blur-xl shadow-2xl">
 

@@ -19,7 +19,14 @@ describe('WEB – Auth: Login', function () {
     feed  = new FeedPage(baseTest.getDriver());
   });
 
-  beforeEach(async function () { await login.open(); });
+  beforeEach(async function () {
+    const driver = baseTest.getDriver();
+    try {
+      await driver.executeScript('try{localStorage.clear()}catch(e){} try{sessionStorage.clear()}catch(e){}');
+      await driver.manage().deleteAllCookies();
+    } catch (_) {}
+    await login.open();
+  });
 
   // ── LGN-W-01 ──────────────────────────────────────────────────────────────
   it('LGN-W-01: Login page loads and email input is visible', async function () {

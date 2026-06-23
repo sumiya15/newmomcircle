@@ -14,8 +14,13 @@ describe('WEB – Feature: Profile', function () {
 
   before(async function () {
     this.timeout(40000);
-    page  = new BasePage(baseTest.getDriver());
-    login = new LoginPage(baseTest.getDriver());
+    const driver = baseTest.getDriver();
+    page  = new BasePage(driver);
+    login = new LoginPage(driver);
+    try {
+      await driver.executeScript('try{localStorage.clear()}catch(e){} try{sessionStorage.clear()}catch(e){}');
+      await driver.manage().deleteAllCookies();
+    } catch (_) {}
     await login.loginAsTestUser();
   });
 
@@ -47,8 +52,10 @@ describe('WEB – Feature: Profile', function () {
   });
 
   it('PRF-W-05: Signing out redirects to login', async function () {
+    this.timeout(35000);
     await page.click('profile-logout-btn');
-    await page.waitForUrl('/auth/login');
+    // signOut() API call can be slow when Supabase is rate-limited
+    await page.waitForUrl('/auth/login', 25000);
     const url = await page.currentUrl();
     expect(url).to.include('login');
   });

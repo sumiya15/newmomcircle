@@ -15,10 +15,14 @@ describe('WEB – Feature: Community Feed', function () {
 
   before(async function () {
     this.timeout(40000);
-    login = new LoginPage(baseTest.getDriver());
-    feed  = new FeedPage(baseTest.getDriver());
+    const driver = baseTest.getDriver();
+    login = new LoginPage(driver);
+    feed  = new FeedPage(driver);
+    try {
+      await driver.executeScript('try{localStorage.clear()}catch(e){} try{sessionStorage.clear()}catch(e){}');
+      await driver.manage().deleteAllCookies();
+    } catch (_) {}
     await login.loginAsTestUser();
-    // Wait for feed to fully load
     await feed.isAt();
   });
 
@@ -49,14 +53,14 @@ describe('WEB – Feature: Community Feed', function () {
     // Compose form should already be open from FED-W-04
     const openOrReopen = await feed.elOrNull('create-post-submit-btn', 2000);
     if (!openOrReopen) await feed.click('feed-create-btn');
-    await feed.click('create-post-submit-btn');
-    await feed.driver.sleep(800);
-    // Error OR button disabled are both acceptable
-    const hasError    = await feed.exists('create-post-error', 3000);
-    const submitBtn   = await feed.elOrNull('create-post-submit-btn', 1000);
-    const isDisabled  = submitBtn
-      ? !(await submitBtn.isEnabled())
-      : false;
+    // Check disabled state first — disabled button IS the validation feedback
+    const submitBtn  = await feed.elOrNull('create-post-submit-btn', 3000);
+    const isDisabled = submitBtn ? !(await submitBtn.isEnabled()) : false;
+    if (!isDisabled) {
+      try { await feed.click('create-post-submit-btn'); } catch (_) {}
+      await feed.driver.sleep(800);
+    }
+    const hasError = await feed.exists('create-post-error', 3000);
     expect(hasError || isDisabled, 'No validation feedback for empty post submit').to.be.true;
   });
 

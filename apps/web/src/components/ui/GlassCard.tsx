@@ -2,7 +2,8 @@ import React from 'react';
 import { motion, type HTMLMotionProps } from 'framer-motion';
 
 interface GlassCardProps extends HTMLMotionProps<'div'> {
-  children: React.ReactNode;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  children: any;
   hoverEffect?: boolean;
   variant?: 'default' | 'elevated' | 'sunken' | 'accent' | 'danger';
 }

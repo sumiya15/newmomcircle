@@ -66,26 +66,26 @@ const Icon = {
 };
 
 const NAV_ITEMS = [
-  { name: 'Community',  path: '/feed',             icon: Icon.Home    },
-  { name: 'Explore',    path: '/explore',           icon: Icon.Compass },
-  { name: 'Tracker',    path: '/tracker',           icon: Icon.Chart   },
-  { name: 'Messages',   path: '/messages',          icon: Icon.Message },
-  { name: 'Journal',    path: '/journal',           icon: Icon.Book    },
-  { name: 'Insights',   path: '/journal/insights',  icon: Icon.Chart   },
-  { name: 'Toolbox',    path: '/toolbox',           icon: Icon.Toolbox },
-  { name: 'Library',    path: '/resources',         icon: Icon.Library },
+  { name: 'Community',  path: '/feed',             icon: Icon.Home, critical: false },
+  { name: 'Explore',    path: '/explore',           icon: Icon.Compass, critical: false },
+  { name: 'Tracker',    path: '/tracker',           icon: Icon.Chart, critical: false },
+  { name: 'Messages',   path: '/messages',          icon: Icon.Message, critical: false },
+  { name: 'Journal',    path: '/journal',           icon: Icon.Book, critical: false },
+  { name: 'Insights',   path: '/journal/insights',  icon: Icon.Chart, critical: false },
+  { name: 'Toolbox',    path: '/toolbox',           icon: Icon.Toolbox, critical: false },
+  { name: 'Library',    path: '/resources',         icon: Icon.Library, critical: false },
   { name: 'SOS Safety', path: '/safety',            icon: Icon.Shield, critical: true },
-  { name: 'Profile',    path: '/profile',           icon: Icon.User    },
+  { name: 'Profile',    path: '/profile',           icon: Icon.User, critical: false },
 ] as const;
 
 /* Mobile tabs — max 5 items */
 const MOBILE_TABS = [
-  { name: 'Home',    path: '/feed',     icon: Icon.Home    },
-  { name: 'Explore', path: '/explore',  icon: Icon.Compass },
-  { name: 'Journal', path: '/journal',  icon: Icon.Book  },
-  { name: 'Toolbox', path: '/toolbox',  icon: Icon.Toolbox },
+  { name: 'Home',    path: '/feed',     icon: Icon.Home, critical: false },
+  { name: 'Explore', path: '/explore',  icon: Icon.Compass, critical: false },
+  { name: 'Journal', path: '/journal',  icon: Icon.Book, critical: false },
+  { name: 'Toolbox', path: '/toolbox',  icon: Icon.Toolbox, critical: false },
   { name: 'SOS',     path: '/safety',   icon: Icon.Shield, critical: true },
-  { name: 'Profile', path: '/profile',  icon: Icon.User  },
+  { name: 'Profile', path: '/profile',  icon: Icon.User, critical: false },
 ] as const;
 
 const Logo = () => (
@@ -99,7 +99,7 @@ const Logo = () => (
 
 const pageVariants = {
   initial: { opacity: 0, y: 6 },
-  enter:   { opacity: 1, y: 0, transition: { duration: 0.28, ease: [0.16, 1, 0.3, 1] } },
+  enter:   { opacity: 1, y: 0, transition: { duration: 0.28, ease: [0.16, 1, 0.3, 1] as const } },
   exit:    { opacity: 0, y: -4, transition: { duration: 0.18 } },
 };
 
@@ -139,7 +139,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
   };
 
   const isActive = (path: string) =>
-    pathname === path || (path === '/journal' && pathname.startsWith('/journal/') && path !== '/journal/insights');
+    pathname === path || (path === '/journal' && pathname.startsWith('/journal/') && pathname !== '/journal/insights');
 
   return (
     <div className="min-h-screen bg-[#0E0705]">
@@ -242,7 +242,8 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
               animate="enter"
               exit="exit"
             >
-              {children}
+              {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+              {children as any}
             </motion.div>
           </AnimatePresence>
         </main>
