@@ -100,6 +100,18 @@ jobs:
           appium driver install uiautomator2
           appium driver list
 
+      # ── Download Expo Go APK (compatible with SDK 56) ─────────────────────────
+      - name: Download Expo Go APK
+        run: |
+          EXPO_APK_URL=$(curl -sf https://api.expo.dev/v2/versions/latest | jq -r '.data.androidClientUrl')
+          if [ -z "$EXPO_APK_URL" ] || [ "$EXPO_APK_URL" = "null" ]; then
+            echo "⚠️  Could not fetch Expo Go URL from API, using fallback"
+            EXPO_APK_URL="https://d1ahtucjixef4r.cloudfront.net/Exponent-2.31.2.apk"
+          fi
+          echo "Downloading Expo Go from: $EXPO_APK_URL"
+          wget -q "$EXPO_APK_URL" -O /tmp/expo-go.apk
+          echo "✅ Expo Go APK downloaded ($(du -h /tmp/expo-go.apk | cut -f1))"
+
       # ── Start Appium server ───────────────────────────────────────────────────
       - name: Start Appium server
         run: |
@@ -130,6 +142,13 @@ jobs:
           script: |
             adb wait-for-device shell 'while [[ -z $(getprop sys.boot_completed) ]]; do sleep 1; done'
             adb shell input keyevent 82
+            # Install Expo Go
+            echo "Installing Expo Go..."
+            adb install -r /tmp/expo-go.apk || echo "⚠️  Expo Go install failed — tests may not run"
+            # Grant permissions
+            adb shell pm grant host.exp.exponent android.permission.CAMERA || true
+            adb shell pm grant host.exp.exponent android.permission.READ_EXTERNAL_STORAGE || true
+            adb shell pm grant host.exp.exponent android.permission.WRITE_EXTERNAL_STORAGE || true
             cd e2e
             SUITE="${{ github.event.inputs.test_suite || 'all' }}"
             if [ "$SUITE" = "all" ]; then

@@ -36,7 +36,8 @@
       "PowerShell(Get-Process *)",
       "PowerShell(try { $r = Invoke-WebRequest -Uri \"http://localhost:3000\" -TimeoutSec 5 -UseBasicParsing -ErrorAction Stop; Write-Output \"UP: $\\($r.StatusCode\\)\" } catch { Write-Output \"NOT UP: $_\" })",
       "Bash(npm test *)",
-      "Skill(run)"
+      "Skill(run)",
+      "Bash(findstr /i \"expo\\\\\"\")"
     ]
   }
 }
