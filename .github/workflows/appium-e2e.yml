@@ -91,7 +91,10 @@ jobs:
       # ── Install E2E dependencies ───────────────────────────────────────────────
       - name: Install E2E dependencies
         working-directory: e2e
-        run: npm ci
+        run: |
+          for i in 1 2 3; do
+            npm ci && break || { echo "npm ci attempt $i failed, retrying..."; sleep 10; }
+          done
 
       # ── Install Appium 2.x + UiAutomator2 ─────────────────────────────────────
       - name: Install Appium
