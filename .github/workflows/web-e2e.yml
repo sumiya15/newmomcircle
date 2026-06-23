@@ -84,14 +84,15 @@ jobs:
           node-version: '22'
           cache: 'npm'
 
-      # ── Chrome ──────────────────────────────────────────────────────────────
-      - name: Install Chrome
-        uses: browser-actions/setup-chrome@v1
-        with:
-          chrome-version: stable
-
-      - name: Verify Chrome version
-        run: google-chrome --version
+      # ── Chrome (pre-installed on ubuntu-latest) ──────────────────────────────
+      - name: Verify Chrome is available
+        run: |
+          which google-chrome-stable || which google-chrome || which chromium-browser
+          google-chrome-stable --version 2>/dev/null || google-chrome --version 2>/dev/null || chromium-browser --version
+          # Export CHROME_BIN for Selenium/WebDriver
+          CHROME=$(which google-chrome-stable 2>/dev/null || which google-chrome 2>/dev/null || which chromium-browser)
+          echo "CHROME_BIN=$CHROME" >> $GITHUB_ENV
+          echo "Using Chrome: $CHROME"
 
       # ── Install root dependencies ────────────────────────────────────────────
       - name: Install root and workspace dependencies
@@ -99,10 +100,14 @@ jobs:
 
       # ── Build Next.js app ────────────────────────────────────────────────────
       - name: Build Next.js web app
-        run: npx turbo run build --filter=@newmomcircle/web
+        working-directory: apps/web
+        run: npx next build
         env:
           NEXT_PUBLIC_SUPABASE_URL:      ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
           NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+
+      - name: Verify build output
+        run: ls -la apps/web/.next/ | head -10
 
       # ── Start web server ────────────────────────────────────────────────────
       - name: Start Next.js server in background
@@ -140,6 +145,7 @@ jobs:
           TEST_USER_PASSWORD: ${{ secrets.TEST_USER_PASSWORD }}
           TEST_USER_NAME:     'Test Mom'
           HEADLESS:           'true'
+          CHROME_BIN:         ${{ env.CHROME_BIN }}
         run: npm run test:${{ matrix.suite }}
 
       # ── Upload raw test artefacts ───────────────────────────────────────────
