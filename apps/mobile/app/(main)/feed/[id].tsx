@@ -105,7 +105,7 @@ export default function PostDetailScreen() {
         <Pressable style={styles.backBtn} onPress={() => router.back()} hitSlop={12}>
           <Ionicons name="chevron-back" size={22} color={Colors.textPrimary} />
         </Pressable>
-        <EmptyState icon="alert-circle-outline" title="Post not found" message="This post may have been deleted." />
+        <EmptyState emoji="⚠️" title="Post not found" subtitle="This post may have been deleted." />
       </View>
     );
   }
@@ -366,11 +366,11 @@ function CommentSkeletons() {
     <View style={styles.skeletonWrap}>
       {[0, 1, 2].map((i) => (
         <View key={i} style={[styles.commentRow, { opacity: 1 - i * 0.2 }]}>
-          <SkeletonBlock width={36} height={36} borderRadius={18} />
+          <SkeletonBlock width={36} height={36} radius={18} />
           <View style={{ flex: 1, gap: 6 }}>
-            <SkeletonBlock width="45%" height={12} borderRadius={Radius.sm} />
-            <SkeletonBlock width="90%" height={10} borderRadius={Radius.sm} />
-            <SkeletonBlock width="70%" height={10} borderRadius={Radius.sm} />
+            <SkeletonBlock width="45%" height={12} radius={Radius.sm} />
+            <SkeletonBlock width="90%" height={10} radius={Radius.sm} />
+            <SkeletonBlock width="70%" height={10} radius={Radius.sm} />
           </View>
         </View>
       ))}

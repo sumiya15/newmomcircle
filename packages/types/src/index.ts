@@ -36,9 +36,11 @@ export interface Post {
   authorPhotoUrl?: string | null;
   content: string;
   imageUrl?: string | null;
+  category?: string;
   likeCount: number;
   commentCount: number;
   likedBy: string[];
+  isLiked?: boolean;
   isAnonymous: boolean;
   createdAt: string;
   updatedAt: string;

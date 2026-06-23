@@ -358,12 +358,12 @@ function SkeletonGrid() {
       <View style={styles.gridRow}>
         {[0, 1].map((i) => (
           <View key={i} style={[styles.cardWrap, styles.card]}>
-            <SkeletonBlock width="100%" height={120} borderRadius={Radius.md} />
+            <SkeletonBlock width="100%" height={120} radius={Radius.md} />
             <View style={{ padding: Spacing.sm, gap: 6 }}>
-              <SkeletonBlock width="80%" height={14} borderRadius={Radius.sm} />
-              <SkeletonBlock width="100%" height={10} borderRadius={Radius.sm} />
-              <SkeletonBlock width="60%" height={10} borderRadius={Radius.sm} />
-              <SkeletonBlock width="50%" height={28} borderRadius={Radius.full} />
+              <SkeletonBlock width="80%" height={14} radius={Radius.sm} />
+              <SkeletonBlock width="100%" height={10} radius={Radius.sm} />
+              <SkeletonBlock width="60%" height={10} radius={Radius.sm} />
+              <SkeletonBlock width="50%" height={28} radius={Radius.full} />
             </View>
           </View>
         ))}
@@ -371,11 +371,11 @@ function SkeletonGrid() {
       <View style={styles.gridRow}>
         {[2, 3].map((i) => (
           <View key={i} style={[styles.cardWrap, styles.card]}>
-            <SkeletonBlock width="100%" height={120} borderRadius={Radius.md} />
+            <SkeletonBlock width="100%" height={120} radius={Radius.md} />
             <View style={{ padding: Spacing.sm, gap: 6 }}>
-              <SkeletonBlock width="70%" height={14} borderRadius={Radius.sm} />
-              <SkeletonBlock width="100%" height={10} borderRadius={Radius.sm} />
-              <SkeletonBlock width="50%" height={28} borderRadius={Radius.full} />
+              <SkeletonBlock width="70%" height={14} radius={Radius.sm} />
+              <SkeletonBlock width="100%" height={10} radius={Radius.sm} />
+              <SkeletonBlock width="50%" height={28} radius={Radius.full} />
             </View>
           </View>
         ))}

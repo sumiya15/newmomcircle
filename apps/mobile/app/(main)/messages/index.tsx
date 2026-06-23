@@ -331,13 +331,13 @@ function SkeletonList() {
           key={i}
           style={[styles.row, { opacity: 1 - i * 0.15 }]}
         >
-          <SkeletonBlock width={52} height={52} borderRadius={26} />
+          <SkeletonBlock width={52} height={52} radius={26} />
           <View style={{ flex: 1, gap: 8 }}>
             <View style={styles.rowTop}>
-              <SkeletonBlock width="55%" height={13} borderRadius={Radius.sm} />
-              <SkeletonBlock width={28} height={11} borderRadius={Radius.sm} />
+              <SkeletonBlock width="55%" height={13} radius={Radius.sm} />
+              <SkeletonBlock width={28} height={11} radius={Radius.sm} />
             </View>
-            <SkeletonBlock width="80%" height={11} borderRadius={Radius.sm} />
+            <SkeletonBlock width="80%" height={11} radius={Radius.sm} />
           </View>
         </View>
       ))}

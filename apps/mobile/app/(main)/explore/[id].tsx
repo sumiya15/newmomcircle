@@ -82,12 +82,15 @@ const MOCK_POSTS: Post[] = [
     authorInitials: 'AR',
     authorPhotoUrl: deterministicAvatar('u2').url,
     content: 'Finally got a full 3-hour stretch last night!! The Huckleberry app schedule changes are actually working 🙌 Who else is using it?',
-    imageUrl: undefined,
+    imageUrl: null,
     category: 'Sleep',
     likeCount: 48,
     commentCount: 12,
+    likedBy: [],
     isLiked: false,
+    isAnonymous: false,
     createdAt: new Date(Date.now() - 1000 * 60 * 45).toISOString(),
+    updatedAt: new Date(Date.now() - 1000 * 60 * 45).toISOString(),
   },
   {
     id: 'p2',
@@ -96,12 +99,15 @@ const MOCK_POSTS: Post[] = [
     authorInitials: 'KM',
     authorPhotoUrl: deterministicAvatar('u3').url,
     content: 'Struggling with latch at week 2 — LC says baby has a mild tongue tie. Any mamas been through the snip? How was recovery?',
-    imageUrl: undefined,
+    imageUrl: null,
     category: 'Feeding',
     likeCount: 22,
     commentCount: 31,
+    likedBy: [],
     isLiked: true,
+    isAnonymous: false,
     createdAt: new Date(Date.now() - 1000 * 60 * 90).toISOString(),
+    updatedAt: new Date(Date.now() - 1000 * 60 * 90).toISOString(),
   },
   {
     id: 'p3',
@@ -114,8 +120,11 @@ const MOCK_POSTS: Post[] = [
     category: 'Feeding',
     likeCount: 134,
     commentCount: 28,
+    likedBy: [],
     isLiked: false,
+    isAnonymous: false,
     createdAt: new Date(Date.now() - 1000 * 60 * 180).toISOString(),
+    updatedAt: new Date(Date.now() - 1000 * 60 * 180).toISOString(),
   },
 ];
 
@@ -254,8 +263,9 @@ export default function CircleDetailScreen() {
             </Text>
             {activeTab === tab && (
               <MotiView
-                layoutId="tab-indicator"
                 style={styles.tabIndicator}
+                from={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
                 transition={{ type: 'spring', ...Motion.spring.snappy }}
               />
             )}
