@@ -217,10 +217,11 @@ jobs:
       - name: Merge Mochawesome JSON reports
         working-directory: e2e-web
         run: |
+          mkdir -p reports/mochawesome reports/html reports/xlsx
           shopt -s nullglob
           jsons=(reports/mochawesome/*.json)
           if [ ${#jsons[@]} -eq 0 ]; then
-            echo '{"stats":{"suites":0,"tests":0,"passes":0,"pending":0,"failures":0},"results":[]}' > reports/mochawesome-combined.json
+            echo '{"stats":{"suites":0,"tests":0,"passes":0,"pending":0,"failures":0,"duration":0},"results":[]}' > reports/mochawesome-combined.json
             echo "⚠️  No JSON shards found — wrote empty placeholder"
           else
             npx mochawesome-merge reports/mochawesome/*.json > reports/mochawesome-combined.json
@@ -278,7 +279,10 @@ jobs:
         if: always()
         run: |
           node -e "
-            const r = require('./reports/mochawesome-combined.json');
+            const fs = require('fs');
+            const rpath = './reports/mochawesome-combined.json';
+            if (!fs.existsSync(rpath)) { console.log('⚠️  No report found — skipping summary'); process.exit(0); }
+            const r = JSON.parse(fs.readFileSync(rpath, 'utf8'));
             const s = r.stats || {};
             const total   = s.tests    || 0;
             const passed  = s.passes   || 0;
@@ -304,7 +308,10 @@ jobs:
         working-directory: e2e-web
         run: |
           node -e "
-            const r = require('./reports/mochawesome-combined.json');
+            const fs = require('fs');
+            const rpath = './reports/mochawesome-combined.json';
+            if (!fs.existsSync(rpath)) { process.stdout.write('## 🌐 Web E2E\n\n⚠️ No report generated.\n'); process.exit(0); }
+            const r = JSON.parse(fs.readFileSync(rpath, 'utf8'));
             const s = r.stats || {};
             const total   = s.tests    || 0;
             const passed  = s.passes   || 0;
